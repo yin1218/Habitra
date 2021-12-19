@@ -1,5 +1,4 @@
 import User from "../../../models/user";
-import db from "../../../mongo";
 import bcrypt from "bcrypt"; 
 
 
@@ -7,14 +6,10 @@ import bcrypt from "bcrypt";
 
 const saltRounds = 10;
 
-const signUp = (req, res) => {
+const signUp = async (req, res) => {
     console.log("inside signUp function");
-    db.on("error", (err) => console.log(err));
-    db.once("open", async () => {
-      console.log("Signing up");
-      console.log(req.body);
-      const hash = await bcrypt.hash(req.body.password, saltRounds)
-      const myobj = new User(
+    const hash = await bcrypt.hash(req.body.password, saltRounds)
+    const myobj = new User(
         {
             User_ID: req.body.user_id,
             Name: req.body.name,
@@ -29,10 +24,9 @@ const signUp = (req, res) => {
         res.status(200).send({ message: 'success'});
     }
     catch(err){
-        res.status(403).send({ message: 'error', post: err});
+        res.status(403).send({ message: 'error', err_msg: err});
     }
 
-    });
     
 };
 
