@@ -25,6 +25,6 @@ const UserSchema = new Schema({
   }
 })
 // Creating a table within database with the defined schema
-const User = mongoose.model('User', UserSchema)
+const User = mongoose.model('users', UserSchema)
 // Exporting table for querying and mutating
 export default User;

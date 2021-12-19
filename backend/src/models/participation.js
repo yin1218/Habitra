@@ -27,6 +27,6 @@ const ParticipationSchema = new Schema({
   }
 })
 // Creating a table within database with the defined schema
-const Participation = mongoose.model('Participation', ParticipationSchema)
+const Participation = mongoose.model('participations', ParticipationSchema)
 // Exporting table for querying and mutating
 export default Participation;

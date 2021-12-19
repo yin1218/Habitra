@@ -4,12 +4,12 @@ const checkEmail = async(req, res) => {
     console.log("inside checkEmail function");
     const existing = await User.findOne({'Email': req.body.email});
     if(existing){
-    var msg = 'existing';
-    res.json({ message: msg });
+        var msg = 'existing';
+        res.json({ message: msg });
     }
     else{
-    var msg = 'not exist';
-    res.json({ message: msg });
+        var msg = 'not exist';
+        res.json({ message: msg });
     }
     
 };

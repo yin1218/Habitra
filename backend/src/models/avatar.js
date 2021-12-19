@@ -10,6 +10,6 @@ const AvatarSchema = new Schema({
   }
 })
 // Creating a table within database with the defined schema
-const Avatar = mongoose.model('Avatar', AvatarSchema)
+const Avatar = mongoose.model('avatars', AvatarSchema)
 // Exporting table for querying and mutating
 export default Avatar;

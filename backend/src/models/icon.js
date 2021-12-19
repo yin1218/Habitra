@@ -10,6 +10,6 @@ const IconSchema = new Schema({
   }
 })
 // Creating a table within database with the defined schema
-const Icon = mongoose.model('Icon', IconSchema)
+const Icon = mongoose.model('icons', IconSchema)
 // Exporting table for querying and mutating
 export default Icon;

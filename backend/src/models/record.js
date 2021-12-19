@@ -22,6 +22,6 @@ const RecordSchema = new Schema({
   }
 })
 // Creating a table within database with the defined schema
-const Record = mongoose.model('Record', RecordSchema)
+const Record = mongoose.model('records', RecordSchema)
 // Exporting table for querying and mutating
 export default Record;

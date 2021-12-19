@@ -44,6 +44,6 @@ const TaskSchema = new Schema({
   }
 })
 // Creating a table within database with the defined schema
-const Task = mongoose.model('Task', TaskSchema)
+const Task = mongoose.model('tasks', TaskSchema)
 // Exporting table for querying and mutating
 export default Task;
