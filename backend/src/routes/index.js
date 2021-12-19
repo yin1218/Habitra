@@ -9,12 +9,14 @@ import addOneAvatar from './api/avatar/addOne';
 import allIcon from './api/icon/getAll';
 import oneIcon from './api/icon/getOne';
 import addOneIcon from './api/icon/addOne';
+import addOneTask from './api/task/addOne';
 const router = express.Router()
 
 router.get("/test", (req, res) => {
     res.send("Hello world");
 })
 
+// phase one
 // users
 router.post('/users/signUp', (req, res) => {
     signUp(req, res);
@@ -59,6 +61,12 @@ router.post('/icon', (req, res) => {
     addOneIcon(req, res);
 })
 
+
+//phase two
+// task
+router.post('/task', (req, res) => {
+    addOneTask(req, res);
+})
 
 
 

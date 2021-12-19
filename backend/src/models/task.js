@@ -12,9 +12,6 @@ const TaskSchema = new Schema({
   Description: {
     type: String
   },
-  Create_Time: {
-    type: Date
-  },
   Close_Time: {
     type: Date
   },
@@ -42,7 +39,11 @@ const TaskSchema = new Schema({
   Need_Daily_Desc: {
     type: Boolean
   }
-})
+}, {
+  collection: 'tasks',
+  timestamps: { createdAt: 'Create_Time'}
+}
+)
 // Creating a table within database with the defined schema
 const Task = mongoose.model('tasks', TaskSchema)
 // Exporting table for querying and mutating
