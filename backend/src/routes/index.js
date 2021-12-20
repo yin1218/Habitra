@@ -17,6 +17,7 @@ import allParticipation_aUser from './api/participation/getAllOfaUser';
 import OngoingParticipation_aUser from './api/participation/getOngoingOfaUser';
 import FinishParticipation_aUser from './api/participation/getFinishOfaUser';
 import allParticipation_aAdmin from './api/participation/getAllOfaAdmin';
+import addOneAdmin from './api/participation/addOneAdmin';
 const router = express.Router()
 
 router.get("/test", (req, res) => {
@@ -87,6 +88,10 @@ router.get('/task/detail', (req, res) => {
 // participation
 router.post('/participation/newMember', (req, res) => {
     addOneParticipation(req, res);
+})
+
+router.post('/participation/newAdmin', (req, res) => {
+    addOneAdmin(req, res);
 })
 
 router.get('/participation', (req, res) => {

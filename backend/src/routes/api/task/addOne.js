@@ -1,4 +1,5 @@
 import Task from "../../../models/task";
+import Participation from "../../../models/participation";
 
 const addOneTask = async (req, res) => {
     console.log("inside addOneTask function");
@@ -20,8 +21,8 @@ const addOneTask = async (req, res) => {
     ) 
     console.log(myobj)
     try{
-        await myobj.save();
-        res.status(200).send({ message: 'success'});
+        const aTask = await myobj.save();
+        res.status(200).send({ message: 'success', id: aTask.id});
     }
     catch(err){
         res.status(403).send({ message: 'error', err_msg: err});

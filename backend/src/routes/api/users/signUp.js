@@ -1,9 +1,6 @@
 import User from "../../../models/user";
 import bcrypt from "bcrypt"; 
 
-
-
-
 const saltRounds = 10;
 
 const signUp = async (req, res) => {
