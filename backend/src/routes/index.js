@@ -10,6 +10,9 @@ import allIcon from './api/icon/getAll';
 import oneIcon from './api/icon/getOne';
 import addOneIcon from './api/icon/addOne';
 import addOneTask from './api/task/addOne';
+import addOneParticipation from './api/participation/addOne';
+import oneTask from './api/task/getOne';
+import oneTaskPartOF from './api/task/getOnePartOf';
 const router = express.Router()
 
 router.get("/test", (req, res) => {
@@ -66,6 +69,20 @@ router.post('/icon', (req, res) => {
 // task
 router.post('/task', (req, res) => {
     addOneTask(req, res);
+})
+
+router.get('/task', (req, res) => {
+    oneTask(req,res);
+})
+
+router.get('/task/detail', (req, res) => {
+    oneTaskPartOF(req,res);
+})
+
+
+// participation
+router.post('/participation/newMember', (req, res) => {
+    addOneParticipation(req, res);
 })
 
 
