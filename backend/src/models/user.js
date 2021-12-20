@@ -22,6 +22,9 @@ const UserSchema = new Schema({
   Avatar: {
     type: String,
     required: [true, 'Avatar field is required.']
+  },
+  Token: {
+    type: String
   }
 })
 // Creating a table within database with the defined schema

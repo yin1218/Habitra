@@ -13,6 +13,7 @@ const signUp = async (req, res) => {
             Email: req.body.email,
             Password: hash,
             Avatar: req.body.avatar,
+            Token: null
         }
     ) 
     console.log(myobj)

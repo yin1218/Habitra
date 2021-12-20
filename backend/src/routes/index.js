@@ -19,9 +19,10 @@ import FinishParticipation_aUser from './api/participation/getFinishOfaUser';
 import allParticipation_aAdmin from './api/participation/getAllOfaAdmin';
 import addOneAdmin from './api/participation/addOneAdmin';
 import addOneRecord from './api/record/addOne';
+const auth = require("../middleware/auth");
 const router = express.Router()
 
-router.get("/test", (req, res) => {
+router.get("/test", auth, (req, res) => {
     res.send("Hello world");
 })
 
@@ -73,46 +74,46 @@ router.post('/icon', (req, res) => {
 
 //phase two
 // task
-router.post('/task', (req, res) => {
+router.post('/task', auth, (req, res) => {
     addOneTask(req, res);
 })
 
-router.get('/task', (req, res) => {
+router.get('/task', auth, (req, res) => {
     oneTask(req,res);
 })
 
-router.get('/task/detail', (req, res) => {
+router.get('/task/detail', auth, (req, res) => {
     oneTaskPartOF(req,res);
 })
 
 
 // participation
-router.post('/participation/newMember', (req, res) => {
+router.post('/participation/newMember', auth, (req, res) => {
     addOneParticipation(req, res);
 })
 
-router.post('/participation/newAdmin', (req, res) => {
+router.post('/participation/newAdmin', auth, (req, res) => {
     addOneAdmin(req, res);
 })
 
-router.get('/participation', (req, res) => {
+router.get('/participation', auth, (req, res) => {
     allParticipation_aUser(req,res);
 })
 
-router.get('/participation/admin', (req, res) => {
+router.get('/participation/admin', auth, (req, res) => {
     allParticipation_aAdmin(req,res);
 })
 
-router.get('/participation/notAdmin/ongoing', (req, res) => {
+router.get('/participation/notAdmin/ongoing', auth, (req, res) => {
     OngoingParticipation_aUser(req,res);
 })
 
-router.get('/participation/notAdmin/finish', (req, res) => {
+router.get('/participation/notAdmin/finish', auth, (req, res) => {
     FinishParticipation_aUser(req,res);
 })
 
 // record
-router.post('/record/add', (req, res) => {
+router.post('/record/add', auth, (req, res) => {
     addOneRecord(req, res);
 })
 
