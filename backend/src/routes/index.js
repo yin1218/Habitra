@@ -18,6 +18,7 @@ import OngoingParticipation_aUser from './api/participation/getOngoingOfaUser';
 import FinishParticipation_aUser from './api/participation/getFinishOfaUser';
 import allParticipation_aAdmin from './api/participation/getAllOfaAdmin';
 import addOneAdmin from './api/participation/addOneAdmin';
+import addOneRecord from './api/record/addOne';
 const router = express.Router()
 
 router.get("/test", (req, res) => {
@@ -108,6 +109,11 @@ router.get('/participation/notAdmin/ongoing', (req, res) => {
 
 router.get('/participation/notAdmin/finish', (req, res) => {
     FinishParticipation_aUser(req,res);
+})
+
+// record
+router.post('/record/add', (req, res) => {
+    addOneRecord(req, res);
 })
 
 router.delete('/clear-db', (req, res) => {
