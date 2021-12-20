@@ -12,7 +12,10 @@ const addOneTask = async (req, res) => {
             Need_Daily_Desc: req.body.need_daily_desc,
             Icon: req.body.icon,
             Start_Hour: req.body.start_hour,
-            End_Hour: req.body.end_hour
+            End_Hour: req.body.end_hour,
+            Close_Time: null,
+            Is_Closed: false,
+            Account_Day: null
         }
     ) 
     console.log(myobj)
