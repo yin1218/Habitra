@@ -13,6 +13,8 @@ import addOneTask from './api/task/addOne';
 import addOneParticipation from './api/participation/addOne';
 import oneTask from './api/task/getOne';
 import oneTaskPartOF from './api/task/getOnePartOf';
+import allParticipation_aUser from './api/participation/getAllOfaUser';
+import OngoingParticipation_aUser from './api/participation/getOngoingOfaUser';
 const router = express.Router()
 
 router.get("/test", (req, res) => {
@@ -85,7 +87,13 @@ router.post('/participation/newMember', (req, res) => {
     addOneParticipation(req, res);
 })
 
+router.get('/participation', (req, res) => {
+    allParticipation_aUser(req,res);
+})
 
+router.get('/participation/notAdmin/ongoing', (req, res) => {
+    OngoingParticipation_aUser(req,res);
+})
 
 router.delete('/clear-db', (req, res) => {
     // deleteScoreCard(req,res);
