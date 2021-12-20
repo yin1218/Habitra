@@ -15,6 +15,7 @@ import oneTask from './api/task/getOne';
 import oneTaskPartOF from './api/task/getOnePartOf';
 import allParticipation_aUser from './api/participation/getAllOfaUser';
 import OngoingParticipation_aUser from './api/participation/getOngoingOfaUser';
+import FinishParticipation_aUser from './api/participation/getFinishOfaUser';
 const router = express.Router()
 
 router.get("/test", (req, res) => {
@@ -93,6 +94,10 @@ router.get('/participation', (req, res) => {
 
 router.get('/participation/notAdmin/ongoing', (req, res) => {
     OngoingParticipation_aUser(req,res);
+})
+
+router.get('/participation/notAdmin/finish', (req, res) => {
+    FinishParticipation_aUser(req,res);
 })
 
 router.delete('/clear-db', (req, res) => {
