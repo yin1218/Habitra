@@ -1,8 +1,10 @@
 import { Form, Input, Button, message} from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import React, {useState, useEffect} from 'react';
+// import { Link,useHistory } from 'react-router-dom';
 
-const LoginPage = ({isLogin, setIsLogin}) => {
+const LoginPage = ({setIsLogin}) => {
+    // let history = useHistory();
     const[userName, setUserName] = useState("");
     const[password, setPassword] = useState("");
     return (

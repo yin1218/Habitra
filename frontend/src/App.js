@@ -13,18 +13,20 @@ function App() {
   const [me, setMe] = useState("")
   const [isLogin, setIsLogin] = useState(false);
   return (
-    <div className="App">
+    <>
       {
         isLogin
         ?
         <h1>is Login</h1>
         :
         <>
-          <Route path="/" exact component={() => <LoginPage isLogin={isLogin} setIsLogin={setIsLogin}/>}/>
-          <Route path="/signUp" exact component={() => <SignUpPage/>}/>
+          {/* <LoginPage isLogin={isLogin} setIsLogin={setIsLogin}/> */}
+          <SignUpPage />
+          {/* <Route path="/" exact component={() => <LoginPage isLogin={isLogin} setIsLogin={setIsLogin}/>}/> */}
+          {/* <Route path="/signUp" exact component={() => <SignUpPage/>}/> */}
         </>
       }
-    </div>
+      </>
   );
 }
 
