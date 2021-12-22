@@ -6,6 +6,7 @@ import 'antd/dist/antd.css';
 import LoginPage from './Containers/LoginPage';
 import SignUpPage from './Containers/SignUpPage';
 import PageNotFound from './Containers/PageNotFound';
+import MainPage from './Containers/MainPage';
 
 
 
@@ -16,7 +17,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-      <Route path='/' element={<LoginPage setIsLogin={setIsLogin} />}></Route>
+      <Route path='/' element={isLogin ? <MainPage /> : <LoginPage setIsLogin={setIsLogin} />}></Route>
         <Route path='/login' element={<LoginPage setIsLogin={setIsLogin} />}></Route>
         <Route path='/signUp' element={<SignUpPage />}></Route>
         <Route path='*' element={<PageNotFound />}></Route>
