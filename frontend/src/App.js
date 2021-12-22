@@ -16,7 +16,8 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='login' element={<LoginPage setIsLogin={setIsLogin} />}></Route>
+      <Route path='/' element={<LoginPage setIsLogin={setIsLogin} />}></Route>
+        <Route path='/login' element={<LoginPage setIsLogin={setIsLogin} />}></Route>
         <Route path='/signUp' element={<SignUpPage />}></Route>
         <Route path='*' element={<PageNotFound />}></Route>
       </Routes>
