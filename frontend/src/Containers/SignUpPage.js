@@ -27,8 +27,8 @@ const SignUpPage = () => {
         avatarTypeNum += 1;
           return(
             <Panel header= {type} key={avatarTypeNum}>
-                {/* 這邊要改成所有頭像的可能性 */}
-                    {avatarUrl[type].map(url => (<Avatar size={64} src={url} onClick={(e) => {setMyAvatarUrl(e.target.src);setIsModalVisible(false);}}/>))}
+                {/* 這邊要增加選取後的外框狀態 */}
+                    {avatarUrl[type].map(url => (<Avatar size={64} src={url} onClick={(e) => {setMyAvatarUrl(e.target.src);}}/>))}
             </Panel>
           )
       }
@@ -149,14 +149,22 @@ const SignUpPage = () => {
                     {/* 送出按鈕 */}
                     <Form.Item>
                         <Button type="primary" htmlType="submit" className="wide-form-button">
-                            Login
+                            Sign Up
                         </Button>
                         Already have an Account?  <a href="/">Login</a>
                     </Form.Item>
                 </Form>
 
                 {/* 記得傳入ok的時候所使用的頭像url，並且在function中set他 */}
-                <Modal title="請選取你想要的頭像" visible={isModalVisible} onCancel={() => handleCancel()}footer={[]}>
+                <Modal title="請選取你想要的頭像" visible={isModalVisible} onCancel={() =>handleCancel()} footer={[
+                    <Button key="back" onClick={() => {setMyAvatarUrl("");}}>
+                    撤銷頭像
+                    </Button>,
+                    <Button key="back" type="primary" onClick={() => handleCancel()}>
+                    完成
+                    </Button>
+                ]}
+                >
                 <Collapse defaultActiveKey={['1']} onChange={callback} accordion>
                     {Object.keys(avatarUrl).map(typeName => avatarPanel(typeName))}
                 </Collapse>
