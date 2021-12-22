@@ -5,13 +5,13 @@ import React, {useState, useEffect} from 'react';
 const SignUpPage = () => {
 
     let avatarTypeNum = 0;
+
+    // avatar select related function
     const { Panel } = Collapse;
     function callback(key) {
         console.log(key);
       }
-
       const [isModalVisible, setIsModalVisible] = useState(false);
-    //   控制頭像選取
       const showModal = () => {
         setIsModalVisible(true);
       };  
@@ -28,7 +28,7 @@ const SignUpPage = () => {
           return(
             <Panel header= {type} key={avatarTypeNum}>
                 {/* 這邊要改成所有頭像的可能性 */}
-                    {avatarUrl[type].map(url => (<Avatar size={64} src={url} onClick={(e) => setMyAvatarUrl(e.target.src)}/>))}
+                    {avatarUrl[type].map(url => (<Avatar size={64} src={url} onClick={(e) => {setMyAvatarUrl(e.target.src);setIsModalVisible(false);}}/>))}
             </Panel>
           )
       }
@@ -156,7 +156,7 @@ const SignUpPage = () => {
                 </Form>
 
                 {/* 記得傳入ok的時候所使用的頭像url，並且在function中set他 */}
-                <Modal title="請選取你想要的頭像" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+                <Modal title="請選取你想要的頭像" visible={isModalVisible} onCancel={() => handleCancel()}footer={[]}>
                 <Collapse defaultActiveKey={['1']} onChange={callback} accordion>
                     {Object.keys(avatarUrl).map(typeName => avatarPanel(typeName))}
                 </Collapse>
