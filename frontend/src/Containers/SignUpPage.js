@@ -1,8 +1,18 @@
 import { Form, Input, Button, Avatar, message, Modal, Collapse } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 import React, {useState, useEffect} from 'react';
+import { getAllAvatar, signUp } from '../axios';
 
 const SignUpPage = () => {
+
+    useEffect( async () => {
+        const response = await getAllAvatar();
+        response.map(e => {
+            // console.log(e.Class);
+            // console.log(e.Uid);
+            // console.log(e._id);
+        })
+    }, []); 
 
     let avatarTypeNum = 0;
 
@@ -23,7 +33,7 @@ const SignUpPage = () => {
       };
 
       const avatarPanel = (type) => {
-          console.log(avatarTypeNum);
+        //   console.log(avatarTypeNum);
         avatarTypeNum += 1;
           return(
             <Panel header= {type} key={avatarTypeNum}>
@@ -43,6 +53,16 @@ const SignUpPage = () => {
     const[ID, setID] = useState("");
     const[password, setPassword] = useState("");
     const[email, setEmail] = useState("");
+
+    const handleSignUp = async () => {
+        const response = await signUp({
+            name: userName, 
+            email: email, 
+            user_id: ID, 
+            password: password, 
+            avatar: myAvatarUrl});
+        console.log(response); //@前端 要不要設狀態 註冊成功(此response為success代表成功)
+      }
     return (
         <>
             <h1 className="login_title">Sign Up</h1>
@@ -148,7 +168,7 @@ const SignUpPage = () => {
                     </Form.Item>
                     {/* 送出按鈕 */}
                     <Form.Item>
-                        <Button type="primary" htmlType="submit" className="wide-form-button">
+                        <Button type="primary" htmlType="submit" className="wide-form-button" onClick={handleSignUp}>
                             Sign Up
                         </Button>
                         Already have an Account?  <a href="/">Login</a>
