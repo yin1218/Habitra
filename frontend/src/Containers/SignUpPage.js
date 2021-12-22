@@ -1,33 +1,44 @@
-import { Form, Input, Button, Avatar, message, Modal } from 'antd';
+import { Form, Input, Button, Avatar, message, Modal, Collapse } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 import React, {useState, useEffect} from 'react';
 
 const SignUpPage = () => {
-    const info = () => {
-        message.info('This is a normal message');
-      };
+
+    let avatarTypeNum = 0;
+    const { Panel } = Collapse;
+    function callback(key) {
+        console.log(key);
+      }
 
       const [isModalVisible, setIsModalVisible] = useState(false);
-
     //   控制頭像選取
       const showModal = () => {
         setIsModalVisible(true);
-      };
-    
+      };  
       const handleOk = () => {
         setIsModalVisible(false);
-      };
-    
+      }; 
       const handleCancel = () => {
         setIsModalVisible(false);
       };
 
+      const avatarPanel = (type) => {
+          console.log(avatarTypeNum);
+        avatarTypeNum += 1;
+          return(
+            <Panel header= {type} key={avatarTypeNum}>
+                {/* 這邊要改成所有頭像的可能性 */}
+                    {avatarUrl[type].map(url => (<Avatar size={64} src={url} onClick={(e) => setMyAvatarUrl(e.target.src)}/>))}
+            </Panel>
+          )
+      }
 
-
-    const [avatarUrl, setAvatarUrl] = useState([]); //頭像選取清單
-    // [avatar_id, uid,class]
+    const [avatarUrl, setAvatarUrl] = useState({
+        "第一類": ["https://joeschmoe.io/api/v1/random","https://joeschmoe.io/api/v1/random","https://joeschmoe.io/api/v1/random"],
+        "第二類": ["https://joeschmoe.io/api/v1/random","https://joeschmoe.io/api/v1/random"],
+        "第三類": ["https://joeschmoe.io/api/v1/random"]
+    }); //頭像選取清單
     const [myAvatarUrl, setMyAvatarUrl] = useState("");  //我所選取的頭像
-
     const[userName, setUserName] = useState("");
     const[ID, setID] = useState("");
     const[password, setPassword] = useState("");
@@ -52,7 +63,7 @@ const SignUpPage = () => {
                         <Avatar size={64} icon={<UserOutlined />} onClick={() => setIsModalVisible(true)}  />
                         :
                         // 可以點即並且選取自己想要的avatar
-                        <Avatar size={64} src="https://joeschmoe.io/api/v1/random" onClick={() => setIsModalVisible(true)}  />
+                        <Avatar size={64} src={myAvatarUrl} onClick={() => setIsModalVisible(true)}  />
                     }
                     </Form.Item>
                     {/* 用戶姓名 */}
@@ -146,9 +157,9 @@ const SignUpPage = () => {
 
                 {/* 記得傳入ok的時候所使用的頭像url，並且在function中set他 */}
                 <Modal title="請選取你想要的頭像" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
-                    <p>Some contents...</p>
-                    <p>Some contents...</p>
-                    <p>Some contents...</p>
+                <Collapse defaultActiveKey={['1']} onChange={callback} accordion>
+                    {Object.keys(avatarUrl).map(typeName => avatarPanel(typeName))}
+                </Collapse>
                 </Modal>
 
             </div>
