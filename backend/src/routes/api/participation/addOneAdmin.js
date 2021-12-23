@@ -1,7 +1,7 @@
 import Participation from "../../../models/participation";
 
 const addOneAdmin = async (req, res) => {
-    console.log("inside addOneParticipation function");
+    console.log("inside addOneAdmin function");
     const existing = await Participation.findOne({User_ID: req.body.user_id, Task_ID: req.body.task_id});
     if(existing){ // update Is_Admin = true
         try{
