@@ -20,6 +20,8 @@ import allParticipation_aAdmin from './api/participation/getAllOfaAdmin';
 import addOneAdmin from './api/participation/addOneAdmin';
 import addOneRecord from './api/record/addOne';
 import AvatarByClass from './api/avatar/getbyClass';
+import TodayOngoingParticipation_aUser from './api/participation/getTodayOngoingOfaUser';
+import TodayFinishParticipation_aUser from './api/participation/getTodayFinishOfaUser';
 const auth = require("../middleware/auth");
 const router = express.Router()
 
@@ -117,6 +119,14 @@ router.get('/participation/notAdmin/ongoing', auth, (req, res) => {
 
 router.get('/participation/notAdmin/finish', auth, (req, res) => {
     FinishParticipation_aUser(req,res);
+})
+
+router.get('/participation/ongoing', auth, (req, res) => {
+    TodayOngoingParticipation_aUser(req,res);
+})
+
+router.get('/participation/finish', auth, (req, res) => {
+    TodayFinishParticipation_aUser(req,res);
 })
 
 // record
