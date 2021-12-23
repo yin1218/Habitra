@@ -15,6 +15,22 @@ const signUp = async(props) => {
     }
 }
 
+const signUpCheckId = async(props) => {
+    const {user_id} = props;
+    const {data: {message}} = await instance.post('/users/signUp/checkId',{
+        user_id
+    });
+    return message;
+}
+
+const signUpCheckEmail = async(props) => {
+    const {email} = props;
+    const {data: {message}} = await instance.post('/users/signUp/checkEmail',{
+        email
+    });
+    return message;
+}
+
 //avatar
 const getAllAvatar = async() => {
     try {
@@ -30,4 +46,4 @@ const getAllAvatar = async() => {
     }  
 }
 
-export {getAllAvatar, signUp};
+export {getAllAvatar, signUp, signUpCheckId, signUpCheckEmail};

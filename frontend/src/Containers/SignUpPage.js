@@ -1,7 +1,7 @@
 import { Form, Input, Button, Avatar, message, Modal, Collapse } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 import React, {useState, useEffect} from 'react';
-import { getAllAvatar, signUp } from '../axios';
+import { getAllAvatar, signUp, signUpCheckId, signUpCheckEmail } from '../axios';
 
 const SignUpPage = () => {
 
@@ -48,20 +48,32 @@ const SignUpPage = () => {
         "第二類": ["https://joeschmoe.io/api/v1/random","https://joeschmoe.io/api/v1/random"],
         "第三類": ["https://joeschmoe.io/api/v1/random"]
     }); //頭像選取清單
-    const [myAvatarUrl, setMyAvatarUrl] = useState("");  //我所選取的頭像
+    const [myAvatarUrl, setMyAvatarUrl] = useState("https://joeschmoe.io/api/v1/random");  //我所選取的頭像
     const[userName, setUserName] = useState("");
     const[ID, setID] = useState("");
     const[password, setPassword] = useState("");
     const[email, setEmail] = useState("");
 
     const handleSignUp = async () => {
-        const response = await signUp({
-            name: userName, 
-            email: email, 
-            user_id: ID, 
-            password: password, 
-            avatar: myAvatarUrl});
-        console.log(response); //@前端 要不要設狀態 註冊成功(此response為success代表成功)
+        const checkId = await signUpCheckId({
+            user_id: ID
+        })
+        const checkEmail = await signUpCheckEmail({
+            email: email
+        })
+        if(checkId == 'existing'){
+            console.log('ID exist'); //@前端
+        } else if(checkEmail == 'existing'){
+            console.log('email exist'); //@前端
+        } else{
+            const response = await signUp({
+                name: userName, 
+                email: email, 
+                user_id: ID, 
+                password: password, 
+                avatar: myAvatarUrl});
+            console.log(response); //@前端 要不要設狀態 註冊成功(此response為success代表成功)
+        }
       }
     return (
         <>
