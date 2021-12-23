@@ -19,6 +19,7 @@ import FinishParticipation_aUser from './api/participation/getFinishOfaUser';
 import allParticipation_aAdmin from './api/participation/getAllOfaAdmin';
 import addOneAdmin from './api/participation/addOneAdmin';
 import addOneRecord from './api/record/addOne';
+import AvatarByClass from './api/avatar/getbyClass';
 const auth = require("../middleware/auth");
 const router = express.Router()
 
@@ -51,7 +52,13 @@ router.get('/avatar/all', (req, res) => {
 })
 
 router.get('/avatar', (req, res) => {
-    oneAvatar(req,res);
+    if(req.query.avatar_id){
+        oneAvatar(req,res);
+    }
+    else if (req.query.class){
+        AvatarByClass(req, res);
+    }
+    
 })
 
 router.post('/avatar', (req, res) => {
