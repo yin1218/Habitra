@@ -1,7 +1,7 @@
 import Icon from "../../../models/icon";
 
 const addOneIcon = async (req, res) => {
-    console.log("inside signUp function");
+    console.log("inside addOneIcon function");
     const myobj = new Icon(
         {
             Uid: req.body.uid,

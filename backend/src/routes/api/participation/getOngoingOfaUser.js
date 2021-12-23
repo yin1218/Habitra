@@ -2,7 +2,7 @@ import Participation from "../../../models/participation";
 import Task from "../../../models/task";
 
 const OngoingParticipation_aUser = async(req, res) => {
-    console.log("inside allParticipation_aUser function");
+    console.log("inside OngoingParticipation_aUser function");
     var ongoingTask = [];
     
     Task.find({ Is_Closed: false })
