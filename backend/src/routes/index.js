@@ -22,6 +22,7 @@ import addOneRecord from './api/record/addOne';
 import AvatarByClass from './api/avatar/getbyClass';
 import TodayOngoingParticipation_aUser from './api/participation/getTodayOngoingOfaUser';
 import TodayFinishParticipation_aUser from './api/participation/getTodayFinishOfaUser';
+import TodayDayOffParticipation_aUser from './api/participation/getTodayDayOffOfaUser';
 const auth = require("../middleware/auth");
 const router = express.Router()
 
@@ -127,6 +128,10 @@ router.get('/participation/ongoing', auth, (req, res) => {
 
 router.get('/participation/finish', auth, (req, res) => {
     TodayFinishParticipation_aUser(req,res);
+})
+
+router.get('/participation/dayoff', auth, (req, res) => {
+    TodayDayOffParticipation_aUser(req,res);
 })
 
 // record

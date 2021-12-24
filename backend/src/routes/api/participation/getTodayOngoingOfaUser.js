@@ -22,6 +22,9 @@ const calculate_now_date = () =>{
 const TodayOngoingParticipation_aUser = async(req, res) => {
     console.log("inside TodayOngoingParticipation_aUser function");
     const today = calculate_now_date();
+    const d = new Date(today);
+    const dWeek = (d.getDay()+6)%7;
+
     var ongoingTask = [];
     var result = [];
     
@@ -40,15 +43,16 @@ const TodayOngoingParticipation_aUser = async(req, res) => {
                     data.map(async (d, k) => {
                         const existing = await Record.findOne({Task_ID: d.Task_ID, Time: today, User_ID: req.query.user_id});
                         console.log("Task_ID: ", d.Task_ID, "\nUser_ID: ", req.query.user_id, "\n");
-                        if(existing){
-                            // 需要再判斷 frequency
-                            const aTask = await Task.findOne({_id: d.Task_ID});
-                            if(aTask.Threshold > existing.Frequency){
+                        const aTask = await Task.findOne({_id: d.Task_ID});
+                        if(aTask.Working_Day[dWeek] == 1){
+                            if(existing){
+                                if(aTask.Threshold > existing.Frequency){
+                                    result.push(d.Task_ID);
+                                }
+                            }
+                            else{
                                 result.push(d.Task_ID);
                             }
-                        }
-                        else{
-                            result.push(d.Task_ID);
                         }
                     })
                 )
