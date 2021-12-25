@@ -3,7 +3,7 @@ import Avatar from "../../../models/avatar";
 const AvatarByClass = async(req, res) => {
     console.log("inside AvatarByClass function");
     try {
-        const Data = await Avatar.find({'Class': req.query.class});
+        const Data = await Avatar.find({'Class': req.query.className});
         console.log("Data: ",Data);
         res.status(200).send({ message: 'success', data: Data});
     } catch (e) { 

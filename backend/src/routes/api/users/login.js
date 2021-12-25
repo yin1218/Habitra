@@ -23,7 +23,7 @@ const login = async(req, res) => {
             user.Token = token;
             await User.updateOne({User_ID: req.body.user_id}, { $set: { 'Token': token } });
             res.status(200).send({
-                user_id: user.User_ID,
+                userId: user.User_ID,
                 name: user.Name,
                 email: user.Email,
                 avatar: user.Avatar,

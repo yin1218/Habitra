@@ -58,7 +58,7 @@ router.get('/avatar', (req, res) => {
     if(req.query.avatar_id){
         oneAvatar(req,res);
     }
-    else if (req.query.class){
+    else if (req.query.className){
         AvatarByClass(req, res);
     }
     
