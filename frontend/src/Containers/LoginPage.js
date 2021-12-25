@@ -2,11 +2,20 @@ import { Form, Input, Button, message} from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import React, {useState, useEffect} from 'react';
 // import { Link,useHistory } from 'react-router-dom';
+import { login } from '../axios';
 
 const LoginPage = ({setIsLogin}) => {
     // let history = useHistory();
-    const[userName, setUserName] = useState("");
+    const[userId, setUserId] = useState("");
     const[password, setPassword] = useState("");
+    const[token, setToken] = useState(""); //@前端 token
+
+    const handleLogin = async () => {
+        const response = await login({user_id: userId, password: password});
+        setToken(response);
+        setIsLogin(true);
+    }
+    
     return (
         <>
             <h1 className="login_title">Login</h1>
@@ -17,15 +26,15 @@ const LoginPage = ({setIsLogin}) => {
                     initialValues={{remember: true,}}
                 >
                     <Form.Item
-                        name="username"
+                        name="userId"
                         rules={[
                         {
                             required: true,
-                            message: 'Please input your Username!',
+                            message: 'Please input your UserId!',
                         },
                         ]}
                     >
-                        <Input prefix={<UserOutlined className="site-form-item-icon" />} value = {userName} placeholder="Username" onChange={(e) => setUserName(e.target.value)}/>
+                        <Input prefix={<UserOutlined className="site-form-item-icon" />} value = {userId} placeholder="UserId" onChange={(e) => setUserId(e.target.value)}/>
                     </Form.Item>
 
                     <Form.Item
@@ -47,7 +56,7 @@ const LoginPage = ({setIsLogin}) => {
                     </Form.Item>
 
                     <Form.Item>
-                        <Button type="primary" htmlType="submit" className="wide-form-button" onClick={() => setIsLogin(true)}>
+                        <Button type="primary" htmlType="submit" className="wide-form-button" onClick={handleLogin}>
                             Login
                         </Button>
                         Don't have an Account?  <a href="/signUp">Sign Up</a>

@@ -1,16 +1,20 @@
 import { Form, Input, Button, Avatar, message, Modal, Collapse } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 import React, {useState, useEffect} from 'react';
-import { getAllAvatar, signUp, signUpCheckId, signUpCheckEmail } from '../axios';
+import { getAvatarClass, signUp, signUpCheckId, signUpCheckEmail } from '../axios';
 
 const SignUpPage = () => {
 
+    var menAvatar = []; //@前端
+    var womenAvatar = []; //@前端
     useEffect( async () => {
-        const response = await getAllAvatar();
-        response.map(e => {
-            // console.log(e.Class);
-            // console.log(e.Uid);
-            // console.log(e._id);
+        const menResponse = await getAvatarClass({className: 'Men'});
+        menResponse.map(e => {
+            menAvatar.push(e.Uid);
+        })
+        const womenResponse = await getAvatarClass({className: 'Men'});
+        womenResponse.map(e => {
+            womenAvatar.push(e.Uid);
         })
     }, []); 
 
@@ -44,9 +48,8 @@ const SignUpPage = () => {
       }
 
     const [avatarUrl, setAvatarUrl] = useState({
-        "第一類": ["https://joeschmoe.io/api/v1/random","https://joeschmoe.io/api/v1/random","https://joeschmoe.io/api/v1/random"],
-        "第二類": ["https://joeschmoe.io/api/v1/random","https://joeschmoe.io/api/v1/random"],
-        "第三類": ["https://joeschmoe.io/api/v1/random"]
+        "Men": ["https://joeschmoe.io/api/v1/random","https://joeschmoe.io/api/v1/random","https://joeschmoe.io/api/v1/random"],
+        "Women": ["https://joeschmoe.io/api/v1/random","https://joeschmoe.io/api/v1/random"]
     }); //頭像選取清單
     const [myAvatarUrl, setMyAvatarUrl] = useState("https://joeschmoe.io/api/v1/random");  //我所選取的頭像
     const[userName, setUserName] = useState("");
@@ -62,7 +65,7 @@ const SignUpPage = () => {
             email: email
         })
         if(checkId == 'existing'){
-            console.log('ID exist'); //@前端
+            console.log('ID exist'); //@前端 
         } else if(checkEmail == 'existing'){
             console.log('email exist'); //@前端
         } else{

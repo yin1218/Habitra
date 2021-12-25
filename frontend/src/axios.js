@@ -31,6 +31,19 @@ const signUpCheckEmail = async(props) => {
     return message;
 }
 
+const login = async(props) => {
+    const {user_id, password} = props;
+    try{
+        const {data: {userId, name, email, avatar, token}} = await instance.post('/users/login',{
+            user_id, password
+        });
+        return token;
+    }
+    catch (error) {
+        console.log("error" + error);
+    }
+}
+
 //avatar
 const getAllAvatar = async() => {
     try {
@@ -46,4 +59,21 @@ const getAllAvatar = async() => {
     }  
 }
 
-export {getAllAvatar, signUp, signUpCheckId, signUpCheckEmail};
+const getAvatarClass = async(props) => {
+    const {className} = props;
+    try{
+        var avatarStorage = [];
+        const { data: {message, data} } = await instance.get('/avatar',{
+            params:{className: className}
+        });
+        for(var i = 0; i < data.length; i++){
+            avatarStorage.push(data[i]);
+        }
+        return avatarStorage;
+    }
+    catch (error){
+        console.log("error");
+    }
+}
+
+export {getAllAvatar, getAvatarClass, signUp, signUpCheckId, signUpCheckEmail, login};
