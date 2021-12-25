@@ -12,7 +12,7 @@ const SignUpPage = () => {
         menResponse.map(e => {
             menAvatar.push(e.Uid);
         })
-        const womenResponse = await getAvatarClass({className: 'Men'});
+        const womenResponse = await getAvatarClass({className: 'Women'});
         womenResponse.map(e => {
             womenAvatar.push(e.Uid);
         })
