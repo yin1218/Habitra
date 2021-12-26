@@ -10,18 +10,20 @@ import SignUpPage from './Containers/SignUpPage';
 import PageNotFound from './Containers/PageNotFound';
 import MainPage from './Containers/MainPage';
 
-
+const LOCALSTORAGE_KEY = "";
 
 function App() {
-  const [me, setMe] = useState("")
+  const savedToken = localStorage.getItem(LOCALSTORAGE_KEY);
+  
+  // const [me, setMe] = useState("")
   const [isLogin, setIsLogin] = useState(false);
-  const[token, setToken] = useState(""); //@前端 token
+  const[token, setToken] = useState(savedToken || ""); //@前端 token
   const[valid, setValid] = useState(false); //@前端 token storage
 
 
   function PrivateRoute({ children }) {
     // const auth = useAuth();
-    return isLogin ? children : <Navigate to="/login" />;
+    return valid ? children : <Navigate to="/login" />;
 
   }
 
@@ -32,18 +34,28 @@ function App() {
     }
   }, [token]); 
 
+  useEffect(() => {
+    if(isLogin){
+      localStorage.setItem(LOCALSTORAGE_KEY, token);
+    }
+  }, [isLogin, token])
+
   return (
     <BrowserRouter>
       <Routes>
         {/* public route */}
-        <Route path='/' element={isLogin ? <MainPage /> : <LoginPage setIsLogin={setIsLogin} setToken={setToken} />}></Route>
+        <Route path='/' element={valid ? <MainPage /> : <LoginPage setIsLogin={setIsLogin} setToken={setToken} />}></Route>
         {/* private route */}
         <Route path='/login' element={
           <PrivateRoute>  
             <LoginPage setIsLogin={setIsLogin} />
           </PrivateRoute>}>
         </Route>
-        <Route path='/signUp' element={<SignUpPage />}></Route>
+        <Route path='/signUp' element={
+        <PrivateRoute>
+          <SignUpPage />
+        </PrivateRoute>
+        }></Route>
         <Route path='*' element={<PageNotFound />}></Route>
       </Routes>
       </BrowserRouter>
