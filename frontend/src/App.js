@@ -16,9 +16,9 @@ function App() {
   const savedToken = localStorage.getItem(LOCALSTORAGE_KEY);
   
   // const [me, setMe] = useState("")
-  const [isLogin, setIsLogin] = useState(false);
-  const[token, setToken] = useState(savedToken || ""); //@前端 token
-  const[valid, setValid] = useState(false); //@前端 token storage
+  const [isLogin, setIsLogin] = useState(false); //目的：檢測目前是否登入
+  const[token, setToken] = useState(savedToken || "");  //目的：檢測當前用戶是否過期
+  const[valid, setValid] = useState(false);  //
 
 
   function PrivateRoute({ children }) {
@@ -27,35 +27,32 @@ function App() {
 
   }
 
+  // 測試token
   useEffect( async () => {
     const response = await testToken({token: token});
     if(response === 'token success'){
       setValid(true);
+      setIsLogin(true);
+      localStorage.setItem(LOCALSTORAGE_KEY, token);
     }
   }, [token]); 
 
   useEffect(() => {
-    if(isLogin){
-      localStorage.setItem(LOCALSTORAGE_KEY, token);
+    if(valid === false){
+      setIsLogin(false);
     }
-  }, [isLogin, token])
+  }, [valid, isLogin])
+
 
   return (
     <BrowserRouter>
       <Routes>
         {/* public route */}
-        <Route path='/' element={valid ? <MainPage /> : <LoginPage setIsLogin={setIsLogin} setToken={setToken} />}></Route>
+        <Route path='/' element={isLogin ? <MainPage setToken={setToken} setValid={setValid} /> : <LoginPage setIsLogin={setIsLogin} setToken={setToken} />}></Route>
         {/* private route */}
-        <Route path='/login' element={
-          <PrivateRoute>  
-            <LoginPage setIsLogin={setIsLogin} />
-          </PrivateRoute>}>
+        <Route path='/login' element={<LoginPage setIsLogin={setIsLogin} />}>
         </Route>
-        <Route path='/signUp' element={
-        <PrivateRoute>
-          <SignUpPage />
-        </PrivateRoute>
-        }></Route>
+        <Route path='/signUp' element={<SignUpPage />}></Route>
         <Route path='*' element={<PageNotFound />}></Route>
       </Routes>
       </BrowserRouter>
