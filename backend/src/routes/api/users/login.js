@@ -22,6 +22,7 @@ const login = async(req, res) => {
               );
             user.Token = token;
             await User.updateOne({User_ID: req.body.user_id}, { $set: { 'Token': token } });
+            res.cookie('token', user.Token, {httpOnly: true});
             res.status(200).send({
                 userId: user.User_ID,
                 name: user.Name,
