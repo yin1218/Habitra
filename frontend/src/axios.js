@@ -1,6 +1,21 @@
 import axios from 'axios';
 const instance = axios.create({ baseURL: 'http://localhost:5000/api' });
 
+//testToken
+const testToken = async(props) => {
+    const {token} = props;
+    try{
+        const {data: {message}} = await instance.get('/test',{
+            params:{token: token}
+        });
+        return message;
+    }
+    catch(error) {
+        console.log("token expired");
+        return ("token expired");
+    }
+}
+
 //users
 const signUp = async(props) => {
     const {name, email, user_id, password, avatar} = props;
@@ -76,4 +91,4 @@ const getAvatarClass = async(props) => {
     }
 }
 
-export {getAllAvatar, getAvatarClass, signUp, signUpCheckId, signUpCheckEmail, login};
+export {getAllAvatar, getAvatarClass, signUp, signUpCheckId, signUpCheckEmail, login, testToken};

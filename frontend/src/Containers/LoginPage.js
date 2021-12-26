@@ -4,11 +4,11 @@ import React, {useState, useEffect} from 'react';
 // import { Link,useHistory } from 'react-router-dom';
 import { login } from '../axios';
 
-const LoginPage = ({setIsLogin}) => {
+const LoginPage = ({setIsLogin, setToken}) => {
     // let history = useHistory();
     const[userId, setUserId] = useState("");
     const[password, setPassword] = useState("");
-    const[token, setToken] = useState(""); //@前端 token
+    
 
     const handleLogin = async () => {
         const response = await login({user_id: userId, password: password});

@@ -27,7 +27,7 @@ const auth = require("../middleware/auth");
 const router = express.Router()
 
 router.get("/test", auth, (req, res) => {
-    res.send("Hello world");
+    res.send({message: "token success"});
 })
 
 // phase one
