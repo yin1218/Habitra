@@ -197,9 +197,9 @@ const AddTaskPage = () => {
                         },
                     ]}
                 >
+                    <Switch checkedChildren="開啟" unCheckedChildren="關閉" defaultChecked onChange={handlePunush}/>
                     <Input.Group compact>
                         {/* switch */}
-                        <Switch checkedChildren="開啟" unCheckedChildren="關閉" defaultChecked onChange={handlePunush}/>
                         {/* input box */}
                         <div style={{visibility:punish !== 0 ? 'visible' : 'hidden'}}>
                             <Input style={{ width: 100 }} value = {punish} placeholder="請輸入數字" onChange={(e) => setPunish(e.target.value)} />
