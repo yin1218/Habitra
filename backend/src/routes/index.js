@@ -13,16 +13,17 @@ import addOneTask from './api/task/addOne';
 import addOneParticipation from './api/participation/addOne';
 import oneTask from './api/task/getOne';
 import oneTaskPartOF from './api/task/getOnePartOf';
-import allParticipation_aUser from './api/participation/getAllOfaUser';
+import {allParticipation_aUser, allParticipation_aAdmin} from './api/participation/getAllOfaUser';
 import OngoingParticipation_aUser from './api/participation/getOngoingOfaUser';
 import FinishParticipation_aUser from './api/participation/getFinishOfaUser';
-import allParticipation_aAdmin from './api/participation/getAllOfaAdmin';
+// import allParticipation_aAdmin from './api/participation/getAllOfaAdmin';
 import addOneAdmin from './api/participation/addOneAdmin';
 import addOneRecord from './api/record/addOne';
 import AvatarByClass from './api/avatar/getbyClass';
 import TodayOngoingParticipation_aUser from './api/participation/getTodayOngoingOfaUser';
 import TodayFinishParticipation_aUser from './api/participation/getTodayFinishOfaUser';
 import TodayDayOffParticipation_aUser from './api/participation/getTodayDayOffOfaUser';
+import { oneRecordOfADay, RecordsOfAPeriod } from './api/record/record';
 const auth = require("../middleware/auth");
 const router = express.Router()
 
@@ -138,6 +139,20 @@ router.get('/participation/dayoff', auth, (req, res) => {
 router.post('/record/add', auth, (req, res) => {
     addOneRecord(req, res);
 })
+
+router.get('/record/period', auth, (req, res) => {
+    RecordsOfAPeriod(req,res);
+})
+
+router.get('/record', auth, (req, res) => {
+    oneRecordOfADay(req,res);
+})
+
+
+
+
+
+
 
 router.delete('/clear-db', (req, res) => {
     // deleteScoreCard(req,res);
