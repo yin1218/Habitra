@@ -1,4 +1,6 @@
 import Record from "../../../models/record";
+import Participation from "../../../models/participation";
+import Task from "../../../models/task";
 
 export const oneRecordOfADay = async(req, res) => {
     console.log("inside oneRecordOfADay function");
@@ -18,7 +20,6 @@ export const RecordsOfAPeriod = async(req, res) => {
         const Data = await Record.find({'User_ID': req.query.user_id, 'Task_ID': req.query.task_id, 'Time': {$gte: req.query.start_time, $lte: req.query.end_time}}, {_id: 0, __v: 0, User_ID: 0, Task_ID: 0});
         var frequency_arr = [];
         var daily_desc_arr = [];
-        var start_date = new Date(req.query.start_time);
         var end_date = new Date(req.query.end_time);
         
         
@@ -38,6 +39,49 @@ export const RecordsOfAPeriod = async(req, res) => {
         console.log("frequency_arr: ", frequency_arr);
         console.log("daily_desc_arr: ", daily_desc_arr);
         res.status(200).send({ message: 'success', frequency: frequency_arr, daily_desc: daily_desc_arr});
+    } catch (e) { 
+        res.status(403).send({ message: 'error', data: null});
+        throw new Error("Database query failed"); 
+    }
+};
+
+export const RecordsOfATask = async(req, res) => {
+    console.log("inside RecordsOfATask function");
+    var userList = [];
+    var result = [];
+    try {
+        const threshold = await Task.find({'Task_ID': req.query.task_id}, {Threshold: 1, _id: 0});
+        await Participation.find({'Task_ID': req.query.task_id, 'Is_Quit': false}, {_id: 0, User_ID: 1}).then(user => {
+            user.map((d, k) => {
+                userList.push(d.User_ID);
+            })
+
+            Record.find({'Task_ID': req.query.task_id, User_ID: { $in: userList }, 'Time': req.query.time}, {User_ID: 1, Frequency: 1, _id: 0})
+            .then( async (data) => {
+                await Promise.all(
+                    user.map(async (d, k) => {
+                        var dd = data.filter(function(item, index, array){
+                            return item.User_ID == d.User_ID;
+                        })
+                        if(dd.length == 0){
+                            result.push({'User_ID': d.User_ID, 'Frequency': 0, 'boolean': false});
+                        }
+                        else{
+                            if(dd[0].Frequency >= threshold[0].Threshold){
+                                result.push({'User_ID': dd[0].User_ID, 'Frequency': dd[0].Frequency, 'boolean': true});
+                            }
+                            else{
+                                result.push({'User_ID': dd[0].User_ID, 'Frequency': dd[0].Frequency, 'boolean': false});
+                            }
+                        }
+                    })
+                )
+
+                console.log("Today User's list:")
+                console.log(result);
+                res.status(200).send({ message: 'success', data: result});
+            })
+        })
     } catch (e) { 
         res.status(403).send({ message: 'error', data: null});
         throw new Error("Database query failed"); 
