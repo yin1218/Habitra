@@ -88,3 +88,22 @@ export const RecordsOfATask = async(req, res) => {
     }
 };
 
+export const CountOfATask = async(req, res) => {
+    console.log("inside CountOfATask function");
+    try {
+        var count = 0;
+        const threshold = await Task.find({'Task_ID': req.query.task_id}, {Threshold: 1, _id: 0});
+        await Record.find({'Task_ID': req.query.task_id, 'Time': req.query.time}, {_id: 0, Frequency: 1}).then(data => {
+            data.map((d, k) => {
+                if(d.Frequency >= threshold[0].Threshold){
+                    count++;
+                }
+            })
+            res.status(200).send({ message: 'success', count: count});
+        })
+    } catch (e) { 
+        res.status(403).send({ message: 'error', data: null});
+        throw new Error("Database query failed"); 
+    }
+};
+
