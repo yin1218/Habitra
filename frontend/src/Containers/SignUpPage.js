@@ -66,8 +66,10 @@ const SignUpPage = () => {
         })
         if(checkId == 'existing'){
             console.log('ID exist'); //@前端 
+            message.error('ID重複，請重新取名QQ');
         } else if(checkEmail == 'existing'){
             console.log('email exist'); //@前端
+            message.error('email重複，請重新輸入QQ');
         } else{
             const response = await signUp({
                 name: userName, 
@@ -76,6 +78,22 @@ const SignUpPage = () => {
                 password: password, 
                 avatar: myAvatarUrl});
             console.log(response); //@前端 要不要設狀態 註冊成功(此response為success代表成功)
+            // success
+            
+            // setTimeout(successMsg, 5000);
+            console.log("status = ", response);
+            if(response === 'success') {
+                message.success('註冊成功，即將跳轉到登入頁面...');
+                // history.push("/");
+                // setLogin(true);
+                // setName(userName);
+                // setUserId(res.data);
+            }
+            else{
+                message.error('失敗QQ...');
+            }
+            // history.push("/login");
+            // 過幾秒直接到Sign in Page
         }
       }
     return (

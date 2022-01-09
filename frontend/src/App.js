@@ -24,7 +24,7 @@ function App() {
 
   function PrivateRoute({ children }) {
     // const auth = useAuth();
-    return valid ? children : <Navigate to="/login" />;
+    return token==='' ? children : <Navigate to="/login" />;
 
   }
 
@@ -49,13 +49,13 @@ function App() {
     <BrowserRouter>
       <Routes>
         {/* public route */}
-        <Route path='/' element={valid ? <MainPage setToken={setToken} setValid={setValid} /> : <LoginPage setIsLogin={setIsLogin} setToken={setToken} />}></Route>
+        <Route path='/' element={token==='' ? <MainPage setToken={setToken} setValid={setValid} /> : <LoginPage setIsLogin={setIsLogin} setToken={setToken} />}></Route>
         {/* private route */}
         <Route path='/login' element={<LoginPage setIsLogin={setIsLogin} />}>
         </Route>
         <Route path='/signUp' element={<SignUpPage />}></Route>
         <Route path='*' element={<PageNotFound />}></Route>
-        <Route path='/addTask' element={ valid ? <AddTaskPage /> : <Navigate to="/login" />}></Route>
+        <Route path='/addTask' element={ token==='' ? <AddTaskPage /> : <Navigate to="/login" />}></Route>
       </Routes>
       </BrowserRouter>
   );
