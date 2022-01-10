@@ -1,4 +1,4 @@
-import Task from "../../../models/task";
+import Task from "../../models/task";
 
 const calculate_now_date = () =>{
     // Date object initialized as per Hong Kong timezone. Returns a datetime string
@@ -17,7 +17,7 @@ const calculate_now_date = () =>{
     return date_yyyy_mm_dd
 }
 
-const addOneTask = async (req, res) => {
+export const addOneTask = async (req, res) => {
     console.log("inside addOneTask function");
     const today = calculate_now_date();
     const myobj = new Task(
@@ -48,4 +48,26 @@ const addOneTask = async (req, res) => {
 };
 
 
-export default addOneTask;
+export const oneTask = async(req, res) => {
+    console.log("inside oneTask function");
+    try {
+        const Data = await Task.findOne({'_id': req.query.task_id});
+        console.log("Data: ",Data);
+        res.status(200).send({ message: 'success', data: Data});
+    } catch (e) { 
+        res.status(403).send({ message: 'error', data: null});
+        throw new Error("Database query failed"); 
+    }
+};
+
+export const oneTaskPartOF = async(req, res) => {
+    console.log("inside oneTaskPartOF function");
+    try {
+        const Data = await Task.findOne({'_id': req.query.task_id}, {_id:0, __v:0, Is_Closed:0, Working_Day:0, Punish:0, Account_Day:0, Need_Daily_Desc:0, updatedAt:0});
+        console.log("Data: ",Data);
+        res.status(200).send({ message: 'success', data: Data});
+    } catch (e) { 
+        res.status(403).send({ message: 'error', data: null});
+        throw new Error("Database query failed"); 
+    }
+};
