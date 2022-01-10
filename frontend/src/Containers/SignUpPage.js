@@ -1,10 +1,12 @@
 import { Form, Input, Button, Avatar, message, Modal, Collapse } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 import React, {useState, useEffect} from 'react';
+import { useNavigate  } from "react-router-dom";
 import { getAvatarClass, signUp, signUpCheckId, signUpCheckEmail } from '../axios';
 
 const SignUpPage = () => {
 
+    const navigate = useNavigate(); //In react-router-dom v6 useHistory() is replaced by useNavigate().
     var menAvatar = []; //@前端
     var womenAvatar = []; //@前端
     useEffect( async () => {
@@ -84,7 +86,7 @@ const SignUpPage = () => {
             console.log("status = ", response);
             if(response === 'success') {
                 message.success('註冊成功，即將跳轉到登入頁面...');
-                // history.push("/");
+                navigate("/login");
                 // setLogin(true);
                 // setName(userName);
                 // setUserId(res.data);
