@@ -1,27 +1,10 @@
 import express from 'express';
-import checkId from './api/users/checkId';
-import checkEmail from './api/users/checkEmail';
-import signUp from './api/users/signUp';
-import login from './api/users/login';
-
-import allIcon from './api/icon/getAll';
-import oneIcon from './api/icon/getOne';
-import addOneIcon from './api/icon/addOne';
-import addOneTask from './api/task/addOne';
-import addOneParticipation from './api/participation/addOne';
-import oneTask from './api/task/getOne';
-import oneTaskPartOF from './api/task/getOnePartOf';
-import {allParticipation_aUser, allParticipation_aAdmin} from './api/participation/getAllOfaUser';
-import OngoingParticipation_aUser from './api/participation/getOngoingOfaUser';
-import FinishParticipation_aUser from './api/participation/getFinishOfaUser';
-// import allParticipation_aAdmin from './api/participation/getAllOfaAdmin';
-import addOneAdmin from './api/participation/addOneAdmin';
-import addOneRecord from './api/record/addOne';
-import TodayOngoingParticipation_aUser from './api/participation/getTodayOngoingOfaUser';
-import TodayFinishParticipation_aUser from './api/participation/getTodayFinishOfaUser';
-import TodayDayOffParticipation_aUser from './api/participation/getTodayDayOffOfaUser';
-import { checkDayDoneOfAUser, CountOfATask, oneRecordOfADay, RecordsOfAPeriod, RecordsOfATask } from './api/record/record';
+import { checkDayDoneOfAUser, CountOfATask, oneRecordOfADay, RecordsOfAPeriod, RecordsOfATask, addOneRecord } from './api/record';
 import { addOneAvatar, allAvatar, AvatarByClass, oneAvatar } from './api/avatar';
+import { checkEmail, checkId, login, signUp } from './api/user';
+import { addOneIcon, allIcon, oneIcon } from './api/icon';
+import { addOneTask, oneTask, oneTaskPartOF } from './api/task';
+import { addOneAdmin, addOneParticipation, allParticipation_aAdmin, allParticipation_aUser, FinishParticipation_aUser, OngoingParticipation_aUser, TodayDayOffParticipation_aUser, TodayFinishParticipation_aUser, TodayOngoingParticipation_aUser } from './api/participation';
 const auth = require("../middleware/auth");
 const router = express.Router()
 
