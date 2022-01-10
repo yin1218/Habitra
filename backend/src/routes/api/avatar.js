@@ -1,4 +1,4 @@
-import Avatar from "../../../models/avatar";
+import Avatar from "../../models/avatar";
 
 export const addOneAvatar = async (req, res) => {
     console.log("inside addOneAvatar function");

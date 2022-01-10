@@ -20,7 +20,7 @@ import addOneRecord from './api/record/addOne';
 import TodayOngoingParticipation_aUser from './api/participation/getTodayOngoingOfaUser';
 import TodayFinishParticipation_aUser from './api/participation/getTodayFinishOfaUser';
 import TodayDayOffParticipation_aUser from './api/participation/getTodayDayOffOfaUser';
-import { CountOfATask, oneRecordOfADay, RecordsOfAPeriod, RecordsOfATask } from './api/record/record';
+import { checkDayDoneOfAUser, CountOfATask, oneRecordOfADay, RecordsOfAPeriod, RecordsOfATask } from './api/record/record';
 import { addOneAvatar, allAvatar, AvatarByClass, oneAvatar } from './api/avatar';
 const auth = require("../middleware/auth");
 const router = express.Router()
@@ -152,6 +152,10 @@ router.get('/record/detail', auth, (req, res) => {
 
 router.get('/record/count', auth, (req, res) => {
     CountOfATask(req,res);
+})
+
+router.get('/record/dayDone', auth, (req, res) => {
+    checkDayDoneOfAUser(req,res);
 })
 
 

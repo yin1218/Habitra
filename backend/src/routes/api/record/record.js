@@ -5,9 +5,17 @@ import Task from "../../../models/task";
 export const oneRecordOfADay = async(req, res) => {
     console.log("inside oneRecordOfADay function");
     try {
-        const Data = await Record.findOne({'User_ID': req.query.user_id, 'Task_ID': req.query.task_id, 'Time': req.query.time}, {_id: 0, __v: 0, User_ID: 0, Task_ID: 0, Time: 0});
+        var result = Object();
+        const Data = await Record.findOne({'User_ID': req.query.user_id, 'Task_ID': req.query.task_id, 'Time': req.query.time}, {Daily_Desc: 1, Frequency: 1, _id: 0});
         console.log("Data: ",Data);
-        res.status(200).send({ message: 'success', data: Data});
+        if(Data){
+            res.status(200).send({ message: 'success', data: Data});
+        }
+        else{
+            result['Frequency'] = 0 ;
+            result['Daily_Desc'] = null;
+            res.status(200).send({ message: 'success', data: result});
+        }
     } catch (e) { 
         res.status(403).send({ message: 'error', data: null});
         throw new Error("Database query failed"); 
@@ -107,3 +115,30 @@ export const CountOfATask = async(req, res) => {
     }
 };
 
+export const checkDayDoneOfAUser = async(req, res) => {
+    console.log("inside oneBooleanOfADay function");
+    try {
+        var result = Object();
+        const threshold = await Task.find({'Task_ID': req.query.task_id}, {Threshold: 1, _id: 0});
+        const Data = await Record.findOne({'User_ID': req.query.user_id, 'Task_ID': req.query.task_id, 'Time': req.query.time}, {_id: 0, __v: 0, User_ID: 0, Task_ID: 0, Time: 0});
+        console.log("Data: ",Data);
+        if(Data){
+            if(Data.Frequency >= threshold[0].Threshold){
+                result['Frequency'] = Data.Frequency;
+                result['boolean'] = true;
+            }
+            else{
+                result['Frequency'] = Data.Frequency;
+                result['boolean'] = false;
+            }
+        }
+        else{
+            result['Frequency'] = 0;
+            result['boolean'] = false;
+        }
+        res.status(200).send({ message: 'success', data: result});
+    } catch (e) { 
+        res.status(403).send({ message: 'error', data: null});
+        throw new Error("Database query failed"); 
+    }
+};
