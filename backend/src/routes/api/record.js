@@ -195,3 +195,66 @@ export const checkDayDoneOfAUser = async(req, res) => {
         throw new Error("Database query failed"); 
     }
 };
+
+export const calculateMoney = async(req, res) => {
+    console.log("inside calculateMoney function");
+    var userList = [];
+    var result = [];
+    const today = calculate_now_date();
+    let today_date = new Date(today);
+    try {
+        const taskDetail = await Task.find({'Task_ID': req.query.task_id}, {Threshold: 1, _id: 0, Account_Day: 1, Working_Day: 1, Punish: 1});
+        await Participation.find({'Task_ID': req.query.task_id, 'Is_Quit': false}, {_id: 0, User_ID: 1, Last_Calculate_Day: 1, Punish_Sum: 1}).then(user => {
+            var calculate_today = true;
+            user.map((d) => {
+                userList.push(d.User_ID);
+                if(d.Last_Calculate_Day.getDate() != today_date.getDate()){
+                    calculate_today = false;
+                }
+            })
+            if(calculate_today == true){
+                user.map((d) => {
+                    result.push({'User_ID': d.User_ID, 'Punish_Sum': d.Punish_Sum});
+                })
+                res.status(200).send({ message: 'success', data: result});
+            }
+            else{
+                Record.find({'Task_ID': req.query.task_id, User_ID: { $in: userList }, 'Time': {$gte: taskDetail[0].Account_Day, $lt: today}}, {User_ID: 1, Frequency: 1, _id: 0, Time: 1})
+                .then( async (data) => {
+                    await Promise.all(
+                        user.map(async (d) => {
+                            var money = 0;
+                            let cur_date = new Date(taskDetail[0].Account_Day);
+                            while(cur_date.getTime() < today_date.getTime()){
+                                var dWeek = (cur_date.getDay()+6)%7;
+                                var f = data.filter(function(item){
+                                    return item.Time.getTime() == cur_date.getTime() && item.User_ID == d.User_ID;
+                                  })
+                                if(taskDetail[0].Working_Day[dWeek] == 1){
+                                    if(f.length == 0){
+                                        money += taskDetail[0].Punish;
+                                    }
+                                    else{
+                                        if(f[0].Frequency < taskDetail[0].Threshold){
+                                            money += taskDetail[0].Punish;
+                                        }
+                                    }
+                                }
+                                cur_date.setDate(cur_date.getDate() + 1);
+                            }
+                            await Participation.updateOne({ 'Task_ID': req.query.task_id, 'User_ID': d.User_ID}, {$set: {Punish_Sum: money, Last_Calculate_Day: today} });
+                            result.push({'User_ID': d.User_ID, 'Punish_Sum': money});
+                        })
+                    )
+    
+                    console.log("User's Punish_Sum list:")
+                    console.log(result);
+                    res.status(200).send({ message: 'success', data: result});
+                })
+            }
+        })
+    } catch (e) { 
+        res.status(403).send({ message: 'error', data: null});
+        throw new Error("Database query failed"); 
+    }
+};

@@ -1,5 +1,5 @@
 import express from 'express';
-import { checkDayDoneOfAUser, CountOfATask, oneRecordOfADay, RecordsOfAPeriod, RecordsOfATask, addOneRecord } from './api/record';
+import { checkDayDoneOfAUser, CountOfATask, oneRecordOfADay, RecordsOfAPeriod, RecordsOfATask, addOneRecord, calculateMoney } from './api/record';
 import { addOneAvatar, allAvatar, AvatarByClass, oneAvatar } from './api/avatar';
 import { checkEmail, checkId, login, signUp } from './api/user';
 import { addOneIcon, allIcon, oneIcon } from './api/icon';
@@ -141,6 +141,9 @@ router.get('/record/dayDone', auth, (req, res) => {
     checkDayDoneOfAUser(req,res);
 })
 
+router.get('/record/punish', auth, (req, res) => {
+    calculateMoney(req,res);
+})
 
 
 router.delete('/clear-db', (req, res) => {
