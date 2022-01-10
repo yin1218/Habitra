@@ -3,9 +3,7 @@ import checkId from './api/users/checkId';
 import checkEmail from './api/users/checkEmail';
 import signUp from './api/users/signUp';
 import login from './api/users/login';
-import allAvatar from './api/avatar/getAll';
-import oneAvatar from './api/avatar/getOne';
-import addOneAvatar from './api/avatar/addOne';
+
 import allIcon from './api/icon/getAll';
 import oneIcon from './api/icon/getOne';
 import addOneIcon from './api/icon/addOne';
@@ -19,11 +17,11 @@ import FinishParticipation_aUser from './api/participation/getFinishOfaUser';
 // import allParticipation_aAdmin from './api/participation/getAllOfaAdmin';
 import addOneAdmin from './api/participation/addOneAdmin';
 import addOneRecord from './api/record/addOne';
-import AvatarByClass from './api/avatar/getbyClass';
 import TodayOngoingParticipation_aUser from './api/participation/getTodayOngoingOfaUser';
 import TodayFinishParticipation_aUser from './api/participation/getTodayFinishOfaUser';
 import TodayDayOffParticipation_aUser from './api/participation/getTodayDayOffOfaUser';
 import { CountOfATask, oneRecordOfADay, RecordsOfAPeriod, RecordsOfATask } from './api/record/record';
+import { addOneAvatar, allAvatar, AvatarByClass, oneAvatar } from './api/avatar';
 const auth = require("../middleware/auth");
 const router = express.Router()
 
