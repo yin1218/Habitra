@@ -111,7 +111,15 @@ export const RecordsOfATask = async(req, res) => {
     var userList = [];
     var result = [];
     try {
-        const threshold = await Task.find({'Task_ID': req.query.task_id}, {Threshold: 1, _id: 0});
+        const taskDetail = await Task.find({'Task_ID': req.query.task_id}, {Threshold: 1, _id: 0, Working_Day: 1});
+        let query_date = new Date(req.query.time);
+        var dWeek = (query_date.getDay()+6)%7;
+        var workDay = true;
+        console.log("taskDetail[0].Working_Day[dWeek]: ", taskDetail[0].Working_Day[dWeek]);
+        if(taskDetail[0].Working_Day[dWeek] == 0){
+            workDay = false;
+        }
+        
         await Participation.find({'Task_ID': req.query.task_id, 'Is_Quit': false}, {_id: 0, User_ID: 1}).then(user => {
             user.map((d, k) => {
                 userList.push(d.User_ID);
@@ -125,10 +133,19 @@ export const RecordsOfATask = async(req, res) => {
                             return item.User_ID == d.User_ID;
                         })
                         if(dd.length == 0){
-                            result.push({'User_ID': d.User_ID, 'Frequency': 0, 'boolean': false});
+                            if(workDay == true){
+                                result.push({'User_ID': d.User_ID, 'Frequency': 0, 'boolean': false});
+                            }
+                            else{
+                                result.push({'User_ID': d.User_ID, 'Frequency': 0, 'boolean': true});
+                            }
+                            
                         }
                         else{
-                            if(dd[0].Frequency >= threshold[0].Threshold){
+                            if(dd[0].Frequency >= taskDetail[0].Threshold){
+                                result.push({'User_ID': dd[0].User_ID, 'Frequency': dd[0].Frequency, 'boolean': true});
+                            }
+                            else if (workDay == false){
                                 result.push({'User_ID': dd[0].User_ID, 'Frequency': dd[0].Frequency, 'boolean': true});
                             }
                             else{
@@ -169,25 +186,42 @@ export const CountOfATask = async(req, res) => {
 };
 
 export const checkDayDoneOfAUser = async(req, res) => {
-    console.log("inside oneBooleanOfADay function");
+    console.log("inside checkDayDoneOfAUser function");
     try {
         var result = Object();
-        const threshold = await Task.find({'Task_ID': req.query.task_id}, {Threshold: 1, _id: 0});
+        const taskDetail = await Task.find({'Task_ID': req.query.task_id}, {Threshold: 1, _id: 0, Working_Day: 1});
         const Data = await Record.findOne({'User_ID': req.query.user_id, 'Task_ID': req.query.task_id, 'Time': req.query.time}, {_id: 0, __v: 0, User_ID: 0, Task_ID: 0, Time: 0});
-        console.log("Data: ",Data);
+        let query_date = new Date(req.query.time);
+        var dWeek = (query_date.getDay()+6)%7;
+        var workDay = true;
+        console.log("taskDetail[0].Working_Day[dWeek]: ", taskDetail[0].Working_Day[dWeek]);
+        if(taskDetail[0].Working_Day[dWeek] == 0){
+            workDay = false;
+        }
+
         if(Data){
-            if(Data.Frequency >= threshold[0].Threshold){
+            if(Data.Frequency >= taskDetail[0].Threshold){
                 result['Frequency'] = Data.Frequency;
                 result['boolean'] = true;
             }
             else{
                 result['Frequency'] = Data.Frequency;
-                result['boolean'] = false;
+                if(workDay){
+                    result['boolean'] = false;
+                }
+                else{
+                    result['boolean'] = true;
+                }
             }
         }
         else{
             result['Frequency'] = 0;
-            result['boolean'] = false;
+            if(workDay){
+                result['boolean'] = false;
+            }
+            else{
+                result['boolean'] = true;
+            }
         }
         res.status(200).send({ message: 'success', data: result});
     } catch (e) { 
