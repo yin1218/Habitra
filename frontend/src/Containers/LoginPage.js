@@ -4,9 +4,9 @@ import React, {useState, useEffect} from 'react';
 // import { Link,useHistory } from 'react-router-dom';
 import { login } from '../axios';
 
-const LoginPage = ({setIsLogin, setToken}) => {
+const LoginPage = ({setIsLogin, setToken, userId, setUserId}) => {
     // let history = useHistory();
-    const[userId, setUserId] = useState("");
+    
     const[password, setPassword] = useState("");
 
     

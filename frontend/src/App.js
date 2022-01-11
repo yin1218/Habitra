@@ -10,6 +10,7 @@ import SignUpPage from './Containers/SignUpPage';
 import PageNotFound from './Containers/PageNotFound';
 import MainPage from './Containers/MainPage';
 import AddTaskPage from './Containers/AddTaskPage';
+import UserInfo from './Containers/UserInfo';
 
 const LOCALSTORAGE_KEY = "";
 
@@ -20,11 +21,11 @@ function App() {
   const [isLogin, setIsLogin] = useState(false); //目的：檢測目前是否登入
   const[token, setToken] = useState(savedToken || "");  //目的：檢測當前用戶是否過期
   const[valid, setValid] = useState(false);  //
-
+  const[userId, setUserId] = useState("");
 
   function PrivateRoute({ children }) {
     // const auth = useAuth();
-    return token==='' ? children : <Navigate to="/login" />;
+    return valid ? children : <Navigate to="/login" />;
 
   }
 
@@ -49,13 +50,16 @@ function App() {
     <BrowserRouter>
       <Routes>
         {/* public route */}
-        <Route path='/' element={token==='' ? <MainPage setToken={setToken} setValid={setValid} /> : <LoginPage setIsLogin={setIsLogin} setToken={setToken} />}></Route>
+        <Route path='/' element={valid ? <MainPage setToken={setToken} setValid={setValid}  /> : <LoginPage setIsLogin={setIsLogin} setToken={setToken} userId = {userId} setUserId={setUserId} />}></Route>
         {/* private route */}
-        <Route path='/login' element={<LoginPage setIsLogin={setIsLogin} />}>
+        <Route path='/login' element={<LoginPage setIsLogin={setIsLogin} userId = {userId} setUserId={setUserId} />}>
         </Route>
         <Route path='/signUp' element={<SignUpPage />}></Route>
         <Route path='*' element={<PageNotFound />}></Route>
-        <Route path='/addTask' element={ token==='' ? <AddTaskPage /> : <Navigate to="/login" />}></Route>
+        <Route path='/addTask' element={ valid ? <AddTaskPage /> : <Navigate to="/login" />}></Route>
+        {/* 個人資訊頁面 */}
+        <Route path="/userInfo/" element={ valid ? <UserInfo userId = {userId} /> : <Navigate to="/login" />}></Route>
+        {/* 統計資料頁面 */}
       </Routes>
       </BrowserRouter>
   );

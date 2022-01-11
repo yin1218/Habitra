@@ -1,12 +1,14 @@
 import { Layout, Menu, Breadcrumb, Button, Avatar, Typography } from 'antd';
 import { useState } from 'react';
+import { useNavigate, Link } from "react-router-dom";
 import {
     TeamOutlined,
     AreaChartOutlined
   } from '@ant-design/icons';
 
 
-const SideBar = ({userName,userAvatar, setValid, setPage}) => {
+const SideBar = ({userId, userName, userAvatar, setValid, setPage, setToken}) => {
+    const navigate = useNavigate();
     const [collapsed, setCollapsed] = useState(false)
     const { Content, Sider } = Layout;
     const { SubMenu } = Menu;
@@ -32,10 +34,11 @@ const SideBar = ({userName,userAvatar, setValid, setPage}) => {
         <></>
         :
         <>
-            <Title level={3}>
-                {userName}
+            <Title level={3} onClick={() => {setPage(3)}}>
+              {userName}
+                {/* <Link to={`/userInfo/${userId}`}>{userName}</Link> */}
             </Title>
-            <Button type="text" size='small' onClick={() => setValid(false)}>登出</Button>
+            <Button type="text" size='small' onClick={() => {setValid(false);setToken("");}}>登出</Button>
         </>
         }
       </div>

@@ -11,6 +11,7 @@ import {
   } from '@ant-design/icons';
 
   import styled from 'styled-components'
+import UserInfo from './UserInfo';
 
 
 
@@ -35,6 +36,7 @@ const MainPage = ({setToken, setValid}) => {
         {"uid": "4", "icon": "https://joeschmoe.io/api/v1/random", "name": "推甄早點上岸群"},
     ]);
     const [userName, setUserName] = useState("巫芊瑩");
+    const [userId, setUserId] = useState("wpbag");
     const [userAvatar, setUserAvatar] = useState("https://joeschmoe.io/api/v1/random");
 
     // set current page
@@ -60,7 +62,7 @@ const MainPage = ({setToken, setValid}) => {
 
     return(
     <Layout style={{ minHeight: '100vh' }}>
-        <SideBar userName={userName} userAvatar={userAvatar} setValid={setValid}  setPage={setPage}/>
+        <SideBar userId = {userId} userName={userName} userAvatar={userAvatar} setValid={setValid}  setPage={setPage} setToken={setToken}/>
         <Layout className="site-layout" style={{ marginLeft: 200 }}>
             {/* 以下麵包屑 FE待修正 */}
           <Content style={{ margin: '24px 16px 0', overflow: 'initial' }}>
@@ -71,10 +73,11 @@ const MainPage = ({setToken, setValid}) => {
             {/* 以下是主要文件 */}
             {
                 page === 1
-                ?
-                <PersonalTasks ongoingTaskInfo={ongoingTaskInfo} doneTaskInfo={doneTaskInfo} relaxTaskInfo={relaxTaskInfo} />
+                ? <PersonalTasks ongoingTaskInfo={ongoingTaskInfo} doneTaskInfo={doneTaskInfo} relaxTaskInfo={relaxTaskInfo} />
                 :
-                <PersonalStats />
+                page === 2
+                ?  <PersonalStats />
+                : <UserInfo userId={userId} />
             }
           </Content>
         </Layout>
