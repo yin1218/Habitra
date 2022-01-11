@@ -306,3 +306,38 @@ export const TodayOngoingParticipation_aUser = async(req, res) => {
         console.log(error);
     })
 };
+
+export const quitParticipation = async(req, res) => {
+    console.log("inside quitParticipation function");
+    try {
+        const today = calculate_now_date();
+        await Participation.updateOne({User_ID: req.body.user_id, Task_ID: req.body.task_id}, { $set: { 'Is_Quit': true, 'Quit_Time': today } });
+        res.status(200).send({ message: 'success'});
+    } catch (e) { 
+        res.status(403).send({ message: 'error', data: null});
+        throw new Error("Database query failed"); 
+    }
+};
+
+export const getQuitTime = async(req, res) => {
+    console.log("inside getQuitTime function");
+    try {
+        const data = await Participation.findOne({User_ID: req.body.user_id, Task_ID: req.body.task_id}, {_id: 0, Is_Quit: 1, Quit_Time: 1});
+        res.status(200).send({ message: 'success', data: data});
+    } catch (e) { 
+        res.status(403).send({ message: 'error', data: null});
+        throw new Error("Database query failed"); 
+    }
+};
+
+export const deleteUser = async(req, res) => {
+    console.log("inside deleteUser function");
+    try {
+        await Record.deleteMany({User_ID: req.body.user_id, Task_ID: req.body.task_id});
+        await Participation.deleteOne({User_ID: req.body.user_id, Task_ID: req.body.task_id});
+        res.status(200).send({ message: 'success'});
+    } catch (e) { 
+        res.status(403).send({ message: 'error', data: null});
+        throw new Error("Database query failed"); 
+    }
+};

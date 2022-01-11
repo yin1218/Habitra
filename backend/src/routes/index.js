@@ -4,7 +4,7 @@ import { addOneAvatar, allAvatar, AvatarByClass, oneAvatar } from './api/avatar'
 import { checkEmail, checkId, login, signUp } from './api/user';
 import { addOneIcon, allIcon, oneIcon } from './api/icon';
 import { addOneTask, closeTask, deleteTask, oneTask, oneTaskPartOF, openTask } from './api/task';
-import { addOneAdmin, addOneParticipation, allParticipation_aAdmin, allParticipation_aUser, FinishParticipation_aUser, OngoingParticipation_aUser, TodayDayOffParticipation_aUser, TodayFinishParticipation_aUser, TodayOngoingParticipation_aUser } from './api/participation';
+import { addOneAdmin, addOneParticipation, allParticipation_aAdmin, allParticipation_aUser, deleteUser, FinishParticipation_aUser, getQuitTime, OngoingParticipation_aUser, quitParticipation, TodayDayOffParticipation_aUser, TodayFinishParticipation_aUser, TodayOngoingParticipation_aUser } from './api/participation';
 const auth = require("../middleware/auth");
 const router = express.Router()
 
@@ -123,6 +123,18 @@ router.get('/participation/finish', auth, (req, res) => {
 
 router.get('/participation/dayoff', auth, (req, res) => {
     TodayDayOffParticipation_aUser(req,res);
+})
+
+router.post('/participation/quit', auth, (req, res) => {
+    quitParticipation(req,res);
+})
+
+router.get('/participation/quit', auth, (req, res) => {
+    getQuitTime(req,res);
+})
+
+router.get('/participation/deleteUser', auth, (req, res) => {
+    deleteUser(req,res);
 })
 
 // record
