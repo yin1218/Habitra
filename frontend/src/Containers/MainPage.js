@@ -19,7 +19,7 @@ import UserInfo from './UserInfo';
 
 
 
-const MainPage = ({setToken, setValid}) => {
+const MainPage = ({setToken, setValid, userId}) => {
 
 
     const { Content } = Layout;
@@ -36,7 +36,7 @@ const MainPage = ({setToken, setValid}) => {
         {"uid": "4", "icon": "https://joeschmoe.io/api/v1/random", "name": "推甄早點上岸群"},
     ]);
     const [userName, setUserName] = useState("巫芊瑩");
-    const [userId, setUserId] = useState("wpbag");
+    // const [userId, setUserId] = useState("wpbag");
     const [userAvatar, setUserAvatar] = useState("https://joeschmoe.io/api/v1/random");
 
     // set current page

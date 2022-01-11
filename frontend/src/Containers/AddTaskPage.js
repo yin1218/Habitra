@@ -1,6 +1,8 @@
-import { Avatar, Switch, Typography, Divider, Form, Input, TimePicker, Select, Checkbox, Row, Col  } from 'antd';
+import { Avatar, Switch, Typography, Divider, Form, Input, TimePicker, Select, Checkbox, Row, Col, Button  } from 'antd';
 import moment from 'moment';
 import { useState } from 'react';
+import { addTask } from '../axios';
+
 const AddTaskPage = () => {
 
 //     POST /task   新增任務
@@ -19,6 +21,7 @@ const AddTaskPage = () => {
         const [thresholdOn, setThresholdOn] = useState(false);
         // 需要計算的日期[INT]
         const [working_day, setWorking_day] = useState([]);
+        const [workDay, setWorkDay] = useState([]); //因原本前端的格式和串接有點不一樣，重新設的變數
         // 懲罰一天的扣錢數量
         const [punish, setPunish] = useState(0);
         // 是否需要上傳文字
@@ -85,6 +88,20 @@ const AddTaskPage = () => {
             <Option value="multipleTimes">需打卡以下次數</Option>
         </Select>
         )
+
+        const handleLogin = async () => {
+            setWorkDay([1,1,1,1,1,1,1]);
+            var temp = workDay;
+            for(var i = 0; i < working_day.length; i++){
+                temp[working_day[i]-1] = 0;
+            }
+            setWorkDay(temp);
+            // const response = await addTask({title:title, description:description, threshold:threshold, working_day:working_day, punish:punish, need_daily_desc:need_daily_desc, icon:icon, start_hour:start_hour, end_hour:end_hour});
+            // console.log(response);
+        }
+
+        console.log(working_day);
+        console.log(workDay);
         
 
     return(
@@ -219,6 +236,11 @@ const AddTaskPage = () => {
                 >
                     <Switch checkedChildren="開啟" unCheckedChildren="關閉" defaultChecked onChange={setNeed_daily_desc}/>
                 </Form.Item>
+                <Form.Item>
+                        <Button type="primary" htmlType="submit" className="wide-form-button" onClick={handleLogin}>
+                            submit
+                        </Button>
+                    </Form.Item>
             </Form> 
 
         </>

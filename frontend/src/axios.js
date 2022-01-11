@@ -59,6 +59,20 @@ const login = async(props) => {
     }
 }
 
+//task
+const addTask = async(props) => {
+    const {title, description, threshold, working_day, punish, need_daily_desc, icon, start_hour, end_hour} = props;
+    try{
+        const {data: {message, id}} = await instance.post('/task',{
+            title, description, threshold, working_day, punish, need_daily_desc, icon, start_hour, end_hour
+        });
+        return id;
+    }
+    catch (error) {
+        console.log("error");
+    }
+}
+
 //avatar
 const getAllAvatar = async() => {
     try {
@@ -91,4 +105,4 @@ const getAvatarClass = async(props) => {
     }
 }
 
-export {getAllAvatar, getAvatarClass, signUp, signUpCheckId, signUpCheckEmail, login, testToken};
+export {getAllAvatar, getAvatarClass, signUp, signUpCheckId, signUpCheckEmail, login, testToken, addTask};
