@@ -71,3 +71,26 @@ export const oneTaskPartOF = async(req, res) => {
         throw new Error("Database query failed"); 
     }
 };
+
+export const closeTask = async(req, res) => {
+    console.log("inside closeTask function");
+    const today = calculate_now_date();
+    try {
+        await Task.updateOne({'_id': req.body.task_id}, { $set: { 'Is_Closed': true , 'Close_Time': today} });
+        res.status(200).send({ message: 'success'});
+    } catch (e) { 
+        res.status(403).send({ message: 'error', data: null});
+        throw new Error("Database query failed"); 
+    }
+};
+
+export const openTask = async(req, res) => {
+    console.log("inside closeTask function");
+    try {
+        await Task.updateOne({'_id': req.body.task_id}, { $set: { 'Is_Closed': false } });
+        res.status(200).send({ message: 'success'});
+    } catch (e) { 
+        res.status(403).send({ message: 'error', data: null});
+        throw new Error("Database query failed"); 
+    }
+};

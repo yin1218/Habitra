@@ -3,7 +3,7 @@ import { checkDayDoneOfAUser, CountOfATask, oneRecordOfADay, RecordsOfAPeriod, R
 import { addOneAvatar, allAvatar, AvatarByClass, oneAvatar } from './api/avatar';
 import { checkEmail, checkId, login, signUp } from './api/user';
 import { addOneIcon, allIcon, oneIcon } from './api/icon';
-import { addOneTask, oneTask, oneTaskPartOF } from './api/task';
+import { addOneTask, closeTask, oneTask, oneTaskPartOF, openTask } from './api/task';
 import { addOneAdmin, addOneParticipation, allParticipation_aAdmin, allParticipation_aUser, FinishParticipation_aUser, OngoingParticipation_aUser, TodayDayOffParticipation_aUser, TodayFinishParticipation_aUser, TodayOngoingParticipation_aUser } from './api/participation';
 const auth = require("../middleware/auth");
 const router = express.Router()
@@ -63,8 +63,6 @@ router.post('/icon', (req, res) => {
     addOneIcon(req, res);
 })
 
-
-//phase two
 // task
 router.post('/task', auth, (req, res) => {
     addOneTask(req, res);
@@ -76,6 +74,14 @@ router.get('/task', auth, (req, res) => {
 
 router.get('/task/detail', auth, (req, res) => {
     oneTaskPartOF(req,res);
+})
+
+router.post('/task/close', auth, (req, res) => {
+    closeTask(req, res);
+})
+
+router.post('/task/open', auth, (req, res) => {
+    openTask(req, res);
 })
 
 
