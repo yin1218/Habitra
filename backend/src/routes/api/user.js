@@ -91,3 +91,21 @@ export const login = async(req, res) => {
         return res.status(404).send({ message: "User Not found." });
     }
 };
+
+export const oneUser = async(req, res) => {
+    console.log("inside oneUser function");
+    const user = await User.findOne({User_ID: req.query.user_id});
+    if(user){
+        try {
+            const Data = await User.findOne({'User_ID': req.query.user_id}, {_id: 0, __v:0, Password: 0, Token: 0});
+            console.log("Data: ",Data);
+            res.status(200).send({ message: 'success', data: Data});
+        } catch (e) { 
+            res.status(403).send({ message: 'error', data: null});
+            throw new Error("Database query failed"); 
+        }
+    }
+    else {
+        return res.status(404).send({ message: "User Not found." });
+    }
+};

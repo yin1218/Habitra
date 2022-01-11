@@ -1,7 +1,7 @@
 import express from 'express';
 import { checkDayDoneOfAUser, CountOfATask, oneRecordOfADay, RecordsOfAPeriod, RecordsOfATask, addOneRecord, calculateMoney } from './api/record';
 import { addOneAvatar, allAvatar, AvatarByClass, oneAvatar } from './api/avatar';
-import { checkEmail, checkId, login, signUp } from './api/user';
+import { checkEmail, checkId, login, oneUser, signUp } from './api/user';
 import { addOneIcon, allIcon, oneIcon } from './api/icon';
 import { addOneTask, clearMoney, closeTask, deleteTask, oneTask, oneTaskPartOF, openTask } from './api/task';
 import { addOneAdmin, addOneParticipation, allParticipation_aAdmin, allParticipation_aUser, deleteUser, FinishParticipation_aUser, getQuitTime, OngoingParticipation_aUser, quitParticipation, TodayDayOffParticipation_aUser, TodayFinishParticipation_aUser, TodayOngoingParticipation_aUser } from './api/participation';
@@ -28,6 +28,10 @@ router.post('/users/signUp/checkEmail', (req, res) => {
 
 router.post('/users/login', (req, res) => {
     login(req, res);
+})
+
+router.get('/users', (req, res) => {
+    oneUser(req, res);
 })
 
 
