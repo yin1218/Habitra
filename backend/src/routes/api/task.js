@@ -109,3 +109,16 @@ export const deleteTask = async(req, res) => {
         throw new Error("Database query failed"); 
     }
 };
+
+export const clearMoney = async(req, res) => {
+    console.log("inside clearMoney function");
+    const today = calculate_now_date();
+    try {
+        await Participation.updateMany({Task_ID: req.body.task_id}, { $set: { 'Punish_Sum': 0 }});
+        await Task.updateOne({_id: req.body.task_id}, { $set: { 'Account_Day': today }});
+        res.status(200).send({ message: 'success'});
+    } catch (e) { 
+        res.status(403).send({ message: 'error', data: null});
+        throw new Error("Database query failed"); 
+    }
+};
