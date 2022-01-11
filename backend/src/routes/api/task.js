@@ -1,3 +1,5 @@
+import Participation from "../../models/participation";
+import Record from "../../models/record";
 import Task from "../../models/task";
 
 const calculate_now_date = () =>{
@@ -88,6 +90,19 @@ export const openTask = async(req, res) => {
     console.log("inside closeTask function");
     try {
         await Task.updateOne({'_id': req.body.task_id}, { $set: { 'Is_Closed': false } });
+        res.status(200).send({ message: 'success'});
+    } catch (e) { 
+        res.status(403).send({ message: 'error', data: null});
+        throw new Error("Database query failed"); 
+    }
+};
+
+export const deleteTask = async(req, res) => {
+    console.log("inside deleteTask function");
+    try {
+        await Task.deleteOne({"_id": req.body.task_id});
+        await Record.deleteMany({"Task_ID": req.body.task_id});
+        await Participation.deleteOne({"Task_ID": req.body.task_id});
         res.status(200).send({ message: 'success'});
     } catch (e) { 
         res.status(403).send({ message: 'error', data: null});

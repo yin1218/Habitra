@@ -3,7 +3,7 @@ import { checkDayDoneOfAUser, CountOfATask, oneRecordOfADay, RecordsOfAPeriod, R
 import { addOneAvatar, allAvatar, AvatarByClass, oneAvatar } from './api/avatar';
 import { checkEmail, checkId, login, signUp } from './api/user';
 import { addOneIcon, allIcon, oneIcon } from './api/icon';
-import { addOneTask, closeTask, oneTask, oneTaskPartOF, openTask } from './api/task';
+import { addOneTask, closeTask, deleteTask, oneTask, oneTaskPartOF, openTask } from './api/task';
 import { addOneAdmin, addOneParticipation, allParticipation_aAdmin, allParticipation_aUser, FinishParticipation_aUser, OngoingParticipation_aUser, TodayDayOffParticipation_aUser, TodayFinishParticipation_aUser, TodayOngoingParticipation_aUser } from './api/participation';
 const auth = require("../middleware/auth");
 const router = express.Router()
@@ -84,6 +84,9 @@ router.post('/task/open', auth, (req, res) => {
     openTask(req, res);
 })
 
+router.delete('/task/delete', auth, (req, res) => {
+    deleteTask(req, res);
+})
 
 // participation
 router.post('/participation/newMember', auth, (req, res) => {
