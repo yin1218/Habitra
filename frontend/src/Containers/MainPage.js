@@ -76,7 +76,7 @@ const MainPage = ({setToken, setValid, userId}) => {
                 ? <PersonalTasks ongoingTaskInfo={ongoingTaskInfo} doneTaskInfo={doneTaskInfo} relaxTaskInfo={relaxTaskInfo} />
                 :
                 page === 2
-                ?  <PersonalStats />
+                ?  <PersonalStats userId={userId}  />
                 : <UserInfo userId={userId} />
             }
           </Content>
