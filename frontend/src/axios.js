@@ -61,10 +61,10 @@ const login = async(props) => {
 
 //task
 const addTask = async(props) => {
-    const {title, description, threshold, working_day, punish, need_daily_desc, icon, start_hour, end_hour} = props;
+    const {title, description, threshold, working_day, punish, need_daily_desc, icon, start_hour, end_hour, token} = props;
     try{
         const {data: {message, id}} = await instance.post('/task',{
-            title, description, threshold, working_day, punish, need_daily_desc, icon, start_hour, end_hour
+            title, description, threshold, working_day, punish, need_daily_desc, icon, start_hour, end_hour,token
         });
         return id;
     }
