@@ -22,24 +22,30 @@ const calculate_now_date = () =>{
 
 export const addOneParticipation = async (req, res) => {
     console.log("inside addOneParticipation function");
-    const myobj = new Participation(
-        {
-            Task_ID: req.body.task_id,
-            User_ID: req.body.user_id,
-            Is_Admin: false,
-            Is_Quit: false,
-            Quit_Time: null,
-            Punish_Sum: 0,
-            Last_Calculate_Day: null
-        }
-    ) 
-    console.log(myobj)
-    try{
-        await myobj.save();
-        res.status(200).send({ message: 'success'});
+    const existing = await Participation.findOne({User_ID: req.body.user_id, Task_ID: req.body.task_id});
+    if(existing){
+        res.status(403).send({ message: 'User already in this task', err_msg: err});
     }
-    catch(err){
-        res.status(403).send({ message: 'error', err_msg: err});
+    else{
+        const myobj = new Participation(
+            {
+                Task_ID: req.body.task_id,
+                User_ID: req.body.user_id,
+                Is_Admin: false,
+                Is_Quit: false,
+                Quit_Time: null,
+                Punish_Sum: 0,
+                Last_Calculate_Day: null
+            }
+        ) 
+        console.log(myobj)
+        try{
+            await myobj.save();
+            res.status(200).send({ message: 'success'});
+        }
+        catch(err){
+            res.status(403).send({ message: 'error', err_msg: err});
+        }
     }
     
 };
@@ -349,35 +355,53 @@ export const TodayOngoingParticipation_aUser = async(req, res) => {
 
 export const quitParticipation = async(req, res) => {
     console.log("inside quitParticipation function");
-    try {
-        const today = calculate_now_date();
-        await Participation.updateOne({User_ID: req.body.user_id, Task_ID: req.body.task_id}, { $set: { 'Is_Quit': true, 'Quit_Time': today } });
-        res.status(200).send({ message: 'success'});
-    } catch (e) { 
-        res.status(403).send({ message: 'error', data: null});
-        throw new Error("Database query failed"); 
+    const user = await User.findOne({User_ID: req.body.user_id});
+    if(user){
+        try {
+            const today = calculate_now_date();
+            await Participation.updateOne({User_ID: req.body.user_id, Task_ID: req.body.task_id}, { $set: { 'Is_Quit': true, 'Quit_Time': today } });
+            res.status(200).send({ message: 'success'});
+        } catch (e) {
+            res.status(403).send({ message: 'error', data: null});
+            throw new Error("Database query failed"); 
+        }
+    }
+    else{
+        return res.status(404).send({ message: "User Not found." });
     }
 };
 
 export const getQuitTime = async(req, res) => {
     console.log("inside getQuitTime function");
-    try {
-        const data = await Participation.findOne({User_ID: req.body.user_id, Task_ID: req.body.task_id}, {_id: 0, Is_Quit: 1, Quit_Time: 1});
-        res.status(200).send({ message: 'success', data: data});
-    } catch (e) { 
-        res.status(403).send({ message: 'error', data: null});
-        throw new Error("Database query failed"); 
+    const user = await User.findOne({User_ID: req.body.user_id});
+    if(user){
+        try {
+            const data = await Participation.findOne({User_ID: req.body.user_id, Task_ID: req.body.task_id}, {_id: 0, Is_Quit: 1, Quit_Time: 1});
+            res.status(200).send({ message: 'success', data: data});
+        } catch (e) { 
+            res.status(403).send({ message: 'error', data: null});
+            throw new Error("Database query failed"); 
+        }
+    }
+    else{
+        return res.status(404).send({ message: "User Not found." });
     }
 };
 
 export const deleteUser = async(req, res) => {
     console.log("inside deleteUser function");
-    try {
-        await Record.deleteMany({User_ID: req.body.user_id, Task_ID: req.body.task_id});
-        await Participation.deleteOne({User_ID: req.body.user_id, Task_ID: req.body.task_id});
-        res.status(200).send({ message: 'success'});
-    } catch (e) { 
-        res.status(403).send({ message: 'error', data: null});
-        throw new Error("Database query failed"); 
+    const user = await User.findOne({User_ID: req.body.user_id});
+    if(user){
+        try {
+            await Record.deleteMany({User_ID: req.body.user_id, Task_ID: req.body.task_id});
+            await Participation.deleteOne({User_ID: req.body.user_id, Task_ID: req.body.task_id});
+            res.status(200).send({ message: 'success'});
+        } catch (e) { 
+            res.status(403).send({ message: 'error', data: null});
+            throw new Error("Database query failed"); 
+        }
+    }
+    else{
+        return res.status(404).send({ message: "User Not found." });
     }
 };
