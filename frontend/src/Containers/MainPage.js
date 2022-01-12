@@ -3,8 +3,9 @@ import { Link } from 'react-router-dom'
 import SideBar from '../Components/SideBar';
 import PersonalTasks from './PersonalTasks';
 import PersonalStats from './PersonalStats';
+import { getUserInfo } from '../axios';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import {
     UsergroupAddOutlined
@@ -19,7 +20,13 @@ import UserInfo from './UserInfo';
 
 
 
-const MainPage = ({setToken, setValid, userId}) => {
+const MainPage = ({setToken, setValid, userId, setUserName, userName}) => {
+
+    useEffect( async () => {
+        console.log(userId);
+        const response = await getUserInfo({user_id: userId});
+        console.log(response);
+      }, []);
 
 
     const { Content } = Layout;
@@ -35,7 +42,7 @@ const MainPage = ({setToken, setValid, userId}) => {
     const [relaxTaskInfo, setRelaxTaskInfo] = useState([
         {"uid": "4", "icon": "https://joeschmoe.io/api/v1/random", "name": "推甄早點上岸群"},
     ]);
-    const [userName, setUserName] = useState("巫芊瑩");
+    // const [userName, setUserName] = useState("巫芊瑩");
     // const [userId, setUserId] = useState("wpbag");
     const [userAvatar, setUserAvatar] = useState("https://joeschmoe.io/api/v1/random");
 

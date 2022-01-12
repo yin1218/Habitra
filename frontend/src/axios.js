@@ -59,6 +59,19 @@ const login = async(props) => {
     }
 }
 
+const getUserInfo = async(props) => {
+    const {user_id} = props;
+    try {
+        const { data: {message, data} } = await instance.get('/users',{
+            params:{user_id: user_id}
+        });
+        return data;
+    }
+    catch (error) {
+        console.log("error");
+    }  
+}
+
 //task
 const addTask = async(props) => {
     const {title, description, threshold, working_day, punish, need_daily_desc, icon, start_hour, end_hour, token} = props;
@@ -105,4 +118,4 @@ const getAvatarClass = async(props) => {
     }
 }
 
-export {getAllAvatar, getAvatarClass, signUp, signUpCheckId, signUpCheckEmail, login, testToken, addTask};
+export {getAllAvatar, getAvatarClass, signUp, signUpCheckId, signUpCheckEmail, login, testToken, addTask, getUserInfo};
