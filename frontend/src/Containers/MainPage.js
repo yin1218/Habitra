@@ -10,7 +10,7 @@ import {
     UsergroupAddOutlined
   } from '@ant-design/icons';
 
-  import styled from 'styled-components'
+import styled from 'styled-components'
 import UserInfo from './UserInfo';
 
 
@@ -62,7 +62,7 @@ const MainPage = ({setToken, setValid, userId}) => {
 
     return(
     <Layout style={{ minHeight: '100vh' }}>
-        <SideBar userId = {userId} userName={userName} userAvatar={userAvatar} setValid={setValid}  setPage={setPage} setToken={setToken}/>
+        <SideBar place = "mainPage" userId = {userId} userName={userName} userAvatar={userAvatar} setValid={setValid}  setPage={setPage} setToken={setToken}/>
         <Layout className="site-layout" style={{ marginLeft: 200 }}>
             {/* 以下麵包屑 FE待修正 */}
           <Content style={{ margin: '24px 16px 0', overflow: 'initial' }}>

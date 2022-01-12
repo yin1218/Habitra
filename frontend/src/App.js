@@ -10,7 +10,8 @@ import SignUpPage from './Containers/SignUpPage';
 import PageNotFound from './Containers/PageNotFound';
 import MainPage from './Containers/MainPage';
 import AddTaskPage from './Containers/AddTaskPage';
-import UserInfo from './Containers/UserInfo';
+// import UserInfo from './Containers/UserInfo';
+import TaskMainPage from './Containers/TaskMainPage';
 
 const LOCALSTORAGE_KEY = "";
 
@@ -43,6 +44,10 @@ function App() {
   useEffect(() => {
     if(valid === false){
       setIsLogin(false);
+      localStorage.removeItem(LOCALSTORAGE_KEY);
+    }
+    else{
+      setIsLogin(true);
     }
   }, [valid, isLogin])
 
@@ -51,16 +56,17 @@ function App() {
     <BrowserRouter>
       <Routes>
         {/* public route */}
-        <Route path='/' element={valid ? <MainPage setToken={setToken} setValid={setValid} userId={userId} setUserName={setUserName} userName={userName}/> : <LoginPage setIsLogin={setIsLogin} setToken={setToken} userId = {userId} setUserId={setUserId} />}></Route>
+        <Route path='/' element={isLogin ? <MainPage setToken={setToken} setValid={setValid} userId={userId} setUserName={setUserName} userName={userName}/> : <LoginPage setIsLogin={setIsLogin} setToken={setToken} userId = {userId} setUserId={setUserId} />}></Route>
         {/* private route */}
         <Route path='/login' element={<LoginPage setIsLogin={setIsLogin} userId = {userId} setUserId={setUserId} setToken={setToken}/>}>
         </Route>
         <Route path='/signUp' element={<SignUpPage />}></Route>
         <Route path='*' element={<PageNotFound />}></Route>
-        <Route path='/addTask' element={ valid ? <AddTaskPage /> : <Navigate to="/login" />}></Route>
+        <Route path='/addTask' element={ isLogin ? <AddTaskPage /> : <Navigate to="/login" />}></Route>
         {/* 個人資訊頁面 */}
-        <Route path="/userInfo/" element={ valid ? <UserInfo userId = {userId} /> : <Navigate to="/login" />}></Route>
+        {/* <Route path="/userInfo/" element={ valid ? <UserInfo userId = {userId} /> : <Navigate to="/login" />}></Route> */}
         {/* 統計資料頁面 */}
+        <Route path='/task:taskID' element={ isLogin ? <TaskMainPage setToken={setToken} setValid={setValid} userId={userId} /> : <Navigate to="/login" />}></Route>
       </Routes>
       </BrowserRouter>
   );

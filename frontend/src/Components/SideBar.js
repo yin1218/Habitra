@@ -7,7 +7,7 @@ import {
   } from '@ant-design/icons';
 
 
-const SideBar = ({userId, userName, userAvatar, setValid, setPage, setToken}) => {
+const SideBar = ({place, userId, userName, userAvatar, setValid, setPage, setToken}) => {
     const navigate = useNavigate();
     const [collapsed, setCollapsed] = useState(false)
     const { Content, Sider } = Layout;
@@ -42,7 +42,11 @@ const SideBar = ({userId, userName, userAvatar, setValid, setPage, setToken}) =>
         </>
         }
       </div>
-      <Menu theme="light" defaultSelectedKeys={["1"]} mode="inline">
+      {/* 在這邊設定一下要使用mainPage or taskMainPage */}
+      {
+        place === 'mainPage'
+        ?
+        <Menu theme="light" defaultSelectedKeys={["1"]} mode="inline">
         <Menu.Item key="1" icon={<TeamOutlined />} onClick={() => setPage(1)}>
             團隊任務
         </Menu.Item>
@@ -50,6 +54,23 @@ const SideBar = ({userId, userName, userAvatar, setValid, setPage, setToken}) =>
             統計資料
         </Menu.Item>
       </Menu>
+        :
+        <Menu theme="light" defaultSelectedKeys={["1"]} mode="inline">
+        <Menu.Item key="1" icon={<TeamOutlined />} onClick={() => setPage(1)}>
+            任務主頁
+        </Menu.Item>
+        <Menu.Item key="2" icon={<AreaChartOutlined />} onClick={() => setPage(2)}>
+            詳細資訊
+        </Menu.Item>
+        <Menu.Item key="3" icon={<AreaChartOutlined />} onClick={() => setPage(3)}>
+            成員清單
+        </Menu.Item>
+        <Menu.Item key="4" icon={<AreaChartOutlined />} onClick={() => setPage(4)}>
+            統計資訊
+        </Menu.Item>
+      </Menu>
+      }
+
     </Sider>
     )
 
