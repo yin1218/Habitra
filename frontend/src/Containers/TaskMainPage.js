@@ -9,7 +9,8 @@
 import styled from 'styled-components'
 import SideBar from '../Components/SideBar';
 import { Layout, Breadcrumb, Button, Avatar, Typography, Tooltip } from 'antd';
-import { useState, useParams } from 'react';
+import { useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 
 
@@ -18,7 +19,8 @@ const TaskMainPage = ({setToken, setValid, userId}) => {
 
     // default settings
     const { Content } = Layout;
-    let {taskID} = useParams(); 
+    let {taskID} = useParams();
+    console.log(taskID);
     // set current page
     const [page, setPage] = useState(1);
     /*
@@ -30,7 +32,7 @@ const TaskMainPage = ({setToken, setValid, userId}) => {
     */
     
     // 資料串接 @陳沛妤
-    const [userName,setUserName] = useState('');
+    const [userName,setUserName] = useState('巫芊瑩');
     const [userAvatar, setUserAvatar] = useState('https://joeschmoe.io/api/v1/random');
 
     
@@ -41,6 +43,7 @@ const TaskMainPage = ({setToken, setValid, userId}) => {
         <Layout className="site-layout" style={{ marginLeft: 200 }}>
             {/* 以下麵包屑 FE待修正 */}
           <Content style={{ margin: '24px 16px 0', overflow: 'initial' }}>
+              <p>This is task main page!</p>
           </Content>
         </Layout>
         {/* 加一個可以新增任務的固定按鈕，hover可以看到詳細資訊 */}      

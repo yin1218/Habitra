@@ -1,14 +1,15 @@
-import { Layout, Menu, Breadcrumb, Button, Avatar, Typography } from 'antd';
+import { Layout, Menu, Breadcrumb, Button, Avatar, Typography, Tooltip } from 'antd';
 import { useState } from 'react';
 import { useNavigate, Link } from "react-router-dom";
 import {
     TeamOutlined,
-    AreaChartOutlined
+    AreaChartOutlined,
+    CaretLeftOutlined
   } from '@ant-design/icons';
 
 
 const SideBar = ({place, userId, userName, userAvatar, setValid, setPage, setToken}) => {
-    const navigate = useNavigate();
+    let navigate = useNavigate();
     const [collapsed, setCollapsed] = useState(false)
     const { Content, Sider } = Layout;
     const { SubMenu } = Menu;
@@ -55,20 +56,25 @@ const SideBar = ({place, userId, userName, userAvatar, setValid, setPage, setTok
         </Menu.Item>
       </Menu>
         :
-        <Menu theme="light" defaultSelectedKeys={["1"]} mode="inline">
-        <Menu.Item key="1" icon={<TeamOutlined />} onClick={() => setPage(1)}>
-            任務主頁
-        </Menu.Item>
-        <Menu.Item key="2" icon={<AreaChartOutlined />} onClick={() => setPage(2)}>
-            詳細資訊
-        </Menu.Item>
-        <Menu.Item key="3" icon={<AreaChartOutlined />} onClick={() => setPage(3)}>
-            成員清單
-        </Menu.Item>
-        <Menu.Item key="4" icon={<AreaChartOutlined />} onClick={() => setPage(4)}>
-            統計資訊
-        </Menu.Item>
-      </Menu>
+        <>
+          <Tooltip title="回到首頁" placement="right">
+            <Button type="circle" icon={<CaretLeftOutlined />} size='small' onClick={() => {navigate('/')}}></Button> 
+          </Tooltip>
+          <Menu theme="light" defaultSelectedKeys={["1"]} mode="inline">
+            <Menu.Item key="1" icon={<TeamOutlined />} onClick={() => setPage(1)}>
+                任務主頁
+            </Menu.Item>
+            <Menu.Item key="2" icon={<AreaChartOutlined />} onClick={() => setPage(2)}>
+                詳細資訊
+            </Menu.Item>
+            <Menu.Item key="3" icon={<AreaChartOutlined />} onClick={() => setPage(3)}>
+                成員清單
+            </Menu.Item>
+            <Menu.Item key="4" icon={<AreaChartOutlined />} onClick={() => setPage(4)}>
+                統計資訊
+            </Menu.Item>
+        </Menu>
+        </>
       }
 
     </Sider>

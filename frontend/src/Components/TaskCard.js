@@ -1,5 +1,7 @@
 import styled from 'styled-components'
 import {Avatar,Typography, Space} from 'antd'
+import { Link } from "react-router-dom";
+
 
 const { Text } = Typography;
 
@@ -23,10 +25,13 @@ const TaskCard = ({uid, icon, name}) => {
 
      return(
          <>
+         <Link to={`/task/${uid}`}>
             <Card>
                 <Avatar shape="square" size="large" src={icon} />
                 <div style={{fontSize: 1}}>{name}</div>
             </Card>
+        </Link>
+
          </>
 
      )
