@@ -1,6 +1,7 @@
 import Participation from "../../models/participation";
 import Task from "../../models/task";
 import Record from "../../models/record";
+import User from "../../models/user";
 
 const calculate_now_date = () =>{
     // Date object initialized as per Hong Kong timezone. Returns a datetime string
@@ -80,86 +81,108 @@ export const addOneAdmin = async (req, res) => {
 
 export const allParticipation_aAdmin = async(req, res) => {
     console.log("inside allParticipation_aAdmin function");
-    try {
-        const Data = await Participation.find({'User_ID': req.query.user_id, 'Is_Admin': true}, {_id: 0, __v: 0, User_ID: 0, Is_Admin: 0, Is_Quit: 0, Quit_Time: 0, Punish_Sum: 0, Last_Calculate_Day: 0});
-        console.log("Data: ",Data);
-        res.status(200).send({ message: 'success', data: Data});
-    } catch (e) { 
-        res.status(403).send({ message: 'error', data: null});
-        throw new Error("Database query failed"); 
+    const user = await User.findOne({User_ID: req.query.user_id});
+    if(user){
+        try {
+            const Data = await Participation.find({'User_ID': req.query.user_id, 'Is_Admin': true}, {_id: 0, __v: 0, User_ID: 0, Is_Admin: 0, Is_Quit: 0, Quit_Time: 0, Punish_Sum: 0, Last_Calculate_Day: 0});
+            console.log("Data: ",Data);
+            res.status(200).send({ message: 'success', data: Data});
+        } catch (e) { 
+            res.status(403).send({ message: 'error', data: null});
+            throw new Error("Database query failed"); 
+        }
+    }
+    else{
+        return res.status(404).send({ message: "User Not found." });
     }
 };
 
 export const allParticipation_aUser = async(req, res) => {
     console.log("inside allParticipation_aUser function");
-    try {
-        const Data = await Participation.find({'User_ID': req.query.user_id}, {_id: 0, __v: 0, User_ID: 0, Last_Calculate_Day: 0});
-        console.log("Data: ",Data);
-        res.status(200).send({ message: 'success', data: Data});
-    } catch (e) { 
-        res.status(403).send({ message: 'error', data: null});
-        throw new Error("Database query failed"); 
+    const user = await User.findOne({User_ID: req.query.user_id});
+    if(user){
+        try {
+            const Data = await Participation.find({'User_ID': req.query.user_id}, {_id: 0, __v: 0, User_ID: 0, Last_Calculate_Day: 0});
+            console.log("Data: ",Data);
+            res.status(200).send({ message: 'success', data: Data});
+        } catch (e) { 
+            res.status(403).send({ message: 'error', data: null});
+            throw new Error("Database query failed"); 
+        }
     }
+    else{
+        return res.status(404).send({ message: "User Not found." });
+    }
+
 };
 
 export const FinishParticipation_aUser = async(req, res) => {
     console.log("inside FinishParticipation_aUser function");
     var ongoingTask = [];
-    
-    Task.find({ Is_Closed: true })
-    .then(data => {
-        // console.log("Ongoing Task List:")
-        // console.log(data);
-  
-        data.map((d, k) => {
-            ongoingTask.push(d._id);
-        })
+    const user = await User.findOne({User_ID: req.query.user_id});
+    if(user){
+        Task.find({ Is_Closed: true })
+        .then(data => {
+            data.map((d, k) => {
+                ongoingTask.push(d._id);
+            })
 
-        Participation.find({ Task_ID: { $in: ongoingTask }, Is_Admin: false, User_ID: req.query.user_id }, {_id: 0, __v: 0, User_ID: 0, Is_Admin: 0, Is_Quit: 0, Quit_Time: 0, Punish_Sum: 0, Last_Calculate_Day: 0})
-            .then(data => {
-                console.log("User's ongoing task list:")
-                console.log(data);
-                res.status(200).send({ message: 'success', data: data});
-            })
-            .catch(error => {
-                console.log(error);
-                res.status(403).send({ message: 'error', data: null});
-                throw new Error("Database query failed"); 
-            })
-    })
-    .catch(error => {
-        console.log(error);
-    })
+            Participation.find({ Task_ID: { $in: ongoingTask }, Is_Admin: false, User_ID: req.query.user_id }, {_id: 0, __v: 0, User_ID: 0, Is_Admin: 0, Is_Quit: 0, Quit_Time: 0, Punish_Sum: 0, Last_Calculate_Day: 0})
+                .then(data => {
+                    console.log("User's ongoing task list:")
+                    console.log(data);
+                    res.status(200).send({ message: 'success', data: data});
+                })
+                .catch(error => {
+                    console.log(error);
+                    res.status(403).send({ message: 'error', data: null});
+                    throw new Error("Database query failed"); 
+                })
+        })
+        .catch(error => {
+            console.log(error);
+        })
+    }
+    else{
+        return res.status(404).send({ message: "User Not found." });
+    }
+
 };
 
 export const OngoingParticipation_aUser = async(req, res) => {
     console.log("inside OngoingParticipation_aUser function");
     var ongoingTask = [];
+    const user = await User.findOne({User_ID: req.query.user_id});
+    if(user){
+        Task.find({ Is_Closed: false })
+        .then(data => {
+            // console.log("Ongoing Task List:")
+            // console.log(data);
     
-    Task.find({ Is_Closed: false })
-    .then(data => {
-        // console.log("Ongoing Task List:")
-        // console.log(data);
-  
-        data.map((d, k) => {
-            ongoingTask.push(d._id);
-        })
+            data.map((d, k) => {
+                ongoingTask.push(d._id);
+            })
 
-        Participation.find({ Task_ID: { $in: ongoingTask }, Is_Admin: false, User_ID: req.query.user_id }, {_id: 0, __v: 0, User_ID: 0, Is_Admin: 0, Is_Quit: 0, Quit_Time: 0, Punish_Sum: 0, Last_Calculate_Day: 0})
-            .then(data => {
-                console.log("User's ongoing task list:")
-                console.log(data);
-                res.status(200).send({ message: 'success', data: data});
-            })
-            .catch(error => {
-                console.log(error);
-                res.status(403).send({ message: 'error', data: null});
-                throw new Error("Database query failed"); 
-            })
-    })
-    .catch(error => {
-        console.log(error);
-    })
+            Participation.find({ Task_ID: { $in: ongoingTask }, Is_Admin: false, User_ID: req.query.user_id }, {_id: 0, __v: 0, User_ID: 0, Is_Admin: 0, Is_Quit: 0, Quit_Time: 0, Punish_Sum: 0, Last_Calculate_Day: 0})
+                .then(data => {
+                    console.log("User's ongoing task list:")
+                    console.log(data);
+                    res.status(200).send({ message: 'success', data: data});
+                })
+                .catch(error => {
+                    console.log(error);
+                    res.status(403).send({ message: 'error', data: null});
+                    throw new Error("Database query failed"); 
+                })
+        })
+        .catch(error => {
+            console.log(error);
+        })
+    }
+    else{
+        return res.status(404).send({ message: "User Not found." });
+    }
+
 };
 
 export const TodayDayOffParticipation_aUser = async(req, res) => {
@@ -169,40 +192,45 @@ export const TodayDayOffParticipation_aUser = async(req, res) => {
     const dWeek = (d.getDay()+6)%7;
     var ongoingTask = [];
     var result = [];
+    const user = await User.findOne({User_ID: req.query.user_id});
+    if(user){
+        Task.find({ Is_Closed: false })
+        .then(data => {
+            console.log("Ongoing Task List:")
+            console.log(data);
     
-    Task.find({ Is_Closed: false })
-    .then(data => {
-        console.log("Ongoing Task List:")
-        console.log(data);
-  
-        data.map((d, k) => {
-            ongoingTask.push(d._id);
+            data.map((d, k) => {
+                ongoingTask.push(d._id);
+            })
+
+            Participation.find({ Task_ID: { $in: ongoingTask }, User_ID: req.query.user_id })
+                .then(async (data) => {
+                    await Promise.all(
+                        data.map(async (d, k) => {
+                            const aTask = await Task.findOne({_id: d.Task_ID});
+                            if(aTask.Working_Day[dWeek] == 0){
+                                result.push(d.Task_ID);
+                            }
+                        })
+                    )
+
+                    console.log("Today User's dayoff task list:")
+                    console.log(result);
+                    res.status(200).send({ message: 'success', data: result});
+                })
+                .catch(error => {
+                    console.log(error);
+                    res.status(403).send({ message: 'error', data: null});
+                    throw new Error("Database query failed"); 
+                })
         })
-
-        Participation.find({ Task_ID: { $in: ongoingTask }, User_ID: req.query.user_id })
-            .then(async (data) => {
-                await Promise.all(
-                    data.map(async (d, k) => {
-                        const aTask = await Task.findOne({_id: d.Task_ID});
-                        if(aTask.Working_Day[dWeek] == 0){
-                            result.push(d.Task_ID);
-                        }
-                    })
-                )
-
-                console.log("Today User's dayoff task list:")
-                console.log(result);
-                res.status(200).send({ message: 'success', data: result});
-            })
-            .catch(error => {
-                console.log(error);
-                res.status(403).send({ message: 'error', data: null});
-                throw new Error("Database query failed"); 
-            })
-    })
-    .catch(error => {
-        console.log(error);
-    })
+        .catch(error => {
+            console.log(error);
+        })
+    }
+    else{
+        return res.status(404).send({ message: "User Not found." });
+    }
 };
 
 export const TodayFinishParticipation_aUser = async(req, res) => {
@@ -212,46 +240,52 @@ export const TodayFinishParticipation_aUser = async(req, res) => {
     const dWeek = (d.getDay()+6)%7;
     var ongoingTask = [];
     var result = [];
+    const user = await User.findOne({User_ID: req.query.user_id});
+    if(user){
+        Task.find({ Is_Closed: false })
+        .then(data => {
+            console.log("Ongoing Task List:")
+            console.log(data);
     
-    Task.find({ Is_Closed: false })
-    .then(data => {
-        console.log("Ongoing Task List:")
-        console.log(data);
-  
-        data.map((d, k) => {
-            ongoingTask.push(d._id);
-        })
+            data.map((d, k) => {
+                ongoingTask.push(d._id);
+            })
 
-        Participation.find({ Task_ID: { $in: ongoingTask }, User_ID: req.query.user_id })
-            .then(async (data) => {
-                await Promise.all(
-                    data.map(async (d, k) => {
-                        const existing = await Record.findOne({Task_ID: d.Task_ID, Time: today, User_ID: req.query.user_id});
-                        console.log("Task_ID: ", d.Task_ID, "\nUser_ID: ", req.query.user_id, "\n");
-                        const aTask = await Task.findOne({_id: d.Task_ID});
-                        if(aTask.Working_Day[dWeek] == 1){
-                            if(existing){
-                                if(aTask.Threshold <= existing.Frequency){
-                                    result.push(d.Task_ID);
+            Participation.find({ Task_ID: { $in: ongoingTask }, User_ID: req.query.user_id })
+                .then(async (data) => {
+                    await Promise.all(
+                        data.map(async (d, k) => {
+                            const existing = await Record.findOne({Task_ID: d.Task_ID, Time: today, User_ID: req.query.user_id});
+                            console.log("Task_ID: ", d.Task_ID, "\nUser_ID: ", req.query.user_id, "\n");
+                            const aTask = await Task.findOne({_id: d.Task_ID});
+                            if(aTask.Working_Day[dWeek] == 1){
+                                if(existing){
+                                    if(aTask.Threshold <= existing.Frequency){
+                                        result.push(d.Task_ID);
+                                    }
                                 }
                             }
-                        }
-                    })
-                )
+                        })
+                    )
 
-                console.log("Today User's unfinished task list:")
-                console.log(result);
-                res.status(200).send({ message: 'success', data: result});
-            })
-            .catch(error => {
-                console.log(error);
-                res.status(403).send({ message: 'error', data: null});
-                throw new Error("Database query failed"); 
-            })
-    })
-    .catch(error => {
-        console.log(error);
-    })
+                    console.log("Today User's unfinished task list:")
+                    console.log(result);
+                    res.status(200).send({ message: 'success', data: result});
+                })
+                .catch(error => {
+                    console.log(error);
+                    res.status(403).send({ message: 'error', data: null});
+                    throw new Error("Database query failed"); 
+                })
+        })
+        .catch(error => {
+            console.log(error);
+        })
+    }
+    else{
+        return res.status(404).send({ message: "User Not found." });
+    }
+
 };
 
 export const TodayOngoingParticipation_aUser = async(req, res) => {
@@ -262,49 +296,55 @@ export const TodayOngoingParticipation_aUser = async(req, res) => {
 
     var ongoingTask = [];
     var result = [];
+    const user = await User.findOne({User_ID: req.query.user_id});
+    if(user){
+        Task.find({ Is_Closed: false })
+        .then(data => {
+            console.log("Ongoing Task List:")
+            console.log(data);
     
-    Task.find({ Is_Closed: false })
-    .then(data => {
-        console.log("Ongoing Task List:")
-        console.log(data);
-  
-        data.map((d, k) => {
-            ongoingTask.push(d._id);
-        })
+            data.map((d, k) => {
+                ongoingTask.push(d._id);
+            })
 
-        Participation.find({ Task_ID: { $in: ongoingTask }, User_ID: req.query.user_id })
-            .then(async (data) => {
-                await Promise.all(
-                    data.map(async (d, k) => {
-                        const existing = await Record.findOne({Task_ID: d.Task_ID, Time: today, User_ID: req.query.user_id});
-                        console.log("Task_ID: ", d.Task_ID, "\nUser_ID: ", req.query.user_id, "\n");
-                        const aTask = await Task.findOne({_id: d.Task_ID});
-                        if(aTask.Working_Day[dWeek] == 1){
-                            if(existing){
-                                if(aTask.Threshold > existing.Frequency){
+            Participation.find({ Task_ID: { $in: ongoingTask }, User_ID: req.query.user_id })
+                .then(async (data) => {
+                    await Promise.all(
+                        data.map(async (d, k) => {
+                            const existing = await Record.findOne({Task_ID: d.Task_ID, Time: today, User_ID: req.query.user_id});
+                            console.log("Task_ID: ", d.Task_ID, "\nUser_ID: ", req.query.user_id, "\n");
+                            const aTask = await Task.findOne({_id: d.Task_ID});
+                            if(aTask.Working_Day[dWeek] == 1){
+                                if(existing){
+                                    if(aTask.Threshold > existing.Frequency){
+                                        result.push(d.Task_ID);
+                                    }
+                                }
+                                else{
                                     result.push(d.Task_ID);
                                 }
                             }
-                            else{
-                                result.push(d.Task_ID);
-                            }
-                        }
-                    })
-                )
+                        })
+                    )
 
-                console.log("Today User's unfinished task list:")
-                console.log(result);
-                res.status(200).send({ message: 'success', data: result});
-            })
-            .catch(error => {
-                console.log(error);
-                res.status(403).send({ message: 'error', data: null});
-                throw new Error("Database query failed"); 
-            })
-    })
-    .catch(error => {
-        console.log(error);
-    })
+                    console.log("Today User's unfinished task list:")
+                    console.log(result);
+                    res.status(200).send({ message: 'success', data: result});
+                })
+                .catch(error => {
+                    console.log(error);
+                    res.status(403).send({ message: 'error', data: null});
+                    throw new Error("Database query failed"); 
+                })
+        })
+        .catch(error => {
+            console.log(error);
+        })
+    }
+    else{
+        return res.status(404).send({ message: "User Not found." });
+    }
+
 };
 
 export const quitParticipation = async(req, res) => {
