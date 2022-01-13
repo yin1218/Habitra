@@ -405,3 +405,36 @@ export const deleteUser = async(req, res) => {
         return res.status(404).send({ message: "User Not found." });
     }
 };
+
+export const durationOpen_aUser = async(req, res) => {
+    console.log("inside durationOpen_aUser function");
+    var ongoingTask = [];
+    const user = await User.findOne({User_ID: req.query.user_id});
+    if(user){
+        Task.find({$or:[{ Is_Closed: false },{ Close_Time: {$gte: req.query.start_time} }]})
+        .then(data => {
+            data.map((d, k) => {
+                ongoingTask.push(d._id);
+            })
+
+            Participation.find({ Task_ID: { $in: ongoingTask }, User_ID: req.query.user_id }, {_id: 0, __v: 0, User_ID: 0, Is_Admin: 0, Is_Quit: 0, Quit_Time: 0, Punish_Sum: 0, Last_Calculate_Day: 0})
+                .then(data => {
+                    console.log("User's ongoing task list:")
+                    console.log(data);
+                    res.status(200).send({ message: 'success', data: data});
+                })
+                .catch(error => {
+                    console.log(error);
+                    res.status(403).send({ message: 'error', data: null});
+                    throw new Error("Database query failed"); 
+                })
+        })
+        .catch(error => {
+            console.log(error);
+        })
+    }
+    else{
+        return res.status(404).send({ message: "User Not found." });
+    }
+
+};
