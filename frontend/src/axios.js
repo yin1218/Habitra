@@ -86,6 +86,59 @@ const addTask = async(props) => {
     }
 }
 
+const getTaskDetail = async(props) => {
+    const {task_id, token} = props;
+    try{
+        const { data: {message, data} } = await instance.get('/task/detail',{
+            params:{task_id: task_id, token: token}
+        });
+        return data;
+    }
+    catch (error) {
+        console.log("error");
+    }
+}
+
+//participation
+const getAdmin = async(props) => {
+    const {user_id, token} = props;
+    try{
+        const { data: {message, data} } = await instance.get('/participation/admin',{
+            params:{user_id: user_id, token: token}
+        });
+        return data;
+    }
+    catch (error) {
+        console.log("error");
+    }
+}
+
+const getNotAdminAndFinish = async(props) => {
+    const {user_id, token} = props;
+    try{
+        const { data: {message, data} } = await instance.get('/participation/notAdmin/finish',{
+            params:{user_id: user_id, token: token}
+        });
+        return data;
+    }
+    catch (error) {
+        console.log("error");
+    }
+}
+
+const getNotAdminAndGoing = async(props) => {
+    const {user_id, token} = props;
+    try{
+        const { data: {message, data} } = await instance.get('/participation/notAdmin/ongoing',{
+            params:{user_id: user_id, token: token}
+        });
+        return data;
+    }
+    catch (error) {
+        console.log("error");
+    }
+}
+
 //avatar
 const getAllAvatar = async() => {
     try {
@@ -118,4 +171,4 @@ const getAvatarClass = async(props) => {
     }
 }
 
-export {getAllAvatar, getAvatarClass, signUp, signUpCheckId, signUpCheckEmail, login, testToken, addTask, getUserInfo};
+export {getAllAvatar, getAvatarClass, signUp, signUpCheckId, signUpCheckEmail, login, testToken, addTask, getUserInfo, getAdmin, getNotAdminAndFinish, getNotAdminAndGoing, getTaskDetail};

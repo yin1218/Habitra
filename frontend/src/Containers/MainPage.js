@@ -20,7 +20,7 @@ import UserInfo from './UserInfo';
 
 
 
-const MainPage = ({setToken, setValid, userId}) => {
+const MainPage = ({setToken, setValid, userId, token}) => {
 
     var name, avatar, email;
     const [userAvatar, setUserAvatar] = useState("");
@@ -86,7 +86,7 @@ const MainPage = ({setToken, setValid, userId}) => {
                 :
                 page === 2
                 ?  <PersonalStats userId={userId}  />
-                : <UserInfo userId={userId} />
+                : <UserInfo userId={userId} name={userName} email={userEmail} token={token}/>
             }
           </Content>
         </Layout>

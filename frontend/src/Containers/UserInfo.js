@@ -12,30 +12,54 @@ ID
 參與中任務
 */
 import {Typography, Divider} from 'antd';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import TaskCard from '../Components/TaskCard';
 import styled from 'styled-components'
+import { getAdmin, getNotAdminAndFinish, getNotAdminAndGoing, getTaskDetail } from '../axios';
 const { Title, Text, Link } = Typography;
 
 
-const UserInfo = ({userId}) => {
-    const [name, setName] = useState("巫芊瑩");
-    const [email, setEmail] = useState("wcy881218@gmail.com");
+const UserInfo = ({userId, name, email, token}) => {
     const Tasks = styled.div`
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     `
-    const [managedTaskInfo, setManagedTaskInfo] = useState([
-        {"uid": "1", "icon": "https://joeschmoe.io/api/v1/random", "name": "推甄早點上岸群"},
-    ]);
-    const [openTaskInfo, setOpenTaskInfo] = useState([
-        {"uid": "2", "icon": "https://joeschmoe.io/api/v1/random", "name": "早睡早起身體好"},
-        {"uid": "3", "icon": "https://joeschmoe.io/api/v1/random", "name": "Leetcode王"},
-    ]);
-    const [closeTaskInfo, setCloseTaskInfo] = useState([
-        {"uid": "4", "icon": "https://joeschmoe.io/api/v1/random", "name": "推甄早點上岸群"},
-    ]);
+
+    const [managedTaskInfo, setManagedTaskInfo] = useState([]);
+    const [openTaskInfo, setOpenTaskInfo] = useState([]);
+    const [closeTaskInfo, setCloseTaskInfo] = useState([]);
+
+    useEffect( async () => {
+        const response_1 = await getAdmin({user_id: userId, token: token});
+        const response_2 = await getNotAdminAndGoing({user_id: userId, token: token});
+        const response_3 = await getNotAdminAndFinish({user_id: userId, token: token});
+        
+        for(var i = 0; i < response_1.length; i++){
+            const res = await getTaskDetail({task_id: response_1[i].Task_ID, token: token});
+            var temp = new Object();
+            temp.uid = response_1[i].Task_ID;
+            temp.icon = res.Icon;
+            temp.name = res.Title;
+            setManagedTaskInfo([...managedTaskInfo, temp]);
+        }
+        for(var i = 0; i < response_2.length; i++){
+            const res = await getTaskDetail({task_id: response_2[i].Task_ID, token: token});
+            var temp = new Object();
+            temp.uid = response_2[i].Task_ID;
+            temp.icon = res.Icon;
+            temp.name = res.Title;
+            setOpenTaskInfo([...openTaskInfo, temp]);
+        }
+        for(var i = 0; i < response_3.length; i++){
+            const res = await getTaskDetail({task_id: response_3[i].Task_ID, token: token});
+            var temp = new Object();
+            temp.uid = response_3[i].Task_ID;
+            temp.icon = res.Icon;
+            temp.name = res.Title;
+            setCloseTaskInfo([...closeTaskInfo, temp]);
+        }
+      }, []);
 
     return(
         <div className="site-layout-background" style={{ marginTop: 48, minHeight: 360 }}>

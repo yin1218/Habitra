@@ -58,7 +58,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         {/* public route */}
-        <Route path='/' element={isLogin ? <MainPage setToken={setToken} setValid={setValid} userId={userId}/> : <LoginPage setIsLogin={setIsLogin} setToken={setToken} userId = {userId} setUserId={setUserId} />}></Route>
+        <Route path='/' element={isLogin ? <MainPage setToken={setToken} setValid={setValid} userId={userId} token={token}/> : <LoginPage setIsLogin={setIsLogin} setToken={setToken} userId = {userId} setUserId={setUserId} />}></Route>
         {/* private route */}
         <Route path='/login' element={<LoginPage setIsLogin={setIsLogin} userId = {userId} setUserId={setUserId} setToken={setToken}/>}>
         </Route>
