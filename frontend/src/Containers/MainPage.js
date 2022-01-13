@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import SideBar from '../Components/SideBar';
 import PersonalTasks from './PersonalTasks';
 import PersonalStats from './PersonalStats';
-import { getUserInfo } from '../axios';
+import { getUserInfo, getTodayOngoing, getTodayFinish, getgetTodayDayoff,getTaskDetail } from '../axios';
 
 import { useState, useEffect } from 'react';
 
@@ -26,31 +26,54 @@ const MainPage = ({setToken, setValid, userId, token}) => {
     const [userAvatar, setUserAvatar] = useState("");
     const [userName, setUserName] = useState("");
     const [userEmail, setEmail] = useState("");
+
+    const { Content } = Layout;
+    // 資料串接所需資訊
+    // FE: 記得設定任務名稱字數上限
+    const [ongoingTaskInfo, setOngoingTaskInfo] = useState([]);
+    const [doneTaskInfo, setDoneTaskInfo] = useState([]);
+    const [relaxTaskInfo, setRelaxTaskInfo] = useState([]);
+
+    // set current page
+    const [page, setPage] = useState(1);
+    // 1: PersonalTasks, 2: PersonalStats
+
     useEffect( async () => {
         const response = await getUserInfo({user_id: userId});
         setUserAvatar(response.Avatar);
         setUserName(response.Name);
         setEmail(response.Email);
+
+        const response_1 = await getTodayOngoing({user_id: userId, token: token});
+        const response_2 = await getTodayFinish({user_id: userId, token: token});
+        const response_3 = await getgetTodayDayoff({user_id: userId, token: token});
+
+        for(var i = 0; i < response_1.length; i++){
+            const res = await getTaskDetail({task_id: response_1[i], token: token});
+            var temp = new Object();
+            temp.uid = response_1[i].Task_ID;
+            temp.icon = res.Icon;
+            temp.name = res.Title;
+            setOngoingTaskInfo([...ongoingTaskInfo, temp]);
+        }
+        for(var i = 0; i < response_2.length; i++){
+            const res = await getTaskDetail({task_id: response_2[i], token: token});
+            var temp = new Object();
+            temp.uid = response_2[i].Task_ID;
+            temp.icon = res.Icon;
+            temp.name = res.Title;
+            setDoneTaskInfo([...doneTaskInfo, temp]);
+        }
+        for(var i = 0; i < response_3.length; i++){
+            const res = await getTaskDetail({task_id: response_3[i], token: token});
+            var temp = new Object();
+            temp.uid = response_3[i].Task_ID;
+            temp.icon = res.Icon;
+            temp.name = res.Title;
+            setRelaxTaskInfo([...relaxTaskInfo, temp]);
+        }
       }, []);
 
-    
-    const { Content } = Layout;
-    // 資料串接所需資訊
-    // FE: 記得設定任務名稱字數上限
-    const [ongoingTaskInfo, setOngoingTaskInfo] = useState([
-        {"uid": "1", "icon": "https://joeschmoe.io/api/v1/random", "name": "推甄早點上岸群"},
-    ]);
-    const [doneTaskInfo, setDoneTaskInfo] = useState([
-        {"uid": "2", "icon": "https://joeschmoe.io/api/v1/random", "name": "早睡早起身體好"},
-        {"uid": "3", "icon": "https://joeschmoe.io/api/v1/random", "name": "Leetcode王"},
-    ]);
-    const [relaxTaskInfo, setRelaxTaskInfo] = useState([
-        {"uid": "4", "icon": "https://joeschmoe.io/api/v1/random", "name": "推甄早點上岸群"},
-    ]);
-
-    // set current page
-    const [page, setPage] = useState(1);
-    // 1: PersonalTasks, 2: PersonalStats
 
 
     const AddTask = styled.div`
