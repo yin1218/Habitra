@@ -12,7 +12,7 @@ avatar
 
 import styled from "styled-components";
 import { useState } from "react";
-import { Typography, Button } from "antd";
+import { Typography, Button, Avatar } from "antd";
 import moment from "moment";
 const TaskInfo = ({taskId}) => {
 
@@ -40,6 +40,7 @@ const TaskInfo = ({taskId}) => {
     // 刪除的時候要加上一個double confirm 的 box
     const [isManager, setIsManager] = useState(true);
     //任務資訊
+    const [taskAvatar, setTaskAvatar] = useState('https://joeschmoe.io/api/v1/random');
     const [taskName, setTaskName] = useState("一起去跑步");
     const [taskDescription, setTaskDescription] = useState("請不要說不!~~~~~~");
     
@@ -59,6 +60,7 @@ const TaskInfo = ({taskId}) => {
 
     return(
         <>
+            <Avatar size={120} src={taskAvatar}  />
             <Title level={3}>任務簡介</Title>
             <Text>{taskDescription}</Text>
             <Title level={3}>任務規則</Title>
