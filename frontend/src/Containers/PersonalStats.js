@@ -4,9 +4,9 @@ import React, { useState, useEffect } from 'react';
 // import ReactDOM from 'react-dom';
 import { Column } from '@ant-design/plots';
 import StatsInfoCard from '../Components/StatsInfoCard';
+import { getDurationOpen, getPeriodRecord, getTaskDetail } from '../axios';
 
-
-const PersonalStats = ({userId}) => {
+const PersonalStats = ({userId, token}) => {
 
     // default settings
 
@@ -16,15 +16,36 @@ const PersonalStats = ({userId}) => {
     // task list
     const [task, setTask] = useState([]);
     // total statistic list 在接的時候加總
-    const [achieveCount, setAchieveCount] = useState([1,0,2,1,10,0,0]);
+    const [achieveCount, setAchieveCount] = useState([0,0,0,0,0,0,0]);
     // to 陳沛妤: 這邊是每周應打卡次數，你也可以取一個好聽一點的名字
-    const [expectedTotalCount, setExpectedTotalCount] = useState(100);
+    const [expectedTotalCount, setExpectedTotalCount] = useState(0);
+    
+    useEffect( async () => {
+      const response = await getDurationOpen({user_id: userId, start_time: startDate, token: token});
+      var temp = []; //多組arr
+      var count = 0;
+      for(var i = 0; i < response.length; i++){
+          const res = await getPeriodRecord({user_id: userId, task_id: response[i].Task_ID, start_time: startDate, end_time: endDate, token: token});
+          temp[i] = res[0];
+          setTask([...task, response[i].Task_ID]);
 
+          const res_2 = await getTaskDetail({task_id: response[i].Task_ID, token: token});
+          count += res_2.Threshold;
+      }
+      setExpectedTotalCount(count);
+      var final = [0,0,0,0,0,0,0]; //一組arr
+      for(var i = 0; i < temp.length; i++){
+        for(var j = 0; j < 7; j++){
+          final[j] += temp[i][j];
+        }
+      }
+      setAchieveCount(final);
+      
+    }, [startDate]);
+  
     // function
     const formatDate = (date)=>{
-        console.log(date);
         let formatted_date = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" +date.getDate();
-        console.log(formatted_date);
         return formatted_date;
     }
 
