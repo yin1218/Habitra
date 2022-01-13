@@ -1,7 +1,7 @@
 
 
 import styled from 'styled-components';
-import { Layout } from 'antd';
+import { Layout, Typography } from 'antd';
 import { Icon } from '@iconify/react';
 
 
@@ -31,13 +31,14 @@ const TaskDescCard = ({done, desc}) => {
                 done
                 ?
                 <>
-                    <Icon icon="twemoji:sad-but-relieved-face" color="black" height="50" />
-                    <Text>未完成打卡QAQ</Text>
+                    <Text>{desc}</Text>
                 </>
                 :
                 <>
-                    <Text>{desc}</Text>
+                <Icon icon="twemoji:sad-but-relieved-face" color="black" height="50" />
+                <Text>未完成打卡QAQ</Text>
                 </>
+
             }
         </CardOutline>
         </>        
