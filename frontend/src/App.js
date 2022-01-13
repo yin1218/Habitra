@@ -68,7 +68,7 @@ function App() {
         {/* 個人資訊頁面 */}
         {/* <Route path="/userInfo/" element={ valid ? <UserInfo userId = {userId} /> : <Navigate to="/login" />}></Route> */}
         {/* 統計資料頁面 */}
-        <Route path='/task/:taskID' element={ <TaskMainPage setToken={setToken} setValid={setValid} userId={userId} /> }></Route>
+        <Route path='/task/:taskId' element={ <TaskMainPage setToken={setToken} setValid={setValid} userId={userId} /> }></Route>
       </Routes>
       </BrowserRouter>
   );
