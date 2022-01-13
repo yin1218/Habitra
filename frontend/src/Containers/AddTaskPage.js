@@ -29,8 +29,8 @@ const AddTaskPage = (token) => {
         // 任務icon
         const [icon, setIcon] = useState("");
         // 打卡區間
-        const [start_hour, setStart_hour] = useState(moment.utc().hour(0).minute(0));
-        const [end_hour, setEnd_hour] = useState(moment.utc().hour(23).minute(59));
+        const [start_hour, setStart_hour] = useState(moment.utc().local().hour(0).minute(0));
+        const [end_hour, setEnd_hour] = useState(moment.utc().local().hour(23).minute(59));
 
 
         const { TextArea } = Input;
@@ -40,8 +40,8 @@ const AddTaskPage = (token) => {
         const handleTimePick = (time) => {
             if(time === null){
                 console.log("NULL");
-                setStart_hour(moment.utc().hour(0).minute(0));
-                setEnd_hour(moment.utc().hour(23).minute(59));
+                setStart_hour(moment.utc().local().hour(0).minute(0));
+                setEnd_hour(moment.utc().local().hour(23).minute(59));
                 
             }
             else{

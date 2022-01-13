@@ -63,7 +63,7 @@ const TaskView = ({taskId}) => {
         <>
         <Title level={3}>{taskName}</Title>
         <Avatar size={120} src={taskAvatar}  />
-        <DatePicker onChange={(e) => dateOnChange(e._d)} />
+        <DatePicker onChange={(e) => dateOnChange(e._d) } allowClear={false} />
         <TaskDescCard done={done} desc={description}/>
         <AddDone></AddDone>
         </>

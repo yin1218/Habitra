@@ -47,14 +47,15 @@ const MainPage = ({setToken, setValid, userId, token}) => {
         const response_1 = await getTodayOngoing({user_id: userId, token: token});
         const response_2 = await getTodayFinish({user_id: userId, token: token});
         const response_3 = await getgetTodayDayoff({user_id: userId, token: token});
-
+        console.log(response_1);
         for(var i = 0; i < response_1.length; i++){
             const res = await getTaskDetail({task_id: response_1[i], token: token});
             var temp = new Object();
-            temp.uid = response_1[i].Task_ID;
+            temp.uid = response_1[i];
             temp.icon = res.Icon;
             temp.name = res.Title;
             setOngoingTaskInfo([...ongoingTaskInfo, temp]);
+            console.log(temp.uid);
         }
         for(var i = 0; i < response_2.length; i++){
             const res = await getTaskDetail({task_id: response_2[i], token: token});
@@ -111,7 +112,7 @@ const MainPage = ({setToken, setValid, userId, token}) => {
                 ?  <PersonalStats userId={userId}  />
                 : <UserInfo userId={userId} name={userName} email={userEmail} token={token}/>
             }
-          </Content>
+          </Content> 
         </Layout>
         {/* 加一個可以新增任務的固定按鈕，hover可以看到詳細資訊 */}
         

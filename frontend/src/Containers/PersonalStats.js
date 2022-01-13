@@ -97,7 +97,7 @@ const PersonalStats = ({userId}) => {
 
     return(
         <>
-            <DatePicker onChange={(e) => weekOnChange(e._d)} picker="week" />
+            <DatePicker onChange={(e) => weekOnChange(e._d)} picker="week" allowClear={false}/>
             <DemoColumn />
             <StatsInfoCard achieveTotalCount={achieveCount.reduce((a, b) => a + b, 0)} expectedTotalCount={expectedTotalCount} />
         </>

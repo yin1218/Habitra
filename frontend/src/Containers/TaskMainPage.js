@@ -8,9 +8,10 @@
  */
 import styled from 'styled-components'
 import SideBar from '../Components/SideBar';
-import { Layout, Modal, Button, Avatar, Typography, Tooltip, Input } from 'antd';
+import { Layout, Modal, Button, Avatar, Typography, Tooltip, Input, message } from 'antd';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
+import moment from 'moment';
 import {
     CheckSquareOutlined
   } from '@ant-design/icons';
@@ -27,8 +28,11 @@ const TaskMainPage = ({setToken, setValid, userId}) => {
     const {Text} = Typography;
     const { Content } = Layout;
     let {taskID} = useParams();
-    console.log(taskID);
+    // console.log(taskID);
     const [page, setPage] = useState(1);
+    const currentHour = moment();
+    // moment(currentTime).isAfter(moment.utc().hour(0).minute(0))
+
     const AddTask = styled.div`
     position: fixed;
     margin-left: 93vw;
@@ -44,6 +48,8 @@ const TaskMainPage = ({setToken, setValid, userId}) => {
     text-align: center;
     line-height: 50px;
 `
+    
+
     //打卡顯示controller
     const [isModalVisible, setIsModalVisible] = useState(false);
 
@@ -54,6 +60,8 @@ const TaskMainPage = ({setToken, setValid, userId}) => {
     // 陳沛妤：這邊要送出打卡資料　｜　巫芊瑩：成功的話要有msg, 等接好後記得加
     const handleOk = () => {
         setIsModalVisible(false);
+        message.success('成功打卡！');
+
     };
 
     const handleCancel = () => {
@@ -71,13 +79,17 @@ const TaskMainPage = ({setToken, setValid, userId}) => {
     const [userAvatar, setUserAvatar] = useState('https://joeschmoe.io/api/v1/random');
     const [closed, setClosed] = useState(false); //透過這個判斷要不要顯示打卡按鈕
     const [typedDesc, setTypedDesc] = useState('');
-    
+    const [startHour, setStartHour] = useState(moment.utc().local().hour(0).minute(0));
+    const [endHour, setEndHour] = useState(moment.utc().local().hour(23).minute(59));
+    console.log("startHour = ", startHour)
+    console.log("endHour = ", endHour)
+    console.log("currentHour = ", currentHour);
+    const [timeIsValid, setTimeIsValid] = useState(moment(currentHour).isAfter(startHour) && moment(currentHour).isBefore(endHour) ? true : false);
 
     return(
         <Layout style={{ minHeight: '100vh' }}>
         <SideBar place = "taskMainPage" userId = {userId} userName={userName} userAvatar={userAvatar} setValid={setValid}  setPage={setPage} setToken={setToken}/>
         <Layout className="site-layout" style={{ marginLeft: 200 }}>
-            {/* 以下麵包屑 FE待修正 */}
           <Content style={{ margin: '24px 16px 0', overflow: 'initial' }}>
               {/* <p>This is task main page!</p> */}
               {
@@ -97,13 +109,12 @@ const TaskMainPage = ({setToken, setValid, userId}) => {
               }
           </Content>
         </Layout>
-        {/* 加一個可以新增任務的固定按鈕，hover可以看到詳細資訊 */}   
         {closed
         ?<></>
         :
-        <Tooltip title="我要打卡">
+        <Tooltip title={timeIsValid ? "我要打卡" : "已超過打卡時間"}>
             <AddTask>
-                <Button type="text" shape="circle" icon={<CheckSquareOutlined />} size="large" onClick={showModal}/>
+                <Button type="text" shape="circle" icon={<CheckSquareOutlined />} size="large" onClick={showModal} disabled={timeIsValid ? false : true}/>
             </AddTask>
         </Tooltip>
         }   
