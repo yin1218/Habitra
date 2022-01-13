@@ -22,13 +22,18 @@ import UserInfo from './UserInfo';
 
 const MainPage = ({setToken, setValid, userId, setUserName, userName}) => {
 
+    var name, avatar, email;
     useEffect( async () => {
         console.log(userId);
         const response = await getUserInfo({user_id: userId});
-        console.log(response);
+        avatar = response.Avatar;
+        name = response.Name;
+        email = response.Email;
       }, []);
 
-
+    const [userAvatar, setUserAvatar] = useState(avatar);
+    setUserName(name);
+    const [userEmail, setEmail] = useState(email);
     const { Content } = Layout;
     // 資料串接所需資訊
     // FE: 記得設定任務名稱字數上限
@@ -42,9 +47,7 @@ const MainPage = ({setToken, setValid, userId, setUserName, userName}) => {
     const [relaxTaskInfo, setRelaxTaskInfo] = useState([
         {"uid": "4", "icon": "https://joeschmoe.io/api/v1/random", "name": "推甄早點上岸群"},
     ]);
-    // const [userName, setUserName] = useState("巫芊瑩");
-    // const [userId, setUserId] = useState("wpbag");
-    const [userAvatar, setUserAvatar] = useState("https://joeschmoe.io/api/v1/random");
+    
 
     // set current page
     const [page, setPage] = useState(1);

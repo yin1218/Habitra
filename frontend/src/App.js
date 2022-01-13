@@ -14,15 +14,17 @@ import AddTaskPage from './Containers/AddTaskPage';
 import TaskMainPage from './Containers/TaskMainPage';
 
 const LOCALSTORAGE_KEY = "";
+const LOCALSTORAGE_USERID = "";
 
 function App() {
   const savedToken = localStorage.getItem(LOCALSTORAGE_KEY);
+  const savedUser = localStorage.getItem(LOCALSTORAGE_USERID);
   
   // const [me, setMe] = useState("")
   const [isLogin, setIsLogin] = useState(false); //目的：檢測目前是否登入
   const[token, setToken] = useState(savedToken || "");  //目的：檢測當前用戶是否過期
   const[valid, setValid] = useState(false);  //
-  const[userId, setUserId] = useState("");
+  const[userId, setUserId] = useState(savedUser|"");
   const[userName, setUserName] = useState("");
 
   function PrivateRoute({ children }) {
@@ -38,6 +40,7 @@ function App() {
       setValid(true);
       setIsLogin(true);
       localStorage.setItem(LOCALSTORAGE_KEY, token);
+      localStorage.setItem(LOCALSTORAGE_USERID, userId);
     }
   }, [token]); 
 
