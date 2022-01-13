@@ -25,7 +25,6 @@ function App() {
   const[token, setToken] = useState(savedToken || "");  //目的：檢測當前用戶是否過期
   const[valid, setValid] = useState(false);  //
   const[userId, setUserId] = useState(savedUser|"");
-  const[userName, setUserName] = useState("");
 
   function PrivateRoute({ children }) {
     // const auth = useAuth();
@@ -59,7 +58,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         {/* public route */}
-        <Route path='/' element={isLogin ? <MainPage setToken={setToken} setValid={setValid} userId={userId} setUserName={setUserName} userName={userName}/> : <LoginPage setIsLogin={setIsLogin} setToken={setToken} userId = {userId} setUserId={setUserId} />}></Route>
+        <Route path='/' element={isLogin ? <MainPage setToken={setToken} setValid={setValid} userId={userId}/> : <LoginPage setIsLogin={setIsLogin} setToken={setToken} userId = {userId} setUserId={setUserId} />}></Route>
         {/* private route */}
         <Route path='/login' element={<LoginPage setIsLogin={setIsLogin} userId = {userId} setUserId={setUserId} setToken={setToken}/>}>
         </Route>

@@ -20,19 +20,19 @@ import UserInfo from './UserInfo';
 
 
 
-const MainPage = ({setToken, setValid, userId, setUserName, userName}) => {
+const MainPage = ({setToken, setValid, userId}) => {
 
     var name, avatar, email;
     useEffect( async () => {
-        console.log(userId);
         const response = await getUserInfo({user_id: userId});
         avatar = response.Avatar;
         name = response.Name;
         email = response.Email;
+        console.log(name);
       }, []);
 
     const [userAvatar, setUserAvatar] = useState(avatar);
-    setUserName(name);
+    const [userName, setUserName] = useState(name);
     const [userEmail, setEmail] = useState(email);
     const { Content } = Layout;
     // 資料串接所需資訊
@@ -47,7 +47,7 @@ const MainPage = ({setToken, setValid, userId, setUserName, userName}) => {
     const [relaxTaskInfo, setRelaxTaskInfo] = useState([
         {"uid": "4", "icon": "https://joeschmoe.io/api/v1/random", "name": "推甄早點上岸群"},
     ]);
-    
+    console.log(userName);
 
     // set current page
     const [page, setPage] = useState(1);
