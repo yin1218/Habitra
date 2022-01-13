@@ -23,17 +23,17 @@ import UserInfo from './UserInfo';
 const MainPage = ({setToken, setValid, userId}) => {
 
     var name, avatar, email;
+    const [userAvatar, setUserAvatar] = useState("");
+    const [userName, setUserName] = useState("");
+    const [userEmail, setEmail] = useState("");
     useEffect( async () => {
         const response = await getUserInfo({user_id: userId});
-        avatar = response.Avatar;
-        name = response.Name;
-        email = response.Email;
-        console.log(name);
+        setUserAvatar(response.Avatar);
+        setUserName(response.Name);
+        setEmail(response.Email);
       }, []);
 
-    const [userAvatar, setUserAvatar] = useState(avatar);
-    const [userName, setUserName] = useState(name);
-    const [userEmail, setEmail] = useState(email);
+    
     const { Content } = Layout;
     // 資料串接所需資訊
     // FE: 記得設定任務名稱字數上限
@@ -47,7 +47,6 @@ const MainPage = ({setToken, setValid, userId}) => {
     const [relaxTaskInfo, setRelaxTaskInfo] = useState([
         {"uid": "4", "icon": "https://joeschmoe.io/api/v1/random", "name": "推甄早點上岸群"},
     ]);
-    console.log(userName);
 
     // set current page
     const [page, setPage] = useState(1);
