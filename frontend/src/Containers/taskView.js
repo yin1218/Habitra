@@ -7,7 +7,7 @@
 
 import { useState } from "react";
 // import { Layout, Menu, Breadcrumb, Button, Avatar, Typography, DatePicker } from 'antd';
-import { DatePicker, Typography, Avatar } from 'antd';
+import { DatePicker, Typography, Avatar, Progress } from 'antd';
 import TaskDescCard from "../Components/TaskDescCard";
 import styled from "styled-components";
 
@@ -64,6 +64,7 @@ const TaskView = ({taskId}) => {
         <Title level={3}>{taskName}</Title>
         <Avatar size={120} src={taskAvatar}  />
         <DatePicker onChange={(e) => dateOnChange(e._d) } allowClear={false} />
+        <Progress percent={frequency/expectedFrequency * 100} size="small" />
         <TaskDescCard done={done} desc={description}/>
         <AddDone></AddDone>
         </>

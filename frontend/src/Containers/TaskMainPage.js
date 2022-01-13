@@ -27,7 +27,7 @@ const TaskMainPage = ({setToken, setValid, userId}) => {
     const { TextArea } = Input;
     const {Text} = Typography;
     const { Content } = Layout;
-    let {taskID} = useParams();
+    let {taskId} = useParams();
     // console.log(taskID);
     const [page, setPage] = useState(1);
     const currentHour = moment();
@@ -79,11 +79,12 @@ const TaskMainPage = ({setToken, setValid, userId}) => {
     const [userAvatar, setUserAvatar] = useState('https://joeschmoe.io/api/v1/random');
     const [closed, setClosed] = useState(false); //透過這個判斷要不要顯示打卡按鈕
     const [typedDesc, setTypedDesc] = useState('');
-    const [startHour, setStartHour] = useState(moment.utc().local().hour(0).minute(0));
-    const [endHour, setEndHour] = useState(moment.utc().local().hour(23).minute(59));
+    const [startHour, setStartHour] = useState(moment("00:00", 'hh:mm')); //陳沛妤: 接的時候記得換成moment格式QQ
+    const [endHour, setEndHour] = useState(moment("23:59", 'hh:mm'));
     console.log("startHour = ", startHour)
     console.log("endHour = ", endHour)
     console.log("currentHour = ", currentHour);
+
     const [timeIsValid, setTimeIsValid] = useState(moment(currentHour).isAfter(startHour) && moment(currentHour).isBefore(endHour) ? true : false);
 
     return(
@@ -95,15 +96,15 @@ const TaskMainPage = ({setToken, setValid, userId}) => {
               {
                   page === 1
                   ?
-                    <TaskView />
+                    <TaskView taskId={taskId} />
                   :
                   page === 2
                   ?
-                    <TaskInfo />
+                    <TaskInfo taskId={taskId} />
                   :
                   page === 3
                   ?
-                  <TaskMenber />
+                  <TaskMenber taskId={taskId} />
                   :
                   <TaskStats />
               }
