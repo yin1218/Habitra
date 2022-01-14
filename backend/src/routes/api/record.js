@@ -34,7 +34,16 @@ export const addOneRecord = async (req, res) => {
     const existing = await Record.findOne({User_ID: req.body.user_id, Task_ID: req.body.task_id, Time: today});
     if(existing){ // update Is_Admin = true
         try{
-            var str = existing.Daily_Desc + "\n" + req.body.daily_desc;
+            var str = null;
+            if(existing.Daily_Desc == null && req.body.daily_desc != null){
+                str = req.body.daily_desc;
+            }
+            else if (existing.Daily_Desc != null && req.body.daily_desc != null){
+                str = existing.Daily_Desc + "\n" + req.body.daily_desc;
+            }
+            else if (existing.Daily_Desc != null){
+                str = existing.Daily_Desc;
+            }
             await Record.updateOne({User_ID: req.body.user_id, Task_ID: req.body.task_id, Time: today}, { $set: { 'Frequency': existing.Frequency+1 , Daily_Desc: str} });
             res.status(200).send({ message: 'success', id: existing.id});
         }
