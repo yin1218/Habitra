@@ -9,7 +9,7 @@
 import styled from 'styled-components'
 import SideBar from '../Components/SideBar';
 import { Layout, Modal, Button, Avatar, Typography, Tooltip, Input, message } from 'antd';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import moment from 'moment';
 import {
@@ -20,8 +20,9 @@ import TaskView from './TaskView';
 import TaskInfo from './TaskInfo';
 import TaskMenber from './TaskMember';
 import TaskStats from './TaskStats';
+import { getUserInfo, addRecord, getTaskDetail } from '../axios';
 
-const TaskMainPage = ({setToken, setValid, userId}) => {
+const TaskMainPage = ({setToken, setValid, userId, token}) => {
 
     // default settings
     const { TextArea } = Input;
@@ -53,39 +54,50 @@ const TaskMainPage = ({setToken, setValid, userId}) => {
     //打卡顯示controller
     const [isModalVisible, setIsModalVisible] = useState(false);
 
-    const showModal = () => {
-        setIsModalVisible(true);
+    
+    
+    // 資料串接 @陳沛妤
+    const [userName,setUserName] = useState('');
+    const [userAvatar, setUserAvatar] = useState('');
+    const [closed, setClosed] = useState(false); //透過這個判斷要不要顯示打卡按鈕
+    const [typedDesc, setTypedDesc] = useState('');
+    const [startHour, setStartHour] = useState(moment("00:00", 'hh:mm')); //陳沛妤: 接的時候記得換成moment格式QQ
+    const [endHour, setEndHour] = useState(moment("23:59", 'hh:mm'));
+    // console.log("startHour = ", startHour)
+    // console.log("endHour = ", endHour)
+    // console.log("currentHour = ", currentHour);
+
+    const textOnChange = e => {
+      setTypedDesc(e.target.value);
     };
 
-    // 陳沛妤：這邊要送出打卡資料　｜　巫芊瑩：成功的話要有msg, 等接好後記得加
-    const handleOk = () => {
-        setIsModalVisible(false);
-        message.success('成功打卡！');
+    const showModal = () => {
+      setIsModalVisible(true);
+    };
 
+  // 陳沛妤：這邊要送出打卡資料　｜　巫芊瑩：成功的話要有msg, 等接好後記得加
+    const handleOk = async () => {
+        setIsModalVisible(false);
+        const res = await addRecord({user_id: userId, task_id: taskId, daily_desc: typedDesc, token: token});
+        console.log(res);
+        message.success('成功打卡！');
     };
 
     const handleCancel = () => {
         setIsModalVisible(false);
     };
 
-    const textOnChange = e => {
-        console.log('Change:', e.target.value);
-        setTypedDesc(e.target.value);
-      };
-    
-    
-    // 資料串接 @陳沛妤
-    const [userName,setUserName] = useState('巫芊瑩');
-    const [userAvatar, setUserAvatar] = useState('https://joeschmoe.io/api/v1/random');
-    const [closed, setClosed] = useState(false); //透過這個判斷要不要顯示打卡按鈕
-    const [typedDesc, setTypedDesc] = useState('');
-    const [startHour, setStartHour] = useState(moment("00:00", 'hh:mm')); //陳沛妤: 接的時候記得換成moment格式QQ
-    const [endHour, setEndHour] = useState(moment("23:59", 'hh:mm'));
-    console.log("startHour = ", startHour)
-    console.log("endHour = ", endHour)
-    console.log("currentHour = ", currentHour);
-
     const [timeIsValid, setTimeIsValid] = useState(moment(currentHour).isAfter(startHour) && moment(currentHour).isBefore(endHour) ? true : false);
+
+    useEffect( async () => {
+      const response = await getUserInfo({user_id: userId});
+      setUserAvatar(response.Avatar);
+      setUserName(response.Name);
+
+      const res = await getTaskDetail({task_id: taskId, token: token});
+      setStartHour(moment(res.Start_Hour,"hh:mm"));
+      setEndHour(moment(res.End_Hour,"hh:mm")); //巫：沒有擋成功
+    }, []);
 
     return(
         <Layout style={{ minHeight: '100vh' }}>
@@ -96,11 +108,11 @@ const TaskMainPage = ({setToken, setValid, userId}) => {
               {
                   page === 1
                   ?
-                    <TaskView taskId={taskId} />
+                    <TaskView taskId={taskId} token={token} userId={userId}/>
                   :
                   page === 2
                   ?
-                    <TaskInfo taskId={taskId} />
+                    <TaskInfo taskId={taskId} token={token} userId={userId}/>
                   :
                   page === 3
                   ?

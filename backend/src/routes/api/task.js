@@ -52,6 +52,11 @@ export const addOneTask = async (req, res) => {
 
 export const oneTask = async(req, res) => {
     console.log("inside oneTask function");
+    if(req.query.task_id == null ){
+        res.status(403).send({ message: 'task_id input is needed'});
+        return ;
+    }
+   
     try {
         const Data = await Task.findOne({'_id': req.query.task_id});
         console.log("Data: ",Data);
@@ -64,6 +69,10 @@ export const oneTask = async(req, res) => {
 
 export const oneTaskPartOF = async(req, res) => {
     console.log("inside oneTaskPartOF function");
+    if(req.query.task_id == null ){
+        res.status(403).send({ message: 'task_id input is needed'});
+        return ;
+    }
     try {
         const Data = await Task.findOne({'_id': req.query.task_id}, {_id:0, __v:0, Is_Closed:0, Working_Day:0, Punish:0, Account_Day:0, Need_Daily_Desc:0, updatedAt:0});
         console.log("Data: ",Data);
@@ -76,6 +85,10 @@ export const oneTaskPartOF = async(req, res) => {
 
 export const closeTask = async(req, res) => {
     console.log("inside closeTask function");
+    if(req.body.task_id == null ){
+        res.status(403).send({ message: 'task_id input is needed'});
+        return ;
+    }
     const today = calculate_now_date();
     try {
         await Task.updateOne({'_id': req.body.task_id}, { $set: { 'Is_Closed': true , 'Close_Time': today} });
@@ -88,6 +101,10 @@ export const closeTask = async(req, res) => {
 
 export const openTask = async(req, res) => {
     console.log("inside closeTask function");
+    if(req.body.task_id == null ){
+        res.status(403).send({ message: 'task_id input is needed'});
+        return ;
+    }
     try {
         await Task.updateOne({'_id': req.body.task_id}, { $set: { 'Is_Closed': false } });
         res.status(200).send({ message: 'success'});
@@ -99,6 +116,10 @@ export const openTask = async(req, res) => {
 
 export const deleteTask = async(req, res) => {
     console.log("inside deleteTask function");
+    if(req.body.task_id == null ){
+        res.status(403).send({ message: 'task_id input is needed'});
+        return ;
+    }
     try {
         await Task.deleteOne({"_id": req.body.task_id});
         await Record.deleteMany({"Task_ID": req.body.task_id});
@@ -112,6 +133,10 @@ export const deleteTask = async(req, res) => {
 
 export const clearMoney = async(req, res) => {
     console.log("inside clearMoney function");
+    if(req.body.task_id == null ){
+        res.status(403).send({ message: 'task_id input is needed'});
+        return ;
+    }
     const today = calculate_now_date();
     try {
         await Participation.updateMany({Task_ID: req.body.task_id}, { $set: { 'Punish_Sum': 0 }});

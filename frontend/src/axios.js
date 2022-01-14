@@ -99,6 +99,19 @@ const getTaskDetail = async(props) => {
     }
 }
 
+const getTask = async(props) => {
+    const {task_id, token} = props;
+    try{
+        const { data: {message, data} } = await instance.get('/task',{
+            params:{task_id: task_id, token: token}
+        });
+        return data;
+    }
+    catch (error) {
+        console.log("error");
+    }
+}
+
 //participation
 const getAdmin = async(props) => {
     const {user_id, token} = props;
@@ -191,6 +204,19 @@ const getDurationOpen = async(props) => {
     }
 }
 
+const getParticipationDetail = async(props) => {
+    const {user_id, task_id, token} = props;
+    try{
+        const { data: {message, data} } = await instance.get('/participation/quit',{
+            params:{user_id: user_id, task_id: task_id, token: token}
+        });
+        return data;
+    }
+    catch (error) {
+        console.log("error");
+    }
+}
+
 //record
 const getPeriodRecord = async(props) => {
     const {user_id, task_id, start_time, end_time, token} = props;
@@ -202,6 +228,32 @@ const getPeriodRecord = async(props) => {
         res[0] = frequency;
         res[1] = daily_desc;
         return res;
+    }
+    catch (error) {
+        console.log("error");
+    }
+}
+
+const addRecord = async(props) => {
+    const {task_id, user_id, daily_desc, token} = props;
+    try{
+        const {data: {message, id}} = await instance.post('/record/add',{
+            task_id, user_id, daily_desc ,token
+        });
+        return id;
+    }
+    catch (error) {
+        console.log("error");
+    }
+}
+
+const getDailyRecord = async(props) => {
+    const {user_id, task_id, time, token} = props;
+    try{
+        const { data: {message, data} } = await instance.get('/record',{
+            params:{user_id: user_id, task_id: task_id, time: time, token: token}
+        });
+        return data;
     }
     catch (error) {
         console.log("error");
@@ -240,4 +292,4 @@ const getAvatarClass = async(props) => {
     }
 }
 
-export {getAllAvatar, getAvatarClass, signUp, signUpCheckId, signUpCheckEmail, login, testToken, addTask, getUserInfo, getAdmin, getNotAdminAndFinish, getNotAdminAndGoing, getTaskDetail, getTodayOngoing, getTodayFinish, getgetTodayDayoff, getDurationOpen, getPeriodRecord};
+export {getAllAvatar, getAvatarClass, signUp, signUpCheckId, signUpCheckEmail, login, testToken, addTask, getUserInfo, getAdmin, getNotAdminAndFinish, getNotAdminAndGoing, getTaskDetail, getTodayOngoing, getTodayFinish, getgetTodayDayoff, getDurationOpen, getPeriodRecord, addRecord, getDailyRecord, getTask, getParticipationDetail};

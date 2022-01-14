@@ -22,12 +22,20 @@ const calculate_now_date = () =>{
 export const addOneRecord = async (req, res) => {
     const today = calculate_now_date();
     console.log("inside addOneRecord function");
+    if(req.body.user_id == null ){
+        res.status(403).send({ message: 'user_id input is needed'});
+        return ;
+    }
+    else if (req.body.task_id == null){
+        res.status(403).send({ message: 'task_id input is needed'});
+        return ;
+    }
 
     const existing = await Record.findOne({User_ID: req.body.user_id, Task_ID: req.body.task_id, Time: today});
     if(existing){ // update Is_Admin = true
         try{
-            await Record.updateOne({User_ID: req.body.user_id, Task_ID: req.body.task_id, Time: today}, { $set: { 'Frequency': existing.Frequency+1 } });
-            res.status(200).send({ message: 'success'});
+            await Record.updateOne({User_ID: req.body.user_id, Task_ID: req.body.task_id, Time: today}, { $set: { 'Frequency': existing.Frequency+1 , Daily_Desc: req.body.daily_desc} });
+            res.status(200).send({ message: 'success', id: existing.id});
         }
         catch(err){
             res.status(403).send({ message: 'error', err_msg: err});
@@ -45,8 +53,8 @@ export const addOneRecord = async (req, res) => {
         ) 
         console.log(myobj)
         try{
-            const aTask = await myobj.save();
-            res.status(200).send({ message: 'success', id: aTask.id});
+            const aRecord = await myobj.save();
+            res.status(200).send({ message: 'success', id: aRecord.id});
         }
         catch(err){
             res.status(403).send({ message: 'error', err_msg: err});
@@ -57,6 +65,18 @@ export const addOneRecord = async (req, res) => {
 
 export const oneRecordOfADay = async(req, res) => {
     console.log("inside oneRecordOfADay function");
+    if(req.query.user_id == null){
+        res.status(403).send({ message: 'user_id input is needed'});
+        return ;
+    }
+    else if (req.query.task_id == null){
+        res.status(403).send({ message: 'task_id input is needed'});
+        return ;
+    }
+    else if(req.query.time == null){
+        res.status(403).send({ message: 'time input is needed'});
+        return ;
+    }
     try {
         var result = Object();
         const Data = await Record.findOne({'User_ID': req.query.user_id, 'Task_ID': req.query.task_id, 'Time': req.query.time}, {Daily_Desc: 1, Frequency: 1, _id: 0});
@@ -77,6 +97,22 @@ export const oneRecordOfADay = async(req, res) => {
 
 export const RecordsOfAPeriod = async(req, res) => {
     console.log("inside RecordsOfAPeriod function");
+    if(req.query.user_id == null){
+        res.status(403).send({ message: 'user_id input is needed'});
+        return ;
+    }
+    else if (req.query.task_id == null){
+        res.status(403).send({ message: 'task_id input is needed'});
+        return ;
+    }
+    else if (req.query.start_time == null){
+        res.status(403).send({ message: 'start_time input is needed'});
+        return ;
+    }
+    else if (req.query.end_time == null){
+        res.status(403).send({ message: 'end_time input is needed'});
+        return ;
+    }
     try {
         const Data = await Record.find({'User_ID': req.query.user_id, 'Task_ID': req.query.task_id, 'Time': {$gte: req.query.start_time, $lte: req.query.end_time}}, {_id: 0, __v: 0, User_ID: 0, Task_ID: 0});
         var frequency_arr = [];
@@ -110,6 +146,10 @@ export const RecordsOfATask = async(req, res) => {
     console.log("inside RecordsOfATask function");
     var userList = [];
     var result = [];
+    if(req.query.task_id == null){
+        res.status(403).send({ message: 'task_id input is needed'});
+        return ;
+    }
     try {
         const taskDetail = await Task.find({_id: req.query.task_id}, {Threshold: 1, _id: 0, Working_Day: 1});
         let query_date = new Date(req.query.time);
@@ -168,6 +208,10 @@ export const RecordsOfATask = async(req, res) => {
 
 export const CountOfATask = async(req, res) => {
     console.log("inside CountOfATask function");
+    if(req.query.task_id == null ){
+        res.status(403).send({ message: 'task_id input is needed'});
+        return ;
+    }
     try {
         var count = 0;
         const threshold = await Task.find({_id: req.query.task_id}, {Threshold: 1, _id: 0});
@@ -187,6 +231,18 @@ export const CountOfATask = async(req, res) => {
 
 export const checkDayDoneOfAUser = async(req, res) => {
     console.log("inside checkDayDoneOfAUser function");
+    if(req.query.user_id == null ){
+        res.status(403).send({ message: 'user_id input is needed'});
+        return ;
+    }
+    else if(req.query.task_id == null){
+        res.status(403).send({ message: 'task_id input is needed'});
+        return ;
+    }
+    else if(req.query.time == null){
+        res.status(403).send({ message: 'time input is needed'});
+        return ;
+    }
     try {
         var result = Object();
         const taskDetail = await Task.find({_id: req.query.task_id}, {Threshold: 1, _id: 0, Working_Day: 1});
@@ -236,6 +292,10 @@ export const calculateMoney = async(req, res) => {
     var result = [];
     const today = calculate_now_date();
     let today_date = new Date(today);
+    if(req.query.task_id == null){
+        res.status(403).send({ message: 'task_id input is needed'});
+        return ;
+    }
     try {
         const taskDetail = await Task.findOne({_id: req.query.task_id}, {Threshold: 1, _id: 0, Title: 1, Account_Day: 1, Working_Day: 1, Punish: 1, Is_Closed: 1, Close_Time: 1});
         await Participation.find({'Task_ID': req.query.task_id, 'Is_Quit': false}, {_id: 0, User_ID: 1, Last_Calculate_Day: 1, Punish_Sum: 1}).then(user => {
