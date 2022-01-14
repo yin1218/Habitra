@@ -11,10 +11,11 @@ avatar
  */
 
 import styled from "styled-components";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Typography, Button, Avatar } from "antd";
 import moment from "moment";
-const TaskInfo = ({taskId}) => {
+import { getTask, getParticipationDetail } from '../axios';
+const TaskInfo = ({taskId, token, userId}) => {
 
     //default settings
     const {Title, Text} = Typography;
@@ -38,16 +39,16 @@ const TaskInfo = ({taskId}) => {
     //判斷是否是管理者，決定是否要顯示danger zone
 
     // 刪除的時候要加上一個double confirm 的 box
-    const [isManager, setIsManager] = useState(true);
+    const [isManager, setIsManager] = useState(false);
     //任務資訊
-    const [taskAvatar, setTaskAvatar] = useState('https://joeschmoe.io/api/v1/random');
-    const [taskName, setTaskName] = useState("一起去跑步");
-    const [taskDescription, setTaskDescription] = useState("請不要說不!~~~~~~");
+    const [taskAvatar, setTaskAvatar] = useState('');
+    const [taskName, setTaskName] = useState("");
+    const [taskDescription, setTaskDescription] = useState("");
     
     // 打卡次數
-    const [threshold, setThreshold] = useState(1);
+    const [threshold, setThreshold] = useState(0);
     // 需要計算的日期[INT]
-    const [workDay, setWorkDay] = useState([1,1,1,1,1,1,1]); //因原本前端的格式和串接有點不一樣，重新設的變數
+    const [workDay, setWorkDay] = useState([1,1,1,1,1,1,1]); //因原本前端的格式和串接有點不一樣，重新設的變數 //巫：沒顯示
     // 懲罰一天的扣錢數量
     const [punish, setPunish] = useState(0);
     // 是否需要上傳文字
@@ -55,8 +56,27 @@ const TaskInfo = ({taskId}) => {
     // 打卡區間
     const [start_hour, setStart_hour] = useState("00:00");
     const [end_hour, setEnd_hour] = useState("23:59");
-    const [taskOpenDate, setOpentDate] = useState("2021-11-11");
+    const [taskOpenDate, setTaskOpentDate] = useState("2021-11-11");
     const [taskCloseDate, setTaskCloseDate] = useState("2021-11-15");
+
+    useEffect( async () => {
+        const res = await getTask({task_id: taskId, token: token});
+        console.log(res);
+        setTaskName(res.Title);
+        setTaskAvatar(res.Icon);
+        setTaskDescription(res.Description);
+        setThreshold(res.Threshold);
+        setPunish(res.Punish);
+        setNeed_daily_desc(res.Need_Daily_Desc);
+        setStart_hour(res.Start_Hour);
+        setEnd_hour(res.End_Hour);
+        setTaskOpentDate(res.Create_Time.toString().split("T")[0]);
+        setTaskCloseDate(res.Close_Time.toString().split("T")[0]);
+        setWorkDay(res.Working_Day);
+
+        const res_2 = await getParticipationDetail({user_id: userId, task_id: taskId, token: token});
+        setIsManager(res_2.Is_Admin);
+      }, []);
 
     return(
         <>
@@ -74,7 +94,7 @@ const TaskInfo = ({taskId}) => {
             <br />
             <Text>懲罰機制（罰金）:{punish}</Text>
             <br />
-            <Text>是否需上傳文字:{need_daily_desc}</Text>
+            <Text>是否需上傳文字:{need_daily_desc?"是":"否"}</Text>
             <br />
             <Text>可打卡時段:{start_hour} ~ {end_hour}</Text>
             {

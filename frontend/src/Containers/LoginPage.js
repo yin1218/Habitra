@@ -12,6 +12,7 @@ const LoginPage = ({setIsLogin, setToken, userId, setUserId}) => {
     
     const handleLogin = async () => {
         const response = await login({user_id: userId, password: password});
+        console.log(response);
         setToken(response);
         setIsLogin(true);
     }
