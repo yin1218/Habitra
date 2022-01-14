@@ -371,12 +371,12 @@ export const quitParticipation = async(req, res) => {
     }
 };
 
-export const getQuitTime = async(req, res) => {
-    console.log("inside getQuitTime function");
+export const getParticipationDetail = async(req, res) => {
+    console.log("inside getParticipationDetail function");
     const user = await User.findOne({User_ID: req.body.user_id});
     if(user){
         try {
-            const data = await Participation.findOne({User_ID: req.body.user_id, Task_ID: req.body.task_id}, {_id: 0, Is_Quit: 1, Quit_Time: 1});
+            const data = await Participation.findOne({User_ID: req.body.user_id, Task_ID: req.body.task_id});
             res.status(200).send({ message: 'success', data: data});
         } catch (e) { 
             res.status(403).send({ message: 'error', data: null});
