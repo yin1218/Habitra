@@ -33,7 +33,8 @@ export const addOneParticipation = async (req, res) => {
     
     const existing = await Participation.findOne({User_ID: req.body.user_id, Task_ID: req.body.task_id});
     if(existing){
-        res.status(403).send({ message: 'User already in this task', err_msg: err});
+        await Participation.updateOne({User_ID: req.body.user_id, Task_ID: req.body.task_id}, { $set: { 'Is_Quit': false } });
+        res.status(200).send({ message: 'success'});
     }
     else{
         const myobj = new Participation(
