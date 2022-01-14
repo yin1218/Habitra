@@ -57,6 +57,10 @@ export const addOneRecord = async (req, res) => {
 
 export const oneRecordOfADay = async(req, res) => {
     console.log("inside oneRecordOfADay function");
+    if(req.query.user_id == null || req.query.task_id == null || req.query.time == null ){
+        res.status(403).send({ message: 'input error'});
+        return ;
+    }
     try {
         var result = Object();
         const Data = await Record.findOne({'User_ID': req.query.user_id, 'Task_ID': req.query.task_id, 'Time': req.query.time}, {Daily_Desc: 1, Frequency: 1, _id: 0});
@@ -77,6 +81,10 @@ export const oneRecordOfADay = async(req, res) => {
 
 export const RecordsOfAPeriod = async(req, res) => {
     console.log("inside RecordsOfAPeriod function");
+    if(req.query.user_id == null || req.query.task_id == null || req.query.start_time == null || req.query.end_time == null ){
+        res.status(403).send({ message: 'input error'});
+        return ;
+    }
     try {
         const Data = await Record.find({'User_ID': req.query.user_id, 'Task_ID': req.query.task_id, 'Time': {$gte: req.query.start_time, $lte: req.query.end_time}}, {_id: 0, __v: 0, User_ID: 0, Task_ID: 0});
         var frequency_arr = [];
