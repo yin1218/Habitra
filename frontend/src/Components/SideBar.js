@@ -35,7 +35,7 @@ const SideBar = ({place, userId, userName, userAvatar, setValid, setPage, setTok
         <></>
         :
         <>
-            <Title level={3} onClick={() => {setPage(3)}}>
+            <Title level={3} onClick={() => {setPage(3)}} style={{cursor: 'pointer'}}>
               {userName}
                 {/* <Link to={`/userInfo/${userId}`}>{userName}</Link> */}
             </Title>
