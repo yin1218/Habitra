@@ -72,6 +72,19 @@ const getUserInfo = async(props) => {
     }  
 }
 
+const getUserExist = async(props) => {
+    const {user_id} = props;
+    try {
+        const { data: {message, data} } = await instance.get('/users/checkExist',{
+            params:{user_id: user_id}
+        });
+        return data;
+    }
+    catch (error) {
+        console.log("error");
+    }  
+}
+
 //task
 const addTask = async(props) => {
     const {title, description, threshold, working_day, punish, need_daily_desc, icon, start_hour, end_hour, token} = props;
@@ -282,6 +295,32 @@ const quitParticipation = async(props) => {
     }
 }
 
+const deleteUserParticipation = async(props) => {
+    const {task_id, user_id, token} = props;
+    try{
+        const {data: {message}} = await instance.post('/participation/deleteUser',{
+            task_id, user_id ,token
+        });
+        return message;
+    }
+    catch (error) {
+        console.log("error");
+    }
+}
+
+const getParticipationAllMember = async(props) => {
+    const {task_id, token} = props;
+    try{
+        const {data: {message, data}} = await instance.get('/participation/allMember',{
+            params:{task_id: task_id, token: token}
+        });
+        return data;
+    }
+    catch (error) {
+        console.log("error");
+    }
+}
+
 //record
 const getPeriodRecord = async(props) => {
     const {user_id, task_id, start_time, end_time, token} = props;
@@ -357,4 +396,4 @@ const getAvatarClass = async(props) => {
     }
 }
 
-export {getAllAvatar, getAvatarClass, signUp, signUpCheckId, signUpCheckEmail, login, testToken, addTask, getUserInfo, getAdmin, getNotAdminAndFinish, getNotAdminAndGoing, getTaskDetail, getTodayOngoing, getTodayFinish, getgetTodayDayoff, getDurationOpen, getPeriodRecord, addRecord, getDailyRecord, getTask, getParticipationDetail, closeTask, deleteTask, addNewAdmin, addNewMember, quitParticipation};
+export {getAllAvatar, getAvatarClass, signUp, signUpCheckId, signUpCheckEmail, login, testToken, addTask, getUserInfo, getAdmin, getNotAdminAndFinish, getNotAdminAndGoing, getTaskDetail, getTodayOngoing, getTodayFinish, getgetTodayDayoff, getDurationOpen, getPeriodRecord, addRecord, getDailyRecord, getTask, getParticipationDetail, closeTask, deleteTask, addNewAdmin, addNewMember, quitParticipation, getUserExist, getParticipationAllMember, deleteUserParticipation};

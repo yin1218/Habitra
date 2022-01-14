@@ -121,6 +121,6 @@ export const checkUserExist = async(req, res) => {
         res.status(200).send({ message: 'success', data: true});
     }
     else {
-        return res.status(404).send({ message: "User Not found.", data: false });
+        return res.status(200).send({ message: "User Not found.", data: false });
     }
 }

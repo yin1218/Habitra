@@ -2,12 +2,13 @@
 
 // isMgr = 是不是群主
 import { Table, Space, Tooltip, Button, Modal, Input, message, Divider, List, Typography  } from 'antd';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Icon } from '@iconify/react';
 import { isDate } from 'moment';
+import { getParticipationDetail, getUserExist, getUserInfo, getParticipationAllMember, addNewMember, deleteUserParticipation } from '../axios';
 
 
-const TaskMenber = ({taskId}) => {
+const TaskMenber = ({taskId, userId, token, userName}) => {
 
     //default settings
     const { Search } = Input;
@@ -29,40 +30,52 @@ const TaskMenber = ({taskId}) => {
     const [openDelete, setOpenDelete] = useState(false);
     const [isSearching, setIsSearching] = useState(false);
 
-
-
     //要串的東西
-    // 陳沛妤:格式盡量不要改QQ 表格吃這個
     //任務成員
-    const [member, setMember] = useState([{
-        key: 1, //陳沛妤: 幫我幫每一個資料都取一個id(from 1)
-        id: '1',
-        name: '陳沛妤',
-        isMgr: true,
-    },
-    {
-        key: 2,
-        id: '2',
-        name: '巫芊瑩',
-        isMgr: false,
-    }]); 
+    const [member, setMember] = useState([]); 
     //當前用戶是否是管理員
-    const [isMgr, setIsMgr] = useState(true);
-    //陳沛妤: 如果有新增成員的話，要傳送的list
-    const [addMemberList, setAddMemberList] = useState([{"id": "巫芊瑩"},{"id": "陳沛妤"}]);
-    //   陳沛妤: 這邊是按"刪除"之後要刪掉的清單的key
+    const [isMgr, setIsMgr] = useState(false);
+    //如果有新增成員的話，要傳送的list
+    const [addMemberList, setAddMemberList] = useState([]); //[{id: "wu", name:"巫"},{id: "chen",name:"陳沛妤"}]
+    //陳沛妤: 這邊是按"刪除"之後要刪掉的清單的key
     const [state, setState] = useState({selectedRowKeys: [], });
     const { selectedRowKeys } = state;
+    const [refresh, setRefresh] = useState(false);
 
+    useEffect( async () => {
+        const res = await getParticipationDetail({user_id: userId, task_id: taskId, token: token});
+        setIsMgr(res.Is_Admin);
+        var t = []
+        var temp = new Object();
+        temp.key = 1;
+        temp.id = userId;
+        temp.name = userName;
+        temp.isMgr = res.Is_Admin;
+        t[0] = temp;
 
-    //functions
+        const mem = await getParticipationAllMember({task_id: taskId, token: token});
+        for(var i = 0; i < mem.length; i++){
+            if(mem[i].User_ID != userId){
+                var te = new Object();
+                te.key = i+1;
+                te.id = mem[i].User_ID;
+                const r = await getUserInfo({user_id: mem[i].User_ID})
+                te.name = r.Name;
+                te.isMgr = false;
+                t[i] = te;
+            }
+        }
+        setMember(t);
+      }, [refresh]);
+
+     //functions
       const onSelectChange = selectedRowKeys => {
-        console.log('selectedRowKeys changed: ', selectedRowKeys);
+        // console.log('selectedRowKeys changed: ', selectedRowKeys);
         setState({ selectedRowKeys });
       };
       
 
-    const handleDelete = () => {
+    const handleDelete = async () => {
         
         let deletedUserId = [];
         setOpenDelete(!openDelete);
@@ -73,21 +86,29 @@ const TaskMenber = ({taskId}) => {
                 deletedUserId.push(member.find(o => o.key === memberKey).id);
             });
         console.log(deletedUserId);
-        // 陳沛妤:deletedUserId 是所有需要刪除的成員ID，幫我送刪除!!!
+        for(var i = 0; i < deletedUserId.length; i++){
+            await deleteUserParticipation({task_id: taskId, user_id: deletedUserId[i], token: token});
+        }
+        setRefresh(!refresh);
     }
 
-    const onSearch = value => {
-        console.log(value)
+    const onSearch = async (value) => {
         setIsSearching(true);
-        //陳沛妤: 幫我看value(就是memberId)有沒有在資料庫裡面
-        /*
-        if(存在這個用戶):
-            setAddMemberList([...AddMemberList, value] );
+        const res = await getUserExist({user_id: value});
+        //看value(就是memberId)有沒有在資料庫裡面
+        if(res){ 
+            const response = await getUserInfo({user_id: value});
+            var temp = new Object();
+            temp.id = value;
+            temp.name = response.Name;
+            setAddMemberList([...addMemberList, temp] );
             setIsSearching(false);
-        else:
+        }
+        else{
             message.error('不存在該用戶，請重新輸入!');
             setIsSearching(false);
-         */
+        }
+         
     };
 
     //table settings
@@ -101,12 +122,24 @@ const TaskMenber = ({taskId}) => {
         ],
     };
 
-    const handleSendAddMember = () => {
-
-        // 陳沛妤：把addMemberList裡面的東西加到小組成員清單裡面
+    const handleSendAddMember = async () => {
+        var t = [];
+        // 把addMemberList裡面的東西加到小組成員清單裡面
+        for(var i = 0; i < addMemberList.length; i++){
+            var temp = new Object();
+            temp.key = member.length+i+1;
+            temp.id = addMemberList[i].id;
+            temp.name = addMemberList[i].name;
+            temp.isMgr = false;
+            t[i] = temp;
+            await addNewMember({task_id: taskId, user_id: addMemberList[i].id, token: token});
+        }
+        console.log(member);
+        console.log(t);
+        setMember([...member, ...t]);
         setShowAddMemberModal(false);
+        setAddMemberList([]);
     }
-
 
     return(
         <>
@@ -120,7 +153,7 @@ const TaskMenber = ({taskId}) => {
                 dataSource={addMemberList}
                 renderItem={item => (
                     <List.Item>
-                    <Typography.Text mark></Typography.Text> {Object.values(item)}
+                    <Typography.Text mark></Typography.Text> {item.name}
                     </List.Item>
                 )}
                 />
