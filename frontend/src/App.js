@@ -13,40 +13,34 @@ import AddTaskPage from './Containers/AddTaskPage';
 // import UserInfo from './Containers/UserInfo';
 import TaskMainPage from './Containers/TaskMainPage';
 
-const LOCALSTORAGE_KEY = "";
-const LOCALSTORAGE_USERID = "";
+const LOCALSTORAGE_KEY = "token";
+const LOCALSTORAGE_USERID = "userId";
 
 function App() {
   const savedToken = localStorage.getItem(LOCALSTORAGE_KEY);
   const savedUser = localStorage.getItem(LOCALSTORAGE_USERID);
   
-  // const [me, setMe] = useState("")
   const [isLogin, setIsLogin] = useState(false); //目的：檢測目前是否登入
   const[token, setToken] = useState(savedToken || "");  //目的：檢測當前用戶是否過期
   const[valid, setValid] = useState(false);  //
-  const[userId, setUserId] = useState(savedUser|"");
-
-  function PrivateRoute({ children }) {
-    // const auth = useAuth();
-    return valid ? children : <Navigate to="/login" />;
-
-  }
+  const[userId, setUserId] = useState(savedUser || "");
 
   // 測試token
   useEffect( async () => {
     const response = await testToken({token: token});
     if(response === 'token success'){
       setValid(true);
-      setIsLogin(true);
+      // setIsLogin(true);
       localStorage.setItem(LOCALSTORAGE_KEY, token);
       localStorage.setItem(LOCALSTORAGE_USERID, userId);
     }
-  }, [token]); 
+  }, [token, userId]); 
 
   useEffect(() => {
     if(valid === false){
       setIsLogin(false);
       localStorage.removeItem(LOCALSTORAGE_KEY);
+      localStorage.removeItem(LOCALSTORAGE_USERID);
     }
     else{
       setIsLogin(true);
@@ -58,15 +52,14 @@ function App() {
     <BrowserRouter>
       <Routes>
         {/* public route */}
-        <Route path='/' element={isLogin ? <MainPage setToken={setToken} setValid={setValid} userId={userId} token={token}/> : <LoginPage setIsLogin={setIsLogin} setToken={setToken} userId = {userId} setUserId={setUserId} />}></Route>
+        <Route path='/' element={isLogin ? <MainPage setToken={setToken} setValid={setValid} userId={userId} token={token}/> : <LoginPage setValid={setValid} setIsLogin={setIsLogin} setToken={setToken} userId = {userId} setUserId={setUserId} />}></Route>
         {/* private route */}
-        <Route path='/login' element={<LoginPage setIsLogin={setIsLogin} userId = {userId} setUserId={setUserId} setToken={setToken}/>}>
+        <Route path='/login' element={<LoginPage setValid={setValid} setIsLogin={setIsLogin} userId = {userId} setUserId={setUserId} setToken={setToken}/>}>
         </Route>
         <Route path='/signUp' element={<SignUpPage />}></Route>
         <Route path='*' element={<PageNotFound />}></Route>
         <Route path='/addTask' element={ <AddTaskPage token={token} userId={userId}/>}></Route>
         {/* 個人資訊頁面 */}
-        {/* <Route path="/userInfo/" element={ valid ? <UserInfo userId = {userId} /> : <Navigate to="/login" />}></Route> */}
         {/* 統計資料頁面 */}
         <Route path='/task/:taskId' element={ <TaskMainPage setToken={setToken} setValid={setValid} userId={userId} token={token}/> }></Route>
       </Routes>

@@ -4,7 +4,7 @@ import React, {useState, useEffect} from 'react';
 // import { Link,useHistory } from 'react-router-dom';
 import { login } from '../axios';
 
-const LoginPage = ({setIsLogin, setToken, userId, setUserId}) => {
+const LoginPage = ({setValid, setIsLogin, setToken, userId, setUserId}) => {
     // let history = useHistory();
     
     const[password, setPassword] = useState("");
@@ -15,6 +15,7 @@ const LoginPage = ({setIsLogin, setToken, userId, setUserId}) => {
         console.log(response);
         setToken(response);
         setIsLogin(true);
+        setValid(true);
     }
     
     return (
