@@ -141,7 +141,7 @@ router.get('/participation/quit', auth, (req, res) => {
     getParticipationDetail(req,res);
 })
 
-router.get('/participation/deleteUser', auth, (req, res) => {
+router.post('/participation/deleteUser', auth, (req, res) => {
     deleteUser(req,res);
 })
 
