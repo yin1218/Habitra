@@ -1,10 +1,10 @@
 import express from 'express';
 import { checkDayDoneOfAUser, CountOfATask, oneRecordOfADay, RecordsOfAPeriod, RecordsOfATask, addOneRecord, calculateMoney } from './api/record';
 import { addOneAvatar, allAvatar, AvatarByClass, oneAvatar } from './api/avatar';
-import { checkEmail, checkId, login, oneUser, signUp } from './api/user';
+import { checkEmail, checkId, checkUserExist, login, oneUser, signUp } from './api/user';
 import { addOneIcon, allIcon, oneIcon } from './api/icon';
 import { addOneTask, clearMoney, closeTask, deleteTask, oneTask, oneTaskPartOF, openTask } from './api/task';
-import { addOneAdmin, addOneParticipation, allParticipation_aAdmin, allParticipation_aUser, deleteUser, durationOpen_aUser, FinishParticipation_aUser, getParticipationDetail, OngoingParticipation_aUser, quitParticipation, TodayDayOffParticipation_aUser, TodayFinishParticipation_aUser, TodayOngoingParticipation_aUser } from './api/participation';
+import { addOneAdmin, addOneParticipation, allParticipation_aAdmin, allParticipation_aUser, deleteUser, durationOpen_aUser, FinishParticipation_aUser, getParticipateMember, getParticipationDetail, OngoingParticipation_aUser, quitParticipation, TodayDayOffParticipation_aUser, TodayFinishParticipation_aUser, TodayOngoingParticipation_aUser } from './api/participation';
 const auth = require("../middleware/auth");
 const router = express.Router()
 
@@ -32,6 +32,10 @@ router.post('/users/login', (req, res) => {
 
 router.get('/users', (req, res) => {
     oneUser(req, res);
+})
+
+router.get('/users/checkExist', (req, res) => {
+    checkUserExist(req, res);
 })
 
 
@@ -141,12 +145,16 @@ router.get('/participation/quit', auth, (req, res) => {
     getParticipationDetail(req,res);
 })
 
-router.get('/participation/deleteUser', auth, (req, res) => {
+router.post('/participation/deleteUser', auth, (req, res) => {
     deleteUser(req,res);
 })
 
 router.get('/participation/durationOpen', auth, (req, res) => {
     durationOpen_aUser(req,res);
+})
+
+router.get('/participation/allMember', auth, (req, res) => {
+    getParticipateMember(req,res);
 })
 
 // record

@@ -243,6 +243,45 @@ const getParticipationDetail = async(props) => {
     }
 }
 
+const addNewMember = async(props) => {
+    const {task_id, user_id, token} = props;
+    try{
+        const {data: {message}} = await instance.post('/participation/newMember',{
+            task_id, user_id ,token
+        });
+        return message;
+    }
+    catch (error) {
+        console.log("error");
+    }
+}
+
+const addNewAdmin = async(props) => {
+    const {task_id, user_id, token} = props;
+    try{
+        const {data: {message}} = await instance.post('/participation/newAdmin',{
+            task_id, user_id ,token
+        });
+        return message;
+    }
+    catch (error) {
+        console.log("error");
+    }
+}
+
+const quitParticipation = async(props) => {
+    const {task_id, user_id, token} = props;
+    try{
+        const {data: {message}} = await instance.post('/participation/quit',{
+            task_id, user_id ,token
+        });
+        return message;
+    }
+    catch (error) {
+        console.log("error");
+    }
+}
+
 //record
 const getPeriodRecord = async(props) => {
     const {user_id, task_id, start_time, end_time, token} = props;
@@ -318,4 +357,4 @@ const getAvatarClass = async(props) => {
     }
 }
 
-export {getAllAvatar, getAvatarClass, signUp, signUpCheckId, signUpCheckEmail, login, testToken, addTask, getUserInfo, getAdmin, getNotAdminAndFinish, getNotAdminAndGoing, getTaskDetail, getTodayOngoing, getTodayFinish, getgetTodayDayoff, getDurationOpen, getPeriodRecord, addRecord, getDailyRecord, getTask, getParticipationDetail, closeTask, deleteTask};
+export {getAllAvatar, getAvatarClass, signUp, signUpCheckId, signUpCheckEmail, login, testToken, addTask, getUserInfo, getAdmin, getNotAdminAndFinish, getNotAdminAndGoing, getTaskDetail, getTodayOngoing, getTodayFinish, getgetTodayDayoff, getDurationOpen, getPeriodRecord, addRecord, getDailyRecord, getTask, getParticipationDetail, closeTask, deleteTask, addNewAdmin, addNewMember, quitParticipation};

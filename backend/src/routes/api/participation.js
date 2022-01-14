@@ -33,7 +33,8 @@ export const addOneParticipation = async (req, res) => {
     
     const existing = await Participation.findOne({User_ID: req.body.user_id, Task_ID: req.body.task_id});
     if(existing){
-        res.status(403).send({ message: 'User already in this task', err_msg: err});
+        await Participation.updateOne({User_ID: req.body.user_id, Task_ID: req.body.task_id}, { $set: { 'Is_Quit': false } });
+        res.status(200).send({ message: 'success'});
     }
     else{
         const myobj = new Participation(
@@ -519,4 +520,20 @@ export const durationOpen_aUser = async(req, res) => {
         return res.status(404).send({ message: "User Not found." });
     }
 
+};
+
+export const getParticipateMember = async(req, res) => {
+    console.log("inside getParticipateMember function");
+    if(req.query.task_id == null ){
+        res.status(403).send({ message: 'task_id input is needed'});
+        return ;
+    }
+    
+    try {
+        const data = await Participation.find({Task_ID: req.query.task_id}, {User_ID: 1, _id: 0});
+        res.status(200).send({ message: 'success', data: data});
+    } catch (e) { 
+        res.status(403).send({ message: 'error', data: null});
+        throw new Error("Database query failed"); 
+    }
 };

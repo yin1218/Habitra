@@ -1,9 +1,9 @@
 import { Avatar, Switch, Typography, Divider, Form, Input, TimePicker, Select, Checkbox, Row, Col, Button  } from 'antd';
 import moment from 'moment';
 import { useState } from 'react';
-import { addTask } from '../axios';
+import { addTask, addNewAdmin, addNewMember } from '../axios';
 
-const AddTaskPage = (token) => {
+const AddTaskPage = ({token, userId}) => {
 
 //     POST /task   新增任務
 
@@ -98,8 +98,10 @@ const AddTaskPage = (token) => {
             var end = end_hour._d.toString();
             
             setWorkDay(temp);
-            const response = await addTask({title:title, description:description, threshold:threshold, working_day:workDay, punish:punish, need_daily_desc:need_daily_desc, icon:icon, start_hour:start.split(" ")[4].substr(0,5), end_hour:end.split(" ")[4].substr(0,5), token: token.token});
-            console.log(response);
+
+            const response = await addTask({title:title, description:description, threshold:threshold, working_day:workDay, punish:punish, need_daily_desc:need_daily_desc, icon:icon, start_hour:start.split(" ")[4].substr(0,5), end_hour:end.split(" ")[4].substr(0,5), token: token});
+            const response_2 = await addNewMember({task_id: response, user_id: userId, token: token});
+            const response_3 = await addNewAdmin({task_id: response, user_id: userId, token: token});
         }
         
 

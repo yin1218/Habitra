@@ -14,7 +14,7 @@ import styled from "styled-components";
 import { useState, useEffect } from "react";
 import { Typography, Button, Avatar } from "antd";
 import moment from "moment";
-import { getTask, getParticipationDetail, closeTask, deleteTask } from '../axios';
+import { getTask, getParticipationDetail, closeTask, deleteTask, quitParticipation } from '../axios';
 const TaskInfo = ({taskId, token, userId}) => {
 
     //default settings
@@ -41,6 +41,7 @@ const TaskInfo = ({taskId, token, userId}) => {
     // 刪除的時候要加上一個double confirm 的 box
     const [isClosed, setIsClosed] = useState(true);
     const [isManager, setIsManager] = useState(false);
+    const [isQuit, setIsQuit] = useState(false);
     //任務資訊
     const [taskAvatar, setTaskAvatar] = useState('');
     const [taskName, setTaskName] = useState("");
@@ -70,12 +71,11 @@ const TaskInfo = ({taskId, token, userId}) => {
         const res = await deleteTask({task_id: taskId, token: token});
         console.log(res);
 
-        //61dd86ad5316d9988a1ccceb
-        //61e0fa8100c2a28290aef0e7
         // message.success('成功打卡！');
     };
-    const handleQuitTask = () => {
-        console.log("退出中~~~~");
+    const handleQuitTask = async () => {
+        const res = await quitParticipation({user_id: userId, task_id: taskId, token: token});
+        console.log(res);
     }
 
     useEffect( async () => {
@@ -92,11 +92,12 @@ const TaskInfo = ({taskId, token, userId}) => {
         setTaskOpentDate(res.Create_Time.toString().split("T")[0]);
         setTaskCloseDate(res.Close_Time.toString().split("T")[0]);
         setWorkDay(res.Working_Day);
+        setIsClosed(res.Is_Closed);
 
         const res_2 = await getParticipationDetail({user_id: userId, task_id: taskId, token: token});
         setIsManager(res_2.Is_Admin);
+        setIsQuit(res_2.Is_Quit);
       }, []);
-
     return(
         <>
             <Avatar size={120} src={taskAvatar}  />
@@ -148,7 +149,7 @@ const TaskInfo = ({taskId, token, userId}) => {
                 <DangerZone>
                     <Title level={4} style={{color:"red"}}>退出任務</Title>
                     <Button type="primary" size="small" onClick={handleQuitTask} danger>退出任務</Button>
-                </DangerZone> 
+                </DangerZone> //巫：回主頁面 要判斷他是不是isquit
                 :
                 <></>
             }

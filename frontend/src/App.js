@@ -64,7 +64,7 @@ function App() {
         </Route>
         <Route path='/signUp' element={<SignUpPage />}></Route>
         <Route path='*' element={<PageNotFound />}></Route>
-        <Route path='/addTask' element={ <AddTaskPage token={token}/>}></Route>
+        <Route path='/addTask' element={ <AddTaskPage token={token} userId={userId}/>}></Route>
         {/* 個人資訊頁面 */}
         {/* <Route path="/userInfo/" element={ valid ? <UserInfo userId = {userId} /> : <Navigate to="/login" />}></Route> */}
         {/* 統計資料頁面 */}
