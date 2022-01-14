@@ -122,7 +122,7 @@ const TaskMainPage = ({setToken, setValid, userId}) => {
         <Modal title="我要打卡" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
             <Text >寫下任何的想法都可以喔！</Text>
             <TextArea showCount maxLength={100} onChange={textOnChange} />
-      </Modal>
+        </Modal>
 
     </Layout>
     ) 
