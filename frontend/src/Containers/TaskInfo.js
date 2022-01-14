@@ -39,6 +39,7 @@ const TaskInfo = ({taskId, token, userId}) => {
     //判斷是否是管理者，決定是否要顯示danger zone
 
     // 刪除的時候要加上一個double confirm 的 box
+    const [isClosed, setIsClosed] = useState(true);
     const [isManager, setIsManager] = useState(false);
     //任務資訊
     const [taskAvatar, setTaskAvatar] = useState('');
@@ -58,7 +59,7 @@ const TaskInfo = ({taskId, token, userId}) => {
     const [end_hour, setEnd_hour] = useState("23:59");
     const [taskOpenDate, setTaskOpentDate] = useState("2021-11-11");
     const [taskCloseDate, setTaskCloseDate] = useState("2021-11-15");
-
+    // const [taskQuitDate, setTaskQuitDate] = useState("2021-11-22");
     const handleCloseTask = async () => {
         const res = await closeTask({task_id: taskId, token: token});
         console.log(res);
@@ -73,6 +74,9 @@ const TaskInfo = ({taskId, token, userId}) => {
         //61e0fa8100c2a28290aef0e7
         // message.success('成功打卡！');
     };
+    const handleQuitTask = () => {
+        console.log("退出中~~~~");
+    }
 
     useEffect( async () => {
         const res = await getTask({task_id: taskId, token: token});
@@ -101,7 +105,13 @@ const TaskInfo = ({taskId, token, userId}) => {
             <Title level={3}>任務規則</Title>
             <Text>任務開始時間:{taskOpenDate}</Text>
             <br />
-            <Text>任務關閉時間:{taskCloseDate}</Text>
+            {
+                isClosed
+                ?
+                    <Text>任務結束時間:{taskCloseDate}</Text>
+                :
+                    <></>
+            }
             <br />
             <Text>任務名稱:{taskName}</Text>
             <br />
@@ -115,6 +125,13 @@ const TaskInfo = ({taskId, token, userId}) => {
             {
                 isManager
                 ?
+                isClosed
+                ?
+                <DangerZone>
+                    <Title level={4} style={{color:"red"}}>刪除任務</Title>
+                    <Button type="primary" size="small" onClick={handleDeleteTask} danger>刪除任務</Button>
+                </DangerZone> 
+                :
                 <>
                 <DangerZone>
                     <Title level={4} style={{color:"red"}}>關閉任務</Title>
@@ -125,6 +142,13 @@ const TaskInfo = ({taskId, token, userId}) => {
                     <Button type="primary" size="small" onClick={handleDeleteTask} danger>刪除任務</Button>
                 </DangerZone> 
                 </>  
+                :
+                !isClosed
+                ?
+                <DangerZone>
+                    <Title level={4} style={{color:"red"}}>退出任務</Title>
+                    <Button type="primary" size="small" onClick={handleQuitTask} danger>退出任務</Button>
+                </DangerZone> 
                 :
                 <></>
             }
