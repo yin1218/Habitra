@@ -22,8 +22,12 @@ const calculate_now_date = () =>{
 export const addOneRecord = async (req, res) => {
     const today = calculate_now_date();
     console.log("inside addOneRecord function");
-    if(req.body.user_id == null || req.body.task_id == null ){
-        res.status(403).send({ message: 'input error'});
+    if(req.body.user_id == null ){
+        res.status(403).send({ message: 'user_id input is needed'});
+        return ;
+    }
+    else if (req.body.task_id == null){
+        res.status(403).send({ message: 'task_id input is needed'});
         return ;
     }
 
@@ -61,8 +65,16 @@ export const addOneRecord = async (req, res) => {
 
 export const oneRecordOfADay = async(req, res) => {
     console.log("inside oneRecordOfADay function");
-    if(req.query.user_id == null || req.query.task_id == null || req.query.time == null ){
-        res.status(403).send({ message: 'input error'});
+    if(req.query.user_id == null){
+        res.status(403).send({ message: 'user_id input is needed'});
+        return ;
+    }
+    else if (req.query.task_id == null){
+        res.status(403).send({ message: 'task_id input is needed'});
+        return ;
+    }
+    else if(req.query.time == null){
+        res.status(403).send({ message: 'time input is needed'});
         return ;
     }
     try {
@@ -85,8 +97,20 @@ export const oneRecordOfADay = async(req, res) => {
 
 export const RecordsOfAPeriod = async(req, res) => {
     console.log("inside RecordsOfAPeriod function");
-    if(req.query.user_id == null || req.query.task_id == null || req.query.start_time == null || req.query.end_time == null ){
-        res.status(403).send({ message: 'input error'});
+    if(req.query.user_id == null){
+        res.status(403).send({ message: 'user_id input is needed'});
+        return ;
+    }
+    else if (req.query.task_id == null){
+        res.status(403).send({ message: 'task_id input is needed'});
+        return ;
+    }
+    else if (req.query.start_time == null){
+        res.status(403).send({ message: 'start_time input is needed'});
+        return ;
+    }
+    else if (req.query.end_time == null){
+        res.status(403).send({ message: 'end_time input is needed'});
         return ;
     }
     try {
@@ -207,8 +231,16 @@ export const CountOfATask = async(req, res) => {
 
 export const checkDayDoneOfAUser = async(req, res) => {
     console.log("inside checkDayDoneOfAUser function");
-    if(req.query.user_id == null || req.query.task_id == null || req.query.time == null  ){
-        res.status(403).send({ message: 'input error'});
+    if(req.query.user_id == null ){
+        res.status(403).send({ message: 'input is missed'});
+        return ;
+    }
+    else if(req.query.task_id == null){
+        res.status(403).send({ message: 'task_id input is missed'});
+        return ;
+    }
+    else if(req.query.time == null){
+        res.status(403).send({ message: 'time input is missed'});
         return ;
     }
     try {
