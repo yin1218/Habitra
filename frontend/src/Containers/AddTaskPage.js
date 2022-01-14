@@ -1,17 +1,24 @@
 import { Avatar, Switch, Typography, Divider, Form, Input, TimePicker, Select, Checkbox, Row, Col, Button  } from 'antd';
 import moment from 'moment';
-import { useState } from 'react';
-import { addTask, addNewAdmin, addNewMember } from '../axios';
+import { useState, useEffect } from 'react';
+import { addTask, addNewAdmin, addNewMember, getAllIcon } from '../axios';
 
 const AddTaskPage = ({token, userId}) => {
 
 //     POST /task   新增任務
+        var iconList = []; 
+        useEffect( async () => {
+            const response = await getAllIcon();
+            response.map(e => {
+                iconList.push(e.Uid);
+            })
+        }, []); 
 
         // Typology default setting
         const { Title } = Typography;
 
         const [taskIcon, setTaskIcon] = useState("https://joeschmoe.io/api/v1/random");
-        const [taskIconList, setTaskIconList] = useState([]);
+        const [taskIconList, setTaskIconList] = useState(iconList);
         
         // POST param @middleware
         const [title, setTitle] = useState("");

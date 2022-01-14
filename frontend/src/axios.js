@@ -364,6 +364,21 @@ const getDailyRecord = async(props) => {
     }
 }
 
+//icon
+const getAllIcon = async() => {
+    try{
+        var avatarStorage = [];
+        const { data: {message, data} } = await instance.get('/icon/all');
+        for(var i = 0; i < data.length; i++){
+            avatarStorage.push(data[i]);
+        }
+        return avatarStorage;
+    }
+    catch (error){
+        console.log("error");
+    }
+}
+
 //avatar
 const getAllAvatar = async() => {
     try {
@@ -396,4 +411,4 @@ const getAvatarClass = async(props) => {
     }
 }
 
-export {getAllAvatar, getAvatarClass, signUp, signUpCheckId, signUpCheckEmail, login, testToken, addTask, getUserInfo, getAdmin, getNotAdminAndFinish, getNotAdminAndGoing, getTaskDetail, getTodayOngoing, getTodayFinish, getgetTodayDayoff, getDurationOpen, getPeriodRecord, addRecord, getDailyRecord, getTask, getParticipationDetail, closeTask, deleteTask, addNewAdmin, addNewMember, quitParticipation, getUserExist, getParticipationAllMember, deleteUserParticipation};
+export {getAllAvatar, getAvatarClass, signUp, signUpCheckId, signUpCheckEmail, login, testToken, addTask, getUserInfo, getAdmin, getNotAdminAndFinish, getNotAdminAndGoing, getTaskDetail, getTodayOngoing, getTodayFinish, getgetTodayDayoff, getDurationOpen, getPeriodRecord, addRecord, getDailyRecord, getTask, getParticipationDetail, closeTask, deleteTask, addNewAdmin, addNewMember, quitParticipation, getUserExist, getParticipationAllMember, deleteUserParticipation, getAllIcon};
