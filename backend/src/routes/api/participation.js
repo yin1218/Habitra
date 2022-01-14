@@ -431,18 +431,18 @@ export const quitParticipation = async(req, res) => {
 
 export const getParticipationDetail = async(req, res) => {
     console.log("inside getParticipationDetail function");
-    if(req.body.user_id == null ){
+    if(req.query.user_id == null ){
         res.status(403).send({ message: 'user_id input is needed'});
         return ;
     }
-    else if(req.body.task_id == null){
+    else if(req.query.task_id == null){
         res.status(403).send({ message: 'task_id input is needed'});
         return ;
     }
-    const user = await User.findOne({User_ID: req.body.user_id});
+    const user = await User.findOne({User_ID: req.query.user_id});
     if(user){
         try {
-            const data = await Participation.findOne({User_ID: req.body.user_id, Task_ID: req.body.task_id});
+            const data = await Participation.findOne({User_ID: req.query.user_id, Task_ID: req.query.task_id});
             res.status(200).send({ message: 'success', data: data});
         } catch (e) { 
             res.status(403).send({ message: 'error', data: null});
