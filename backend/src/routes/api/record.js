@@ -147,7 +147,7 @@ export const RecordsOfATask = async(req, res) => {
     var userList = [];
     var result = [];
     if(req.query.task_id == null){
-        res.status(403).send({ message: 'input error'});
+        res.status(403).send({ message: 'task_id input is needed'});
         return ;
     }
     try {
@@ -209,7 +209,7 @@ export const RecordsOfATask = async(req, res) => {
 export const CountOfATask = async(req, res) => {
     console.log("inside CountOfATask function");
     if(req.query.task_id == null ){
-        res.status(403).send({ message: 'input error'});
+        res.status(403).send({ message: 'task_id input is needed'});
         return ;
     }
     try {
@@ -232,15 +232,15 @@ export const CountOfATask = async(req, res) => {
 export const checkDayDoneOfAUser = async(req, res) => {
     console.log("inside checkDayDoneOfAUser function");
     if(req.query.user_id == null ){
-        res.status(403).send({ message: 'input is missed'});
+        res.status(403).send({ message: 'user_id input is needed'});
         return ;
     }
     else if(req.query.task_id == null){
-        res.status(403).send({ message: 'task_id input is missed'});
+        res.status(403).send({ message: 'task_id input is needed'});
         return ;
     }
     else if(req.query.time == null){
-        res.status(403).send({ message: 'time input is missed'});
+        res.status(403).send({ message: 'time input is needed'});
         return ;
     }
     try {
@@ -293,7 +293,7 @@ export const calculateMoney = async(req, res) => {
     const today = calculate_now_date();
     let today_date = new Date(today);
     if(req.query.task_id == null){
-        res.status(403).send({ message: 'input error'});
+        res.status(403).send({ message: 'task_id input is needed'});
         return ;
     }
     try {

@@ -22,6 +22,15 @@ const calculate_now_date = () =>{
 
 export const addOneParticipation = async (req, res) => {
     console.log("inside addOneParticipation function");
+    if(req.body.user_id == null ){
+        res.status(403).send({ message: 'user_id input is needed'});
+        return ;
+    }
+    else if(req.body.task_id == null){
+        res.status(403).send({ message: 'task_id input is needed'});
+        return ;
+    }
+    
     const existing = await Participation.findOne({User_ID: req.body.user_id, Task_ID: req.body.task_id});
     if(existing){
         res.status(403).send({ message: 'User already in this task', err_msg: err});
@@ -52,6 +61,14 @@ export const addOneParticipation = async (req, res) => {
 
 export const addOneAdmin = async (req, res) => {
     console.log("inside addOneAdmin function");
+    if(req.body.user_id == null ){
+        res.status(403).send({ message: 'user_id input is needed'});
+        return ;
+    }
+    else if(req.body.task_id == null){
+        res.status(403).send({ message: 'task_id input is needed'});
+        return ;
+    }
     const existing = await Participation.findOne({User_ID: req.body.user_id, Task_ID: req.body.task_id});
     if(existing){ // update Is_Admin = true
         try{
@@ -87,6 +104,11 @@ export const addOneAdmin = async (req, res) => {
 
 export const allParticipation_aAdmin = async(req, res) => {
     console.log("inside allParticipation_aAdmin function");
+    if(req.query.user_id == null ){
+        res.status(403).send({ message: 'user_id input is needed'});
+        return ;
+    }
+    
     const user = await User.findOne({User_ID: req.query.user_id});
     if(user){
         try {
@@ -105,6 +127,11 @@ export const allParticipation_aAdmin = async(req, res) => {
 
 export const allParticipation_aUser = async(req, res) => {
     console.log("inside allParticipation_aUser function");
+    if(req.query.user_id == null ){
+        res.status(403).send({ message: 'user_id input is needed'});
+        return ;
+    }
+    
     const user = await User.findOne({User_ID: req.query.user_id});
     if(user){
         try {
@@ -124,6 +151,11 @@ export const allParticipation_aUser = async(req, res) => {
 
 export const FinishParticipation_aUser = async(req, res) => {
     console.log("inside FinishParticipation_aUser function");
+    if(req.query.user_id == null ){
+        res.status(403).send({ message: 'user_id input is needed'});
+        return ;
+    }
+    
     var ongoingTask = [];
     const user = await User.findOne({User_ID: req.query.user_id});
     if(user){
@@ -157,6 +189,11 @@ export const FinishParticipation_aUser = async(req, res) => {
 
 export const OngoingParticipation_aUser = async(req, res) => {
     console.log("inside OngoingParticipation_aUser function");
+    if(req.query.user_id == null ){
+        res.status(403).send({ message: 'user_id input is needed'});
+        return ;
+    }
+    
     var ongoingTask = [];
     const user = await User.findOne({User_ID: req.query.user_id});
     if(user){
@@ -193,6 +230,11 @@ export const OngoingParticipation_aUser = async(req, res) => {
 
 export const TodayDayOffParticipation_aUser = async(req, res) => {
     console.log("inside TodayDayOffParticipation_aUser function");
+    if(req.query.user_id == null ){
+        res.status(403).send({ message: 'user_id input is needed'});
+        return ;
+    }
+    
     const today = calculate_now_date();
     const d = new Date(today);
     const dWeek = (d.getDay()+6)%7;
@@ -241,6 +283,10 @@ export const TodayDayOffParticipation_aUser = async(req, res) => {
 
 export const TodayFinishParticipation_aUser = async(req, res) => {
     console.log("inside TodayFinishParticipation_aUser function");
+    if(req.query.user_id == null ){
+        res.status(403).send({ message: 'user_id input is needed'});
+        return ;
+    }
     const today = calculate_now_date();
     const d = new Date(today);
     const dWeek = (d.getDay()+6)%7;
@@ -296,6 +342,10 @@ export const TodayFinishParticipation_aUser = async(req, res) => {
 
 export const TodayOngoingParticipation_aUser = async(req, res) => {
     console.log("inside TodayOngoingParticipation_aUser function");
+    if(req.query.user_id == null ){
+        res.status(403).send({ message: 'user_id input is needed'});
+        return ;
+    }
     const today = calculate_now_date();
     const d = new Date(today);
     const dWeek = (d.getDay()+6)%7;
@@ -355,6 +405,14 @@ export const TodayOngoingParticipation_aUser = async(req, res) => {
 
 export const quitParticipation = async(req, res) => {
     console.log("inside quitParticipation function");
+    if(req.body.user_id == null ){
+        res.status(403).send({ message: 'user_id input is needed'});
+        return ;
+    }
+    else if(req.body.task_id == null){
+        res.status(403).send({ message: 'task_id input is needed'});
+        return ;
+    }
     const user = await User.findOne({User_ID: req.body.user_id});
     if(user){
         try {
@@ -373,6 +431,14 @@ export const quitParticipation = async(req, res) => {
 
 export const getParticipationDetail = async(req, res) => {
     console.log("inside getParticipationDetail function");
+    if(req.body.user_id == null ){
+        res.status(403).send({ message: 'user_id input is needed'});
+        return ;
+    }
+    else if(req.body.task_id == null){
+        res.status(403).send({ message: 'task_id input is needed'});
+        return ;
+    }
     const user = await User.findOne({User_ID: req.body.user_id});
     if(user){
         try {
@@ -390,6 +456,14 @@ export const getParticipationDetail = async(req, res) => {
 
 export const deleteUser = async(req, res) => {
     console.log("inside deleteUser function");
+    if(req.body.user_id == null ){
+        res.status(403).send({ message: 'user_id input is needed'});
+        return ;
+    }
+    else if(req.body.task_id == null){
+        res.status(403).send({ message: 'task_id input is needed'});
+        return ;
+    }
     const user = await User.findOne({User_ID: req.body.user_id});
     if(user){
         try {
@@ -408,6 +482,14 @@ export const deleteUser = async(req, res) => {
 
 export const durationOpen_aUser = async(req, res) => {
     console.log("inside durationOpen_aUser function");
+    if(req.query.user_id == null ){
+        res.status(403).send({ message: 'user_id input is needed'});
+        return ;
+    }
+    else if(req.query.start_time == null){
+        res.status(403).send({ message: 'start_time input is needed'});
+        return ;
+    }
     var ongoingTask = [];
     const user = await User.findOne({User_ID: req.query.user_id});
     if(user){
