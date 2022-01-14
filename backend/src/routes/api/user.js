@@ -109,3 +109,18 @@ export const oneUser = async(req, res) => {
         return res.status(404).send({ message: "User Not found." });
     }
 };
+
+export const checkUserExist = async(req, res) => {
+    console.log("inside checkUserExist function");
+    if(req.query.user_id == null ){
+        res.status(403).send({ message: 'user_id input is needed'});
+        return ;
+    }
+    const user = await User.findOne({User_ID: req.query.user_id});
+    if(user){
+        res.status(200).send({ message: 'success'});
+    }
+    else {
+        return res.status(404).send({ message: "User Not found." });
+    }
+}
