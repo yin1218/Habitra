@@ -521,3 +521,19 @@ export const durationOpen_aUser = async(req, res) => {
     }
 
 };
+
+export const getParticipateMember = async(req, res) => {
+    console.log("inside getParticipateMember function");
+    if(req.query.task_id == null ){
+        res.status(403).send({ message: 'task_id input is needed'});
+        return ;
+    }
+    
+    try {
+        const data = await Participation.find({Task_ID: req.query.task_id}, {User_ID: 1, _id: 0});
+        res.status(200).send({ message: 'success', data: data});
+    } catch (e) { 
+        res.status(403).send({ message: 'error', data: null});
+        throw new Error("Database query failed"); 
+    }
+};

@@ -4,7 +4,7 @@ import { addOneAvatar, allAvatar, AvatarByClass, oneAvatar } from './api/avatar'
 import { checkEmail, checkId, checkUserExist, login, oneUser, signUp } from './api/user';
 import { addOneIcon, allIcon, oneIcon } from './api/icon';
 import { addOneTask, clearMoney, closeTask, deleteTask, oneTask, oneTaskPartOF, openTask } from './api/task';
-import { addOneAdmin, addOneParticipation, allParticipation_aAdmin, allParticipation_aUser, deleteUser, durationOpen_aUser, FinishParticipation_aUser, getParticipationDetail, OngoingParticipation_aUser, quitParticipation, TodayDayOffParticipation_aUser, TodayFinishParticipation_aUser, TodayOngoingParticipation_aUser } from './api/participation';
+import { addOneAdmin, addOneParticipation, allParticipation_aAdmin, allParticipation_aUser, deleteUser, durationOpen_aUser, FinishParticipation_aUser, getParticipateMember, getParticipationDetail, OngoingParticipation_aUser, quitParticipation, TodayDayOffParticipation_aUser, TodayFinishParticipation_aUser, TodayOngoingParticipation_aUser } from './api/participation';
 const auth = require("../middleware/auth");
 const router = express.Router()
 
@@ -151,6 +151,10 @@ router.post('/participation/deleteUser', auth, (req, res) => {
 
 router.get('/participation/durationOpen', auth, (req, res) => {
     durationOpen_aUser(req,res);
+})
+
+router.get('/participation/allMember', auth, (req, res) => {
+    getParticipateMember(req,res);
 })
 
 // record
