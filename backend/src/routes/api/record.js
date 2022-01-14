@@ -222,19 +222,39 @@ export const CountOfATask = async(req, res) => {
         res.status(403).send({ message: 'task_id input is needed'});
         return ;
     }
+    else if(req.query.start_time == null ){
+        res.status(403).send({ message: 'start_time input is needed'});
+        return ;
+    }
+    else if(req.query.end_time == null ){
+        res.status(403).send({ message: 'end_time input is needed'});
+        return ;
+    }
     try {
-        var count = 0;
-        const threshold = await Task.find({_id: req.query.task_id}, {Threshold: 1, _id: 0});
-        await Record.find({'Task_ID': req.query.task_id, 'Time': req.query.time}, {_id: 0, Frequency: 1}).then(data => {
-            data.map((d, k) => {
-                if(d.Frequency >= threshold[0].Threshold){
-                    count++;
+        
+        const threshold = await Task.findOne({_id: req.query.task_id}, {Threshold: 1, _id: 0});
+        await Record.find({'Task_ID': req.query.task_id, 'Time': {$gte: req.query.start_time, $lte: req.query.end_time}}, {_id: 0, Frequency: 1, Time: 1}).then(data => {
+            var result = [];
+            var end_date = new Date(req.query.end_time);
+            
+            for ( let cur_date = new Date(req.query.start_time); cur_date.getDate() <= end_date.getDate() ; cur_date.setDate(cur_date.getDate() + 1)){
+                var d = data.filter(function(item){
+                    return item.Time.getDate() == cur_date.getDate();
+                })
+                var count = 0;
+                if(d!=null){
+                    d.map((doc) => {
+                        if(doc.Frequency >= threshold.Threshold){
+                            count++;
+                        }
+                    })
                 }
-            })
-            res.status(200).send({ message: 'success', count: count});
+                result.push(count);
+            }
+            res.status(200).send({ message: 'success', count: result});
         })
     } catch (e) { 
-        res.status(403).send({ message: 'error', data: null});
+        res.status(403).send({ message: 'error', data: e});
         throw new Error("Database query failed"); 
     }
 };
