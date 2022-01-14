@@ -26,8 +26,8 @@ export const addOneRecord = async (req, res) => {
     const existing = await Record.findOne({User_ID: req.body.user_id, Task_ID: req.body.task_id, Time: today});
     if(existing){ // update Is_Admin = true
         try{
-            await Record.updateOne({User_ID: req.body.user_id, Task_ID: req.body.task_id, Time: today}, { $set: { 'Frequency': existing.Frequency+1 } });
-            res.status(200).send({ message: 'success'});
+            await Record.updateOne({User_ID: req.body.user_id, Task_ID: req.body.task_id, Time: today}, { $set: { 'Frequency': existing.Frequency+1 , Daily_Desc: req.body.daily_desc} });
+            res.status(200).send({ message: 'success', id: existing.id});
         }
         catch(err){
             res.status(403).send({ message: 'error', err_msg: err});
@@ -45,8 +45,8 @@ export const addOneRecord = async (req, res) => {
         ) 
         console.log(myobj)
         try{
-            const aTask = await myobj.save();
-            res.status(200).send({ message: 'success', id: aTask.id});
+            const aRecord = await myobj.save();
+            res.status(200).send({ message: 'success', id: aRecord.id});
         }
         catch(err){
             res.status(403).send({ message: 'error', err_msg: err});
