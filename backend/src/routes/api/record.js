@@ -22,6 +22,10 @@ const calculate_now_date = () =>{
 export const addOneRecord = async (req, res) => {
     const today = calculate_now_date();
     console.log("inside addOneRecord function");
+    if(req.body.user_id == null || req.body.task_id == null ){
+        res.status(403).send({ message: 'input error'});
+        return ;
+    }
 
     const existing = await Record.findOne({User_ID: req.body.user_id, Task_ID: req.body.task_id, Time: today});
     if(existing){ // update Is_Admin = true
@@ -118,6 +122,10 @@ export const RecordsOfATask = async(req, res) => {
     console.log("inside RecordsOfATask function");
     var userList = [];
     var result = [];
+    if(req.query.task_id == null){
+        res.status(403).send({ message: 'input error'});
+        return ;
+    }
     try {
         const taskDetail = await Task.find({_id: req.query.task_id}, {Threshold: 1, _id: 0, Working_Day: 1});
         let query_date = new Date(req.query.time);
@@ -176,6 +184,10 @@ export const RecordsOfATask = async(req, res) => {
 
 export const CountOfATask = async(req, res) => {
     console.log("inside CountOfATask function");
+    if(req.query.task_id == null ){
+        res.status(403).send({ message: 'input error'});
+        return ;
+    }
     try {
         var count = 0;
         const threshold = await Task.find({_id: req.query.task_id}, {Threshold: 1, _id: 0});
@@ -195,6 +207,10 @@ export const CountOfATask = async(req, res) => {
 
 export const checkDayDoneOfAUser = async(req, res) => {
     console.log("inside checkDayDoneOfAUser function");
+    if(req.query.user_id == null || req.query.task_id == null || req.query.time == null  ){
+        res.status(403).send({ message: 'input error'});
+        return ;
+    }
     try {
         var result = Object();
         const taskDetail = await Task.find({_id: req.query.task_id}, {Threshold: 1, _id: 0, Working_Day: 1});
@@ -244,6 +260,10 @@ export const calculateMoney = async(req, res) => {
     var result = [];
     const today = calculate_now_date();
     let today_date = new Date(today);
+    if(req.query.task_id == null){
+        res.status(403).send({ message: 'input error'});
+        return ;
+    }
     try {
         const taskDetail = await Task.findOne({_id: req.query.task_id}, {Threshold: 1, _id: 0, Title: 1, Account_Day: 1, Working_Day: 1, Punish: 1, Is_Closed: 1, Close_Time: 1});
         await Participation.find({'Task_ID': req.query.task_id, 'Is_Quit': false}, {_id: 0, User_ID: 1, Last_Calculate_Day: 1, Punish_Sum: 1}).then(user => {
