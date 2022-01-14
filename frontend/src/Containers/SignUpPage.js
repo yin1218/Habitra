@@ -50,8 +50,10 @@ const SignUpPage = () => {
       }
 
     const [avatarUrl, setAvatarUrl] = useState({
-        "Men": ["https://joeschmoe.io/api/v1/random","https://joeschmoe.io/api/v1/random","https://joeschmoe.io/api/v1/random"],
-        "Women": ["https://joeschmoe.io/api/v1/random","https://joeschmoe.io/api/v1/random"]
+        // "Men": ["https://joeschmoe.io/api/v1/random","https://joeschmoe.io/api/v1/random","https://joeschmoe.io/api/v1/random"],
+        // "Women": ["https://joeschmoe.io/api/v1/random","https://joeschmoe.io/api/v1/random"]
+        "Men": menAvatar,
+        "Women": womenAvatar
     }); //頭像選取清單
     const [myAvatarUrl, setMyAvatarUrl] = useState("https://joeschmoe.io/api/v1/random");  //我所選取的頭像
     const[userName, setUserName] = useState("");
