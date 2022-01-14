@@ -118,7 +118,7 @@ const TaskMainPage = ({setToken, setValid, userId, token}) => {
                   ?
                   <TaskMenber taskId={taskId} userId={userId} token={token} userName={userName}/>
                   :
-                  <TaskStats />
+                  <TaskStats taskId={taskId} token={token} userId={userId}/>
               }
           </Content>
         </Layout>

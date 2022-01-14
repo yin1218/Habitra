@@ -151,6 +151,19 @@ const getTask = async(props) => {
     }
 }
 
+const clearMoney = async(props) => {
+    const {task_id, token} = props;
+    try{
+        const {data: {message}} = await instance.post('/task/clearMoney',{
+            task_id, token
+        });
+        return message;
+    }
+    catch (error) {
+        console.log("error");
+    }
+}
+
 //participation
 const getAdmin = async(props) => {
     const {user_id, token} = props;
@@ -244,10 +257,10 @@ const getDurationOpen = async(props) => {
 }
 
 const getParticipationDetail = async(props) => {
-    const {user_id, task_id, token} = props;
+    const {user_id, task_id} = props;
     try{
         const { data: {message, data} } = await instance.get('/participation/quit',{
-            params:{user_id: user_id, task_id: task_id, token: token}
+            params:{user_id: user_id, task_id: task_id}
         });
         return data;
     }
@@ -364,6 +377,45 @@ const getDailyRecord = async(props) => {
     }
 }
 
+const getRecordPunish = async(props) => {
+    const {task_id, token} = props;
+    try{
+        const { data: {message, data} } = await instance.get('/record/punish',{
+            params:{task_id: task_id, token: token}
+        });
+        return data;
+    }
+    catch (error) {
+        console.log("error");
+    }
+}
+
+const getRecordDetail = async(props) => {
+    const {task_id, time, token} = props;
+    try{
+        const { data: {message, data} } = await instance.get('/record/detail',{
+            params:{task_id: task_id, time: time, token: token}
+        });
+        return data;
+    }
+    catch (error) {
+        console.log("error");
+    }
+}
+
+const getRecordCount = async(props) => {
+    const {task_id, start_time, end_time, token} = props;
+    try{
+        const { data: {message, count} } = await instance.get('/record/count',{
+            params:{task_id: task_id, start_time: start_time, end_time: end_time, token: token}
+        });
+        return count;
+    }
+    catch (error) {
+        console.log("error");
+    }
+}
+
 //icon
 const getAllIcon = async() => {
     try{
@@ -411,4 +463,4 @@ const getAvatarClass = async(props) => {
     }
 }
 
-export {getAllAvatar, getAvatarClass, signUp, signUpCheckId, signUpCheckEmail, login, testToken, addTask, getUserInfo, getAdmin, getNotAdminAndFinish, getNotAdminAndGoing, getTaskDetail, getTodayOngoing, getTodayFinish, getgetTodayDayoff, getDurationOpen, getPeriodRecord, addRecord, getDailyRecord, getTask, getParticipationDetail, closeTask, deleteTask, addNewAdmin, addNewMember, quitParticipation, getUserExist, getParticipationAllMember, deleteUserParticipation, getAllIcon};
+export {getAllAvatar, getAvatarClass, signUp, signUpCheckId, signUpCheckEmail, login, testToken, addTask, getUserInfo, getAdmin, getNotAdminAndFinish, getNotAdminAndGoing, getTaskDetail, getTodayOngoing, getTodayFinish, getgetTodayDayoff, getDurationOpen, getPeriodRecord, addRecord, getDailyRecord, getTask, getParticipationDetail, closeTask, deleteTask, addNewAdmin, addNewMember, quitParticipation, getUserExist, getParticipationAllMember, deleteUserParticipation, getAllIcon, getRecordPunish, getRecordDetail, clearMoney, getRecordCount};

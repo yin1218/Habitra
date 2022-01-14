@@ -43,7 +43,7 @@ const TaskMenber = ({taskId, userId, token, userName}) => {
     const [refresh, setRefresh] = useState(false);
 
     useEffect( async () => {
-        const res = await getParticipationDetail({user_id: userId, task_id: taskId, token: token});
+        const res = await getParticipationDetail({user_id: userId, task_id: taskId});
         setIsMgr(res.Is_Admin);
         var t = []
         var temp = new Object();
@@ -61,7 +61,8 @@ const TaskMenber = ({taskId, userId, token, userName}) => {
                 te.id = mem[i].User_ID;
                 const r = await getUserInfo({user_id: mem[i].User_ID})
                 te.name = r.Name;
-                te.isMgr = false;
+                const b = await getParticipationDetail({user_id: mem[i].User_ID, task_id: taskId});
+                te.isMgr = b.Is_Admin;
                 t[i] = te;
             }
         }

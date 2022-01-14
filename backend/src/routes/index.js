@@ -141,7 +141,7 @@ router.post('/participation/quit', auth, (req, res) => {
     quitParticipation(req,res);
 })
 
-router.get('/participation/quit', auth, (req, res) => {
+router.get('/participation/quit', (req, res) => {
     getParticipationDetail(req,res);
 })
 

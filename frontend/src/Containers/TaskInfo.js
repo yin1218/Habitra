@@ -90,11 +90,11 @@ const TaskInfo = ({taskId, token, userId}) => {
         setStart_hour(res.Start_Hour);
         setEnd_hour(res.End_Hour);
         setTaskOpentDate(res.Create_Time.toString().split("T")[0]);
-        setTaskCloseDate(res.Close_Time.toString().split("T")[0]);
+        if(res.Close_Time!= null) setTaskCloseDate(res.Close_Time.toString().split("T")[0]);
         setWorkDay(res.Working_Day);
         setIsClosed(res.Is_Closed);
 
-        const res_2 = await getParticipationDetail({user_id: userId, task_id: taskId, token: token});
+        const res_2 = await getParticipationDetail({user_id: userId, task_id: taskId});
         setIsManager(res_2.Is_Admin);
         setIsQuit(res_2.Is_Quit);
       }, []);

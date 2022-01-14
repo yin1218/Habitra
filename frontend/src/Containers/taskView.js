@@ -78,7 +78,7 @@ const TaskView = ({taskId, token, userId}) => {
         const res_2 = await getTask({task_id: taskId, token: token});
         setIsClosed(res_2.Is_Closed);
 
-        const res_3 = await getParticipationDetail({user_id: userId, task_id: taskId, token: token});
+        const res_3 = await getParticipationDetail({user_id: userId, task_id: taskId});
         setIsAdmin(res_3.Is_Admin);
     
       }, []);

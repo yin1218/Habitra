@@ -9,13 +9,14 @@
 2. 長條圖
  */
 import { Column } from '@ant-design/plots';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {Modal, Typography, Statistic, List, Avatar, Button, message, DatePicker,Row,  Col} from 'antd';
 import styled from "styled-components";
 import { Icon } from '@iconify/react';
+import { getRecordPunish, getUserInfo, getParticipationDetail, getTaskDetail, getRecordDetail, clearMoney, getRecordCount } from '../axios';
 
 // 記得 {userId}
-const TaskStats = () => {
+const TaskStats = ({taskId, token, userId}) => {
 
     //default settings
     const [openModal, setOpenModal] = useState(false);
@@ -43,52 +44,24 @@ const TaskStats = () => {
         }, 0);
     };
     const formatDate = (date)=>{
-        let formatted_date = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" +date.getDate();
+        var str1 = date.getMonth() + 1;
+        var str2 = date.getDate();
+        if(parseInt(date.getMonth() + 1) < 10){
+            str1 = '0'+ (date.getMonth() + 1);
+        }
+        if(parseInt(date.getDate()) < 10){
+            str2 = '0'+date.getDate();
+        }
+        let formatted_date = date.getFullYear() + "-" + str1 + "-" +str2;
         return formatted_date;
     }
     
-    //以下陳沛妤要看
-    const [oweMemberInfo, setOweMemberInfo] = useState([
-        {
-            "User_ID": "gary1030",
-            "User_Name": "蓋瑞",
-            "Avatar": " https://joeschmoe.io/api/v1/random",
-            "Punish_sum": 1400
-        },
-        {
-            "User_ID": "zoe1234",
-            "User_Name": "小陳",
-            "Avatar": " https://joeschmoe.io/api/v1/random",
-            "Punish_sum": 1200
-        }
-    ])
+    const [oweMemberInfo, setOweMemberInfo] = useState([])
 
     //陳沛妤: 這邊是每個任務的人指定日期的完成資訊，指定日期是selectedDate
-    const [taskThreshold, setTaskThreshold] = useState(10)
-    const [finishTaskMemberInfo, setFinishTaskMemberInfo] = useState([
-        {
-            "User_ID": "gary1030",
-            "User_Name": "蓋瑞",
-            "Avatar": " https://joeschmoe.io/api/v1/random",
-            "frequency": 1
-        },
-        {
-            "User_ID": "zoe1234",
-            "User_Name": "小陳",
-            "Avatar": " https://joeschmoe.io/api/v1/random",
-            "frequency": 200
-        }
-
-    ])
-    const [unfinishTaskMemberInfo, setUnfinishTaskMemberInfo] = useState([
-        {
-            "User_ID": "zoe1234",
-            "User_Name": "小陳",
-            "Avatar": " https://joeschmoe.io/api/v1/random",
-            "frequency": 200
-        }
-
-    ])
+    const [taskThreshold, setTaskThreshold] = useState(0)
+    const [finishTaskMemberInfo, setFinishTaskMemberInfo] = useState([])
+    const [unfinishTaskMemberInfo, setUnfinishTaskMemberInfo] = useState([])
 
     //總欠款: 接memberInfo的時候要加總
     const [totalArrear, setTotalArrear] = useState(sum(oweMemberInfo, "Punish_sum"));
@@ -96,11 +69,69 @@ const TaskStats = () => {
     const [startDate, setStartDate]=  useState("");
     const [endDate, setEndDate]=  useState("");
     const [selectedDate, setSelectedDate] = useState("");
-    const [achieveCount, setAchieveCount] = useState([1,1,1,1,1,1,2]);
+    const [achieveCount, setAchieveCount] = useState([0,0,0,0,0,0,0]);
+    const [refresh, setRefresh] = useState(false);
+
+    useEffect( async () => {
+      const response = await getRecordPunish({task_id: taskId, token: token});
+      console.log(response);
+      var tem = []
+      for(var i = 0; i < response.length; i++){
+        var t = new Object();
+        t.User_ID = response[i].User_ID;
+        const r = await getUserInfo({user_id: response[i].User_ID})
+        t.User_Name = r.Name;
+        t.Avatar = r.Avatar;
+        t.Punish_sum = response[i].Punish_Sum;
+        tem[i] = t;
+      }
+      setOweMemberInfo(tem);
+      setTotalArrear(sum(tem, "Punish_sum"));
+
+      const res = await getParticipationDetail({user_id: userId, task_id: taskId});
+      setIsMgr(res.Is_Admin);
+
+      const res_2 = await getTaskDetail({task_id: taskId, token: token});
+      setTaskThreshold(res_2.Threshold);
+
+    }, [refresh]);
+
+    useEffect( async () => {
+      const res_3 = await getRecordDetail({task_id: taskId, token: token, time: selectedDate});
+      console.log(res_3);
+      var fin = [];
+      var unfin = [];
+      for(var i = 0; i < res_3.length; i++){
+        if(res_3[i].boolean){
+          var t = new Object();
+          t.User_ID = res_3[i].User_ID;
+          const r = await getUserInfo({user_id: res_3[i].User_ID})
+          t.User_Name = r.Name;
+          t.Avatar = r.Avatar;
+          t.frequency = res_3[i].Frequency;
+          fin.push(t);
+        } else{
+          var t = new Object();
+          t.User_ID = res_3[i].User_ID;
+          const r = await getUserInfo({user_id: res_3[i].User_ID})
+          t.User_Name = r.Name;
+          t.Avatar = r.Avatar;
+          t.frequency = res_3[i].Frequency;
+          unfin.push(t);
+        }
+      }
+      setFinishTaskMemberInfo(fin);
+      setUnfinishTaskMemberInfo(unfin);
+
+      const res_4 = await getRecordCount({task_id:taskId, start_time: startDate, end_time: endDate, token: token});
+      setAchieveCount(res_4);
+    }, [selectedDate]);
 
     
-    const handleEmtifiedFee = () => {
-        // 陳沛妤: 幫我把大家的欠款清空
+    const handleEmtifiedFee = async () => {
+        const res = await clearMoney({task_id: taskId, token: token});
+        console.log(res);
+        setRefresh(!refresh);
         message.success("已成功清空，祝大家有美好的一餐~");
         setOpenModal(false);
     }
@@ -173,6 +204,7 @@ const TaskStats = () => {
         };
         return <Column {...config} />;
       };
+
 
     return(
         <>
