@@ -47,33 +47,44 @@ const MainPage = ({setToken, setValid, userId, token}) => {
         const response_1 = await getTodayOngoing({user_id: userId, token: token});
         const response_2 = await getTodayFinish({user_id: userId, token: token});
         const response_3 = await getgetTodayDayoff({user_id: userId, token: token});
+
+        var str = [];
+        var str_2 = [];
+        var str_3 = [];
         for(var i = 0; i < response_1.length; i++){
             const res = await getTaskDetail({task_id: response_1[i], token: token});
             var temp = new Object();
             temp.uid = response_1[i];
             temp.icon = res.Icon;
             temp.name = res.Title;
-            setOngoingTaskInfo([...ongoingTaskInfo, temp]);
+            // setOngoingTaskInfo([...ongoingTaskInfo, temp]);
+            str[i] = temp;
         }
         for(var i = 0; i < response_2.length; i++){
             const res = await getTaskDetail({task_id: response_2[i], token: token});
             var temp = new Object();
-            temp.uid = response_2[i].Task_ID;
+            temp.uid = response_2[i];
             temp.icon = res.Icon;
             temp.name = res.Title;
-            setDoneTaskInfo([...doneTaskInfo, temp]);
+            // setDoneTaskInfo([...doneTaskInfo, temp]);
+            str_2[i] = temp;
         }
         for(var i = 0; i < response_3.length; i++){
             const res = await getTaskDetail({task_id: response_3[i], token: token});
             var temp = new Object();
-            temp.uid = response_3[i].Task_ID;
+            temp.uid = response_3[i];
             temp.icon = res.Icon;
             temp.name = res.Title;
-            setRelaxTaskInfo([...relaxTaskInfo, temp]);
+            // setRelaxTaskInfo([...relaxTaskInfo, temp]);
+            str_3[i] = temp;
         }
+
+        setOngoingTaskInfo(str);
+        setDoneTaskInfo(str_2);
+        setRelaxTaskInfo(str_3);
       }, []);
 
-
+      console.log(ongoingTaskInfo);
 
     const AddTask = styled.div`
         position: fixed;

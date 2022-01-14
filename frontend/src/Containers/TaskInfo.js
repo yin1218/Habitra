@@ -14,7 +14,7 @@ import styled from "styled-components";
 import { useState, useEffect } from "react";
 import { Typography, Button, Avatar } from "antd";
 import moment from "moment";
-import { getTask, getParticipationDetail } from '../axios';
+import { getTask, getParticipationDetail, closeTask, deleteTask } from '../axios';
 const TaskInfo = ({taskId, token, userId}) => {
 
     //default settings
@@ -58,6 +58,21 @@ const TaskInfo = ({taskId, token, userId}) => {
     const [end_hour, setEnd_hour] = useState("23:59");
     const [taskOpenDate, setTaskOpentDate] = useState("2021-11-11");
     const [taskCloseDate, setTaskCloseDate] = useState("2021-11-15");
+
+    const handleCloseTask = async () => {
+        const res = await closeTask({task_id: taskId, token: token});
+        console.log(res);
+        // message.success('成功打卡！');
+    };
+
+    const handleDeleteTask = async () => {
+        const res = await deleteTask({task_id: taskId, token: token});
+        console.log(res);
+
+        //61dd86ad5316d9988a1ccceb
+        //61e0fa8100c2a28290aef0e7
+        // message.success('成功打卡！');
+    };
 
     useEffect( async () => {
         const res = await getTask({task_id: taskId, token: token});
@@ -103,11 +118,11 @@ const TaskInfo = ({taskId, token, userId}) => {
                 <>
                 <DangerZone>
                     <Title level={4} style={{color:"red"}}>關閉任務</Title>
-                    <Button type="primary" size="small" danger>關閉任務</Button>
+                    <Button type="primary" size="small" onClick={handleCloseTask} danger>關閉任務</Button>
                 </DangerZone>     
                 <DangerZone>
                     <Title level={4} style={{color:"red"}}>刪除任務</Title>
-                    <Button type="primary" size="small" danger>刪除任務</Button>
+                    <Button type="primary" size="small" onClick={handleDeleteTask} danger>刪除任務</Button>
                 </DangerZone> 
                 </>  
                 :

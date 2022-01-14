@@ -35,13 +35,17 @@ const UserInfo = ({userId, name, email, token}) => {
         const response_2 = await getNotAdminAndGoing({user_id: userId, token: token});
         const response_3 = await getNotAdminAndFinish({user_id: userId, token: token});
         
+        var str = [];
+        var str_2 = [];
+        var str_3 = [];
         for(var i = 0; i < response_1.length; i++){
             const res = await getTaskDetail({task_id: response_1[i].Task_ID, token: token});
             var temp = new Object();
             temp.uid = response_1[i].Task_ID;
             temp.icon = res.Icon;
             temp.name = res.Title;
-            setManagedTaskInfo([...managedTaskInfo, temp]);
+            str[i] = temp;
+            // setManagedTaskInfo([...managedTaskInfo, temp]);
         }
         for(var i = 0; i < response_2.length; i++){
             const res = await getTaskDetail({task_id: response_2[i].Task_ID, token: token});
@@ -49,7 +53,8 @@ const UserInfo = ({userId, name, email, token}) => {
             temp.uid = response_2[i].Task_ID;
             temp.icon = res.Icon;
             temp.name = res.Title;
-            setOpenTaskInfo([...openTaskInfo, temp]);
+            str_2[i] = temp;
+            // setOpenTaskInfo([...openTaskInfo, temp]);
         }
         for(var i = 0; i < response_3.length; i++){
             const res = await getTaskDetail({task_id: response_3[i].Task_ID, token: token});
@@ -57,8 +62,12 @@ const UserInfo = ({userId, name, email, token}) => {
             temp.uid = response_3[i].Task_ID;
             temp.icon = res.Icon;
             temp.name = res.Title;
-            setCloseTaskInfo([...closeTaskInfo, temp]);
+            str_3[i] = temp;
+            // setCloseTaskInfo([...closeTaskInfo, temp]);
         }
+        setManagedTaskInfo(str);
+        setOpenTaskInfo(str_2);
+        setCloseTaskInfo(str_3);
       }, []);
 
     return(

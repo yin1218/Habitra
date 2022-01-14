@@ -88,7 +88,7 @@ router.post('/task/open', auth, (req, res) => {
     openTask(req, res);
 })
 
-router.delete('/task/delete', auth, (req, res) => {
+router.post('/task/delete', auth, (req, res) => {
     deleteTask(req, res);
 })
 

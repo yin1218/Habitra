@@ -86,6 +86,32 @@ const addTask = async(props) => {
     }
 }
 
+const closeTask = async(props) => {
+    const {task_id, token} = props;
+    try{
+        const {data: {message}} = await instance.post('/task/close',{
+            task_id,token
+        });
+        return message;
+    }
+    catch (error) {
+        console.log("error");
+    }
+}
+
+const deleteTask = async(props) => {
+    const {task_id, token} = props;
+    try{
+        const {data: {message}} = await instance.post('/task/delete',{
+            task_id, token
+        });
+        return message;
+    }
+    catch (error) {
+        console.log("error");
+    }
+}
+
 const getTaskDetail = async(props) => {
     const {task_id, token} = props;
     try{
@@ -292,4 +318,4 @@ const getAvatarClass = async(props) => {
     }
 }
 
-export {getAllAvatar, getAvatarClass, signUp, signUpCheckId, signUpCheckEmail, login, testToken, addTask, getUserInfo, getAdmin, getNotAdminAndFinish, getNotAdminAndGoing, getTaskDetail, getTodayOngoing, getTodayFinish, getgetTodayDayoff, getDurationOpen, getPeriodRecord, addRecord, getDailyRecord, getTask, getParticipationDetail};
+export {getAllAvatar, getAvatarClass, signUp, signUpCheckId, signUpCheckEmail, login, testToken, addTask, getUserInfo, getAdmin, getNotAdminAndFinish, getNotAdminAndGoing, getTaskDetail, getTodayOngoing, getTodayFinish, getgetTodayDayoff, getDurationOpen, getPeriodRecord, addRecord, getDailyRecord, getTask, getParticipationDetail, closeTask, deleteTask};
