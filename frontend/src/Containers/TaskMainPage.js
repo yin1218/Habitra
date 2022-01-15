@@ -8,7 +8,7 @@
  */
 import styled from 'styled-components'
 import SideBar from '../Components/SideBar';
-import { Layout, Modal, Button, Avatar, Typography, Tooltip, Input, message } from 'antd';
+import { Layout, Modal, Button, Avatar, Typography, Tooltip, Input, message, Divider } from 'antd';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import moment from 'moment';
@@ -27,7 +27,7 @@ const TaskMainPage = ({setToken, setValid, userId, token}) => {
 
     // default settings
     const { TextArea } = Input;
-    const {Text} = Typography;
+    const {Title, Text} = Typography;
     const { Content } = Layout;
     let {taskId} = useParams();
     // console.log(taskID);
@@ -67,6 +67,9 @@ const TaskMainPage = ({setToken, setValid, userId, token}) => {
     const [endHour, setEndHour] = useState(moment("23:59", 'hh:mm'));
     const [manager, setManager] = useState('');
     const [isQuit, setIsQuit] = useState('');
+    const [taskName, setTaskName] = useState('');
+    const [taskAvatar, setTaskAvatar] = useState('');
+
     console.log("startHour = ", startHour)
     console.log("endHour = ", endHour)
     console.log("currentHour = ", currentHour);
@@ -102,6 +105,8 @@ const TaskMainPage = ({setToken, setValid, userId, token}) => {
       const res = await getTaskDetail({task_id: taskId, token: token});
       setStartHour(moment(res.Start_Hour,"hh:mm"));
       setEndHour(moment(res.End_Hour,"hh:mm")); //巫：沒有擋成功
+      setTaskName(res.Title);
+      setTaskAvatar(res.Icon);
 
       const res_2 = await getTask({task_id: taskId, token: token});
       setClosed(res_2.Is_Closed);
@@ -116,8 +121,13 @@ const TaskMainPage = ({setToken, setValid, userId, token}) => {
         <SideBar place = "taskMainPage" userId = {userId} userName={userName} userAvatar={userAvatar} setValid={setValid}  setPage={setPage} setToken={setToken}/>
         <Layout className="site-layout" style={{ marginLeft: 200 }}>
           <Content style={{ margin: '24px 16px 0', overflow: 'initial' }}>
-              {/* <p>This is task main page!</p> */}
-              {
+            <div style={{position: "fixed", }}>
+              <Avatar size={120} src={taskAvatar}  />
+              <Title level={2}>{taskName}</Title>
+              <Divider></Divider>
+            </div>
+            <div style={{marginTop: "33vh"}}>
+            {
                   page === 1
                   ?
                     <TaskView taskId={taskId} token={token} userId={userId}/>
@@ -136,6 +146,8 @@ const TaskMainPage = ({setToken, setValid, userId, token}) => {
                   :
                   <UserInfo userId={userId} name={userName} email={userEmail} token={token}/>
               }
+            </div>
+              {/* <p>This is task main page!</p> */}
           </Content>
         </Layout>
         {closed

@@ -22,7 +22,7 @@ const TaskMenber = ({taskId, userId, token, userName}) => {
             render: tag => tag === true ? <Tooltip placement="right" title="任務主人"><Icon icon="emojione:crown" color="black" height="20" /></Tooltip> : <></>,
           },
         {
-          title: 'name',
+          title: '姓名',
           dataIndex: 'name',
           key: 'name',
         },
