@@ -8,15 +8,15 @@ const SignUpPage = () => {
 
     const navigate = useNavigate(); //In react-router-dom v6 useHistory() is replaced by useNavigate().
     var menAvatar = []; //@前端
-    var womenAvatar = []; //@前端
+    var faceAvatar = []; //@前端
     useEffect( async () => {
-        const menResponse = await getAvatarClass({className: 'Men'});
-        menResponse.map(e => {
-            menAvatar.push(e.Uid);
-        })
-        const womenResponse = await getAvatarClass({className: 'Women'});
-        womenResponse.map(e => {
-            womenAvatar.push(e.Uid);
+        // const menResponse = await getAvatarClass({className: 'Men'});
+        // menResponse.map(e => {
+        //     menAvatar.push(e.Uid);
+        // })
+        const faceResponse = await getAvatarClass({className: 'face'});
+        faceResponse.map(e => {
+            faceAvatar.push(e.Uid);
         })
     }, []); 
 
@@ -52,10 +52,10 @@ const SignUpPage = () => {
     const [avatarUrl, setAvatarUrl] = useState({
         // "Men": ["https://joeschmoe.io/api/v1/random","https://joeschmoe.io/api/v1/random","https://joeschmoe.io/api/v1/random"],
         // "Women": ["https://joeschmoe.io/api/v1/random","https://joeschmoe.io/api/v1/random"]
-        "Men": menAvatar,
-        "Women": womenAvatar
+        // "Men": menAvatar,
+        "Face": faceAvatar
     }); //頭像選取清單
-    const [myAvatarUrl, setMyAvatarUrl] = useState("https://joeschmoe.io/api/v1/random");  //我所選取的頭像
+    const [myAvatarUrl, setMyAvatarUrl] = useState("https://avatars.dicebear.com/api/croodles-neutral/sdsddcdrgrgergrtcdc.svg");  //我所選取的頭像
     const[userName, setUserName] = useState("");
     const[ID, setID] = useState("");
     const[password, setPassword] = useState("");
