@@ -528,10 +528,14 @@ export const durationOpen_aUser = async(req, res) => {
         res.status(403).send({ message: 'start_time input is needed'});
         return ;
     }
+    else if(req.query.end_time == null){
+        res.status(403).send({ message: 'end_time input is needed'});
+        return ;
+    }
     var ongoingTask = [];
     const user = await User.findOne({User_ID: req.query.user_id});
     if(user){
-        Task.find({$or:[{ Is_Closed: false },{ Close_Time: {$gte: req.query.start_time} }]})
+        Task.find({$or:[{ Is_Closed: false },{ Close_Time: {$gte: req.query.start_time} }], Create_Time: {$lte: req.query.end_time}})
         .then(data => {
             data.map((d, k) => {
                 ongoingTask.push(d._id);
