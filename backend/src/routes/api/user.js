@@ -125,10 +125,10 @@ export const checkUserExist = async(req, res) => {
     if(user){
         const participation = await Participation.findOne({User_ID: req.query.user_id, Task_ID: req.query.task_id, Is_Quit: false});
         if(participation){
-            res.status(200).send({ message: 'success', data: true});
+            res.status(200).send({ message: 'User already in this Task', data: false});
         }
         else{
-            res.status(200).send({ message: 'User Not in this Task', data: false});
+            res.status(200).send({ message: 'User Not in this Task', data: true});
         }
     }
     else {
