@@ -229,6 +229,43 @@ export const OngoingParticipation_aUser = async(req, res) => {
 
 };
 
+export const Participation_aNotAdminUser = async(req, res) => {
+    console.log("inside Participation_aNotAdminUser function");
+    if(req.query.user_id == null ){
+        res.status(403).send({ message: 'user_id input is needed'});
+        return ;
+    }
+    
+    var TaskList = [];
+    const user = await User.findOne({User_ID: req.query.user_id});
+    if(user){
+        Task.find({})
+        .then(data => {
+            data.map((d, k) => {
+                TaskList.push(d._id);
+            })
+
+            Participation.find({ Task_ID: { $in: TaskList }, Is_Admin: false, User_ID: req.query.user_id }, {_id: 0, __v: 0, User_ID: 0, Is_Admin: 0, Is_Quit: 0, Quit_Time: 0, Punish_Sum: 0, Last_Calculate_Day: 0})
+                .then(data => {
+                    res.status(200).send({ message: 'success', data: data});
+                })
+                .catch(error => {
+                    console.log(error);
+                    res.status(403).send({ message: 'error', data: null});
+                    throw new Error("Database query failed"); 
+                })
+        })
+        .catch(error => {
+            console.log(error);
+        })
+    }
+    else{
+        return res.status(404).send({ message: "User Not found." });
+    }
+
+};
+
+
 export const TodayDayOffParticipation_aUser = async(req, res) => {
     console.log("inside TodayDayOffParticipation_aUser function");
     if(req.query.user_id == null ){
