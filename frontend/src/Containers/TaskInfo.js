@@ -12,14 +12,15 @@ avatar
 
 import styled from "styled-components";
 import { useState, useEffect } from "react";
-import { Typography, Button, Avatar } from "antd";
+import { Typography, Button, Avatar, message } from "antd";
 import moment from "moment";
 import { getTask, getParticipationDetail, closeTask, deleteTask, quitParticipation } from '../axios';
+import { useNavigate } from "react-router-dom";
 const TaskInfo = ({taskId, token, userId}) => {
 
     //default settings
     const {Title, Text} = Typography;
-
+    const navigate = useNavigate();
     const DangerZone = styled.div`
     display: flex;
     flex-direction: row;
@@ -65,17 +66,22 @@ const TaskInfo = ({taskId, token, userId}) => {
         const res = await closeTask({task_id: taskId, token: token});
         console.log(res);
         // message.success('成功打卡！');
+        message.success("成功關閉任務");
+        navigate("/");
     };
 
     const handleDeleteTask = async () => {
         const res = await deleteTask({task_id: taskId, token: token});
         console.log(res);
-
+        message.success("成功刪除任務");
+        navigate("/");
         // message.success('成功打卡！');
     };
     const handleQuitTask = async () => {
         const res = await quitParticipation({user_id: userId, task_id: taskId, token: token});
         console.log(res);
+        message.success("成功退出任務");
+        navigate("/");
     }
 
     useEffect( async () => {
@@ -144,7 +150,7 @@ const TaskInfo = ({taskId, token, userId}) => {
                 </DangerZone> 
                 </>  
                 :
-                !isClosed
+                !isClosed && !isQuit
                 ?
                 <DangerZone>
                     <Title level={4} style={{color:"red"}}>退出任務</Title>

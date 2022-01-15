@@ -8,6 +8,7 @@ import {
   } from '@ant-design/icons';
 
 
+
 const SideBar = ({place, userId, userName, userAvatar, setValid, setPage, setToken}) => {
     let navigate = useNavigate();
     const [collapsed, setCollapsed] = useState(false)
@@ -35,11 +36,10 @@ const SideBar = ({place, userId, userName, userAvatar, setValid, setPage, setTok
         <></>
         :
         <>
-            <Title level={3} onClick={() => {setPage(3)}} style={{cursor: 'pointer'}}>
+            <Title level={3} onClick={() => {setPage(5)}} style={{cursor: 'pointer'}}>
               {userName}
-                {/* <Link to={`/userInfo/${userId}`}>{userName}</Link> */}
             </Title>
-            <Button type="text" size='small' onClick={() => {setValid(false);setToken("");}}>登出</Button>
+            <Button type="text" size='small' onClick={() => {setValid(false);setToken("");navigate("/login");}}>登出</Button>
         </>
         }
       </div>

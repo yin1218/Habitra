@@ -20,6 +20,7 @@ import TaskView from './TaskView';
 import TaskInfo from './TaskInfo';
 import TaskMenber from './TaskMember';
 import TaskStats from './TaskStats';
+import UserInfo from './UserInfo';
 import { getUserInfo, addRecord, getTaskDetail, getTask, getParticipationDetail } from '../axios';
 
 const TaskMainPage = ({setToken, setValid, userId, token}) => {
@@ -58,6 +59,7 @@ const TaskMainPage = ({setToken, setValid, userId, token}) => {
     
     // 資料串接 @陳沛妤
     const [userName,setUserName] = useState('');
+    const [userEmail, setUserEmail] = useState('');
     const [userAvatar, setUserAvatar] = useState('');
     const [closed, setClosed] = useState(false); //透過這個判斷要不要顯示打卡按鈕
     const [typedDesc, setTypedDesc] = useState('');
@@ -65,9 +67,9 @@ const TaskMainPage = ({setToken, setValid, userId, token}) => {
     const [endHour, setEndHour] = useState(moment("23:59", 'hh:mm'));
     const [manager, setManager] = useState('');
     const [isQuit, setIsQuit] = useState('');
-    // console.log("startHour = ", startHour)
-    // console.log("endHour = ", endHour)
-    // console.log("currentHour = ", currentHour);
+    console.log("startHour = ", startHour)
+    console.log("endHour = ", endHour)
+    console.log("currentHour = ", currentHour);
 
     const textOnChange = e => {
       setTypedDesc(e.target.value);
@@ -95,6 +97,7 @@ const TaskMainPage = ({setToken, setValid, userId, token}) => {
       const response = await getUserInfo({user_id: userId});
       setUserAvatar(response.Avatar);
       setUserName(response.Name);
+      setUserEmail(response.Email)
 
       const res = await getTaskDetail({task_id: taskId, token: token});
       setStartHour(moment(res.Start_Hour,"hh:mm"));
@@ -127,7 +130,11 @@ const TaskMainPage = ({setToken, setValid, userId, token}) => {
                   ?
                   <TaskMenber taskId={taskId} userId={userId} token={token} userName={userName}/>
                   :
+                  page === 4
+                  ?
                   <TaskStats taskId={taskId} token={token} userId={userId}/>
+                  :
+                  <UserInfo userId={userId} name={userName} email={userEmail} token={token}/>
               }
           </Content>
         </Layout>

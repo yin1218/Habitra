@@ -1,10 +1,14 @@
-import { Avatar, Switch, Typography, Divider, Form, Input, TimePicker, Select, Checkbox, Row, Col, Button  } from 'antd';
+import { Avatar, message, Switch, Typography, Divider, Form, Input, TimePicker, Select, Checkbox, Row, Col, Button  } from 'antd';
 import moment from 'moment';
 import { useState, useEffect } from 'react';
 import { addTask, addNewAdmin, addNewMember, getAllIcon } from '../axios';
+import { useNavigate } from "react-router-dom";
+
 
 const AddTaskPage = ({token, userId}) => {
 
+    //default settings
+    const navigate = useNavigate();
 //     POST /task   新增任務
         var iconList = []; 
         useEffect( async () => {
@@ -109,6 +113,9 @@ const AddTaskPage = ({token, userId}) => {
             const response = await addTask({title:title, description:description, threshold:threshold, working_day:workDay, punish:punish, need_daily_desc:need_daily_desc, icon:icon, start_hour:start.split(" ")[4].substr(0,5), end_hour:end.split(" ")[4].substr(0,5), token: token});
             const response_2 = await addNewMember({task_id: response, user_id: userId, token: token});
             const response_3 = await addNewAdmin({task_id: response, user_id: userId, token: token});
+            console.log("response = ", response.message);
+            message.success("成功新增任務!");
+            navigate("/");
         }
         
 
@@ -245,6 +252,9 @@ const AddTaskPage = ({token, userId}) => {
                     <Switch checkedChildren="開啟" unCheckedChildren="關閉" defaultChecked onChange={setNeed_daily_desc}/>
                 </Form.Item>
                 <Form.Item>
+                        <Button className="wide-form-button" onClick={() => navigate("/")} >
+                            返回
+                        </Button>
                         <Button type="primary" htmlType="submit" className="wide-form-button" onClick={handleLogin}>
                             submit
                         </Button>
