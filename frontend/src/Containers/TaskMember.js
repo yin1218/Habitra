@@ -91,25 +91,31 @@ const TaskMenber = ({taskId, userId, token, userName}) => {
             await deleteUserParticipation({task_id: taskId, user_id: deletedUserId[i], token: token});
         }
         setRefresh(!refresh);
+        setState({selectedRowKeys: [], });
     }
 
     const onSearch = async (value) => {
         setIsSearching(true);
         const res = await getUserExist({user_id: value, task_id: taskId});
         //看value(就是memberId)有沒有在資料庫裡面
-        if(res.data){ 
-            const response = await getUserInfo({user_id: value});
-            var temp = new Object();
-            temp.id = value;
-            temp.name = response.Name;
-            setAddMemberList([...addMemberList, temp] );
+        if(addMemberList.some(obj => obj.id === value)){
+            message.error("你已輸入過此用戶!");
             setIsSearching(false);
         }
         else{
-            message.error(res.message);
-            setIsSearching(false);
+            if(res.data){ 
+                const response = await getUserInfo({user_id: value});
+                var temp = new Object();
+                temp.id = value;
+                temp.name = response.Name;
+                setAddMemberList([...addMemberList, temp] );
+                setIsSearching(false);
+            }
+            else{
+                message.error(res.message);
+                setIsSearching(false);
+            }
         }
-         
     };
 
     //table settings
@@ -144,12 +150,13 @@ const TaskMenber = ({taskId, userId, token, userName}) => {
         setMember([...member, ...t]);
         setShowAddMemberModal(false);
         setAddMemberList([]);
+        setOpenDelete(false);
     }
 
     return(
         <>
-            <Table columns={columns} rowSelection={openDelete && isMgr ? rowSelection : undefined}  dataSource={member} size='small' title={isMgr ? !openDelete ? () => <Button onClick={() => setOpenDelete(!openDelete)}>編輯</Button> : () => <Button type='primary' onClick={() => setShowAddMemberModal(true)}>新增成員</Button> : undefined} footer={openDelete ? () => (<><Button onClick={() => {setOpenDelete(!openDelete)}}>取消</Button><Button danger type='primary' onClick={() => handleDelete()}>刪除</Button></>) : undefined}/>
-            <Modal title="新增成員" visible={showAddMemberModal} onCancel={() => setShowAddMemberModal(false)} onOk={() => handleSendAddMember()} >
+            <Table columns={columns} rowSelection={openDelete && isMgr ? rowSelection : undefined}  dataSource={member} size='small' title={isMgr ? !openDelete ? () => <Button onClick={() => setOpenDelete(!openDelete)}>編輯</Button> : () => <Button type='primary' onClick={() => setShowAddMemberModal(true)}>新增成員</Button> : undefined} footer={openDelete ? () => (<><Button onClick={() => {setOpenDelete(!openDelete);setState({selectedRowKeys: [], });}}>取消</Button><Button danger type='primary' onClick={() => handleDelete()}>刪除</Button></>) : undefined}/>
+            <Modal title="新增成員" visible={showAddMemberModal} onCancel={() => {setShowAddMemberModal(false);setAddMemberList([]);}} onOk={() => {handleSendAddMember();}} >
             {/* <Text >寫下任何的想法都可以喔！</Text> */}
             <Search placeholder="input search text"  style={{ width: 200 }} onSearch={onSearch} loading={isSearching}  enterButton />
             <Divider ></Divider>
