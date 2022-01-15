@@ -95,7 +95,7 @@ const TaskMenber = ({taskId, userId, token, userName}) => {
 
     const onSearch = async (value) => {
         setIsSearching(true);
-        const res = await getUserExist({user_id: value});
+        const res = await getUserExist({user_id: value, task_id: taskId});
         //看value(就是memberId)有沒有在資料庫裡面
         if(res){ 
             const response = await getUserInfo({user_id: value});

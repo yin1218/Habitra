@@ -20,6 +20,7 @@ const testToken = async(props) => {
 const signUp = async(props) => {
     const {name, email, user_id, password, avatar} = props;
     try{
+        console.log(name, email, user_id, password, avatar);
         const {data: {message}} = await instance.post('/users/signUp',{
             name, email, user_id, password, avatar
         });
@@ -195,6 +196,19 @@ const getNotAdminAndGoing = async(props) => {
     const {user_id, token} = props;
     try{
         const { data: {message, data} } = await instance.get('/participation/notAdmin/ongoing',{
+            params:{user_id: user_id, token: token}
+        });
+        return data;
+    }
+    catch (error) {
+        console.log("error");
+    }
+}
+
+const getNotAdmin = async(props) => {
+    const {user_id, token} = props;
+    try{
+        const { data: {message, data} } = await instance.get('/participation/notAdmin',{
             params:{user_id: user_id, token: token}
         });
         return data;
@@ -463,4 +477,4 @@ const getAvatarClass = async(props) => {
     }
 }
 
-export {getAllAvatar, getAvatarClass, signUp, signUpCheckId, signUpCheckEmail, login, testToken, addTask, getUserInfo, getAdmin, getNotAdminAndFinish, getNotAdminAndGoing, getTaskDetail, getTodayOngoing, getTodayFinish, getgetTodayDayoff, getDurationOpen, getPeriodRecord, addRecord, getDailyRecord, getTask, getParticipationDetail, closeTask, deleteTask, addNewAdmin, addNewMember, quitParticipation, getUserExist, getParticipationAllMember, deleteUserParticipation, getAllIcon, getRecordPunish, getRecordDetail, clearMoney, getRecordCount};
+export {getAllAvatar, getAvatarClass, signUp, signUpCheckId, signUpCheckEmail, login, testToken, addTask, getUserInfo, getAdmin, getNotAdminAndFinish, getNotAdminAndGoing, getTaskDetail, getTodayOngoing, getTodayFinish, getgetTodayDayoff, getDurationOpen, getPeriodRecord, addRecord, getDailyRecord, getTask, getParticipationDetail, closeTask, deleteTask, addNewAdmin, addNewMember, quitParticipation, getUserExist, getParticipationAllMember, deleteUserParticipation, getAllIcon, getRecordPunish, getRecordDetail, clearMoney, getRecordCount, getNotAdmin};
