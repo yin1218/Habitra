@@ -2,6 +2,7 @@ import User from "../../models/user";
 import bcrypt from "bcrypt";  
 const jwt = require("jsonwebtoken");
 import dotenv from "dotenv-defaults";
+import Participation from "../../models/participation";
 dotenv.config();
 
 const saltRounds = 10;
@@ -116,9 +117,19 @@ export const checkUserExist = async(req, res) => {
         res.status(403).send({ message: 'user_id input is needed'});
         return ;
     }
+    else if(req.query.task_id == null ){
+        res.status(403).send({ message: 'task_id input is needed'});
+        return ;
+    }
     const user = await User.findOne({User_ID: req.query.user_id});
     if(user){
-        res.status(200).send({ message: 'success', data: true});
+        const participation = await Participation.findOne({User_ID: req.query.user_id, Task_ID: req.query.task_id, Is_Quit: false});
+        if(participation){
+            res.status(200).send({ message: 'success', data: true});
+        }
+        else{
+            res.status(200).send({ message: 'User Not in this Task', data: false});
+        }
     }
     else {
         return res.status(200).send({ message: "User Not found.", data: false });
