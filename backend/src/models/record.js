@@ -18,7 +18,7 @@ const RecordSchema = new Schema({
     type: Number
   },
   Daily_Desc: {
-    type: String
+    type: [String]
   }
 })
 // Creating a table within database with the defined schema

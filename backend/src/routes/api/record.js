@@ -35,16 +35,19 @@ export const addOneRecord = async (req, res) => {
     if(existing){ // update Is_Admin = true
         try{
             var str = null;
-            if(existing.Daily_Desc == null && req.body.daily_desc != null){
-                str = req.body.daily_desc;
+            if(req.body.daily_desc != ""){
+                existing.Daily_Desc.push(req.body.daily_desc);
             }
-            else if (existing.Daily_Desc != null && req.body.daily_desc != null){
-                str = existing.Daily_Desc + "\n" + req.body.daily_desc;
-            }
-            else if (existing.Daily_Desc != null){
-                str = existing.Daily_Desc;
-            }
-            await Record.updateOne({User_ID: req.body.user_id, Task_ID: req.body.task_id, Time: today}, { $set: { 'Frequency': existing.Frequency+1 , Daily_Desc: str} });
+            // if(existing.Daily_Desc == "" && req.body.daily_desc != ""){
+            //     str = req.body.daily_desc;
+            // }
+            // else if (existing.Daily_Desc != "" && req.body.daily_desc != ""){
+            //     str = existing.Daily_Desc + "<br><br>" + req.body.daily_desc;
+            // }
+            // else if (existing.Daily_Desc != ""){
+            //     str = existing.Daily_Desc;
+            // }
+            await Record.updateOne({User_ID: req.body.user_id, Task_ID: req.body.task_id, Time: today}, { $set: { 'Frequency': existing.Frequency+1 , Daily_Desc: existing.Daily_Desc} });
             res.status(200).send({ message: 'success', id: existing.id});
         }
         catch(err){
