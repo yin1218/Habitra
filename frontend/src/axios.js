@@ -258,10 +258,10 @@ const getgetTodayDayoff = async(props) => {
 }
 
 const getDurationOpen = async(props) => {
-    const {user_id, start_time, token} = props;
+    const {user_id, start_time, end_time, token} = props;
     try{
         const { data: {message, data} } = await instance.get('/participation/durationOpen',{
-            params:{user_id: user_id, start_time: start_time, token: token}
+            params:{user_id: user_id, start_time: start_time, end_time: end_time,token: token}
         });
         return data;
     }

@@ -21,7 +21,7 @@ const PersonalStats = ({userId, token}) => {
     const [expectedTotalCount, setExpectedTotalCount] = useState(0);
     
     useEffect( async () => {
-      const response = await getDurationOpen({user_id: userId, start_time: startDate, token: token});
+      const response = await getDurationOpen({user_id: userId, start_time: startDate, token: token, end_time: endDate});
       console.log(response);
       var temp = []; //多組arr
       var count = 0;
