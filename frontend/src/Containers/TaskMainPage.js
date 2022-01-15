@@ -20,7 +20,7 @@ import TaskView from './TaskView';
 import TaskInfo from './TaskInfo';
 import TaskMenber from './TaskMember';
 import TaskStats from './TaskStats';
-import { getUserInfo, addRecord, getTaskDetail } from '../axios';
+import { getUserInfo, addRecord, getTaskDetail, getTask, getParticipationDetail } from '../axios';
 
 const TaskMainPage = ({setToken, setValid, userId, token}) => {
 
@@ -63,6 +63,8 @@ const TaskMainPage = ({setToken, setValid, userId, token}) => {
     const [typedDesc, setTypedDesc] = useState('');
     const [startHour, setStartHour] = useState(moment("00:00", 'hh:mm')); //陳沛妤: 接的時候記得換成moment格式QQ
     const [endHour, setEndHour] = useState(moment("23:59", 'hh:mm'));
+    const [manager, setManager] = useState('');
+    const [isQuit, setIsQuit] = useState('');
     // console.log("startHour = ", startHour)
     // console.log("endHour = ", endHour)
     // console.log("currentHour = ", currentHour);
@@ -97,6 +99,13 @@ const TaskMainPage = ({setToken, setValid, userId, token}) => {
       const res = await getTaskDetail({task_id: taskId, token: token});
       setStartHour(moment(res.Start_Hour,"hh:mm"));
       setEndHour(moment(res.End_Hour,"hh:mm")); //巫：沒有擋成功
+
+      const res_2 = await getTask({task_id: taskId, token: token});
+      setClosed(res_2.Is_Closed);
+
+      const res_3 = await getParticipationDetail({user_id: userId, task_id: taskId});
+      setManager(res_3.Is_Admin);
+      setIsQuit(res_3.Is_Quit);
     }, []);
 
     return(

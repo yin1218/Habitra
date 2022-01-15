@@ -15,7 +15,7 @@ import {Typography, Divider} from 'antd';
 import { useState, useEffect } from 'react';
 import TaskCard from '../Components/TaskCard';
 import styled from 'styled-components'
-import { getAdmin, getNotAdminAndFinish, getNotAdminAndGoing, getTaskDetail } from '../axios';
+import { getAdmin, getNotAdmin, getTaskDetail, getTask, getParticipationDetail } from '../axios';
 const { Title, Text, Link } = Typography;
 
 
@@ -27,13 +27,11 @@ const UserInfo = ({userId, name, email, token}) => {
     `
 
     const [managedTaskInfo, setManagedTaskInfo] = useState([]);
-    const [openTaskInfo, setOpenTaskInfo] = useState([]);
-    const [closeTaskInfo, setCloseTaskInfo] = useState([]);
+    const [TaskInfo, setTaskInfo] = useState([]);
 
     useEffect( async () => {
         const response_1 = await getAdmin({user_id: userId, token: token});
-        const response_2 = await getNotAdminAndGoing({user_id: userId, token: token});
-        const response_3 = await getNotAdminAndFinish({user_id: userId, token: token});
+        const response_2 = await getNotAdmin({user_id: userId, token: token});
         
         var str = [];
         var str_2 = [];
@@ -44,6 +42,8 @@ const UserInfo = ({userId, name, email, token}) => {
             temp.uid = response_1[i].Task_ID;
             temp.icon = res.Icon;
             temp.name = res.Title;
+            const res_2 = await getTask({task_id: response_1[i].Task_ID, token: token});
+            temp.isClosed = res_2.Is_Closed//巫
             str[i] = temp;
             // setManagedTaskInfo([...managedTaskInfo, temp]);
         }
@@ -53,21 +53,15 @@ const UserInfo = ({userId, name, email, token}) => {
             temp.uid = response_2[i].Task_ID;
             temp.icon = res.Icon;
             temp.name = res.Title;
+            const res_2 = await getTask({task_id: response_2[i].Task_ID, token: token});
+            temp.isClosed = res_2.Is_Closed//巫
+            const res_3 = await getParticipationDetail({user_id: userId, task_id: response_2[i].Task_ID});
+            temp.isQuit = res_3.Is_Quit;
             str_2[i] = temp;
-            // setOpenTaskInfo([...openTaskInfo, temp]);
-        }
-        for(var i = 0; i < response_3.length; i++){
-            const res = await getTaskDetail({task_id: response_3[i].Task_ID, token: token});
-            var temp = new Object();
-            temp.uid = response_3[i].Task_ID;
-            temp.icon = res.Icon;
-            temp.name = res.Title;
-            str_3[i] = temp;
-            // setCloseTaskInfo([...closeTaskInfo, temp]);
+            // setTaskInfo([...openTaskInfo, temp]);
         }
         setManagedTaskInfo(str);
-        setOpenTaskInfo(str_2);
-        setCloseTaskInfo(str_3);
+        setTaskInfo(str_2);
       }, []);
 
     return(
@@ -88,19 +82,9 @@ const UserInfo = ({userId, name, email, token}) => {
         )}
         </Tasks>
         <Divider orientation="left">參與中任務</Divider>
-        <Divider orientation="left">開啟中任務</Divider>
+        <Divider orientation="left">開啟中＆關閉任務</Divider>
         <Tasks>
-        {openTaskInfo.map(
-            task => {
-                return(
-                    <TaskCard uid={task.uid} icon={task.icon} name={task.name}/>
-                )
-            }
-        )}
-        </Tasks>
-        <Divider orientation="left">關閉中任務</Divider>
-        <Tasks>
-        {closeTaskInfo.map(
+        {TaskInfo.map(
             task => {
                 return(
                     <TaskCard uid={task.uid} icon={task.icon} name={task.name}/>

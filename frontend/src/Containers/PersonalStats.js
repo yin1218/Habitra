@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 // import ReactDOM from 'react-dom';
 import { Column } from '@ant-design/plots';
 import StatsInfoCard from '../Components/StatsInfoCard';
-import { getDurationOpen, getPeriodRecord, getTaskDetail } from '../axios';
+import { getDurationOpen, getPeriodRecord, getTaskDetail, getTask } from '../axios';
 
 const PersonalStats = ({userId, token}) => {
 
@@ -22,15 +22,23 @@ const PersonalStats = ({userId, token}) => {
     
     useEffect( async () => {
       const response = await getDurationOpen({user_id: userId, start_time: startDate, token: token});
+      console.log(response);
       var temp = []; //多組arr
       var count = 0;
       for(var i = 0; i < response.length; i++){
           const res = await getPeriodRecord({user_id: userId, task_id: response[i].Task_ID, start_time: startDate, end_time: endDate, token: token});
+          console.log(res);
           temp[i] = res[0];
           setTask([...task, response[i].Task_ID]);
 
+          const r = await getTask({task_id: response[i].Task_ID, token: token});
+          var s = 0;
+          for(var k = 0; k < 7; k++){
+            s += r.Working_Day[k]
+          }
+
           const res_2 = await getTaskDetail({task_id: response[i].Task_ID, token: token});
-          count += res_2.Threshold;
+          count += res_2.Threshold*s;
       }
       setExpectedTotalCount(count);
       var final = [0,0,0,0,0,0,0]; //一組arr
@@ -45,8 +53,16 @@ const PersonalStats = ({userId, token}) => {
   
     // function
     const formatDate = (date)=>{
-        let formatted_date = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" +date.getDate();
-        return formatted_date;
+      var str1 = date.getMonth() + 1;
+      var str2 = date.getDate();
+      if(parseInt(date.getMonth() + 1) < 10){
+          str1 = '0'+ (date.getMonth() + 1);
+      }
+      if(parseInt(date.getDate()) < 10){
+          str2 = '0'+date.getDate();
+      }
+      let formatted_date = date.getFullYear() + "-" + str1 + "-" +str2;
+      return formatted_date;
     }
 
     const weekOnChange = (date) => {
