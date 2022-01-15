@@ -54,19 +54,21 @@ const TaskMenber = ({taskId, userId, token, userName}) => {
         t[0] = temp;
 
         const mem = await getParticipationAllMember({task_id: taskId, token: token});
+        var count = 1;
         for(var i = 0; i < mem.length; i++){
             if(mem[i].User_ID != userId){
                 var te = new Object();
-                te.key = i+1;
+                te.key = count+1;
                 te.id = mem[i].User_ID;
                 const r = await getUserInfo({user_id: mem[i].User_ID})
                 te.name = r.Name;
                 const b = await getParticipationDetail({user_id: mem[i].User_ID, task_id: taskId});
                 te.isMgr = b.Is_Admin;
-                t[i] = te;
+                t[count] = te;
+                count = count+1;
             }
         }
-        setMember(t);
+        setMember(t);  
       }, [refresh]);
 
      //functions
@@ -111,7 +113,6 @@ const TaskMenber = ({taskId, userId, token, userName}) => {
         }
          
     };
-
     //table settings
     const rowSelection = {
         selectedRowKeys,
