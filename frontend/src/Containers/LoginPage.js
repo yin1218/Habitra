@@ -11,11 +11,14 @@ const LoginPage = ({setValid, setIsLogin, setToken, userId, setUserId}) => {
 
     
     const handleLogin = async () => {
-        const response = await login({user_id: userId, password: password});
-        console.log(response);
-        setToken(response);
-        setIsLogin(true);
-        setValid(true);
+        if(userId !== "" && password!==""){
+            const response = await login({user_id: userId, password: password});
+            console.log(response);
+            setToken(response);
+            setIsLogin(true);
+            setValid(true);
+        }
+
     }
     
     return (
@@ -32,7 +35,7 @@ const LoginPage = ({setValid, setIsLogin, setToken, userId, setUserId}) => {
                         rules={[
                         {
                             required: true,
-                            message: 'Please input your UserId!',
+                            message: '請輸入使用者帳號!',
                         },
                         ]}
                     >
@@ -44,7 +47,7 @@ const LoginPage = ({setValid, setIsLogin, setToken, userId, setUserId}) => {
                         rules={[
                         {
                             required: true,
-                            message: 'Please input your Password!',
+                            message: '請輸入密碼!',
                         },
                         ]}
                     >

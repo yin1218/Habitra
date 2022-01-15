@@ -116,6 +116,10 @@ const TaskMenber = ({taskId, userId, token, userName}) => {
     const rowSelection = {
         selectedRowKeys,
         onChange: onSelectChange,
+        getCheckboxProps: (record) => ({
+            disabled: record.name === userName, // Column configuration not to be checked
+            name: record.name,
+          }),
         selections: [
         Table.SELECTION_ALL,
         Table.SELECTION_INVERT,
