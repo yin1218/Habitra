@@ -213,7 +213,7 @@ const TaskStats = ({taskId, token, userId}) => {
                 <Statistic title="累積金額 (NTD)" value={totalArrear} precision={0} />
             </CardOutline>
             <Modal 
-                title="貢獻金額成員清單" 
+                title="成員款項貢獻紀錄" 
                 visible={openModal} 
                 onCancel={() => setOpenModal(false)}
                 footer={isMgr ? [<Button type="primary" onClick={() => handleEmtifiedFee()}>清空</Button>] : []} 

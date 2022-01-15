@@ -110,27 +110,29 @@ const AddTaskPage = ({token, userId}) => {
             
             setWorkDay(temp);
 
-            const response = await addTask({title:title, description:description, threshold:threshold, working_day:workDay, punish:punish, need_daily_desc:need_daily_desc, icon:icon, start_hour:start.split(" ")[4].substr(0,5), end_hour:end.split(" ")[4].substr(0,5), token: token});
-            const response_2 = await addNewMember({task_id: response, user_id: userId, token: token});
-            const response_3 = await addNewAdmin({task_id: response, user_id: userId, token: token});
-            console.log("response = ", response.message);
-            message.success("成功新增任務!");
-            navigate("/");
+            if(title !== ""){
+                const response = await addTask({title:title, description:description, threshold:threshold, working_day:workDay, punish:punish, need_daily_desc:need_daily_desc, icon:icon, start_hour:start.split(" ")[4].substr(0,5), end_hour:end.split(" ")[4].substr(0,5), token: token});
+                const response_2 = await addNewMember({task_id: response, user_id: userId, token: token});
+                const response_3 = await addNewAdmin({task_id: response, user_id: userId, token: token});
+                // console.log("response = ", response.message);
+                message.success("成功新增任務!");
+                navigate("/");
+            }
         }
         
 
     return(
         <>
             <Title level={3}>新增任務</Title>
-            <Divider orientation="left">基本資訊</Divider>
+            {/* <Divider orientation="left">任務規範</Divider> */}
             <Form
                     name="normal_login"
                     className="login-form"
                     initialValues={{remember: true, layout: 'vertical'}}
 
-                >
-                    {/* 用戶姓名 */}
-                    <Form.Item
+            >
+                {/* 打卡區間 */}
+                <Form.Item
                         name="taskName"
                         label="任務名稱"
                         rules={[
@@ -148,17 +150,8 @@ const AddTaskPage = ({token, userId}) => {
                     >
                         <TextArea  value = {description} placeholder="任務敘述" onChange={(e) => setDescription(e.target.value)}/>
                     </Form.Item>
-            </Form> 
-            <Divider orientation="left">任務規範</Divider>
-            <Form
-                    name="normal_login"
-                    className="login-form"
-                    initialValues={{remember: true, layout: 'vertical'}}
-
-            >
-                {/* 打卡區間 */}
                 <Form.Item
-                    name="taskName"
+                    name="finishRange"
                     label="打卡區間"
                     rules={[
                     {
@@ -167,18 +160,12 @@ const AddTaskPage = ({token, userId}) => {
                     },
                     ]}
                 >
-                    <TimePicker.RangePicker format={"HH:mm"} value={[start_hour, end_hour]} onChange={(time) => handleTimePick(time)} />
+                    <TimePicker.RangePicker defaultValue={[start_hour, end_hour]} format={"HH:mm"} value={[start_hour, end_hour]} onChange={(time) => handleTimePick(time)} />
                 </Form.Item>
                 {/* 完成方式 */}
                 <Form.Item
-                    name="taskName"
+                    name="finishMethod"
                     label="完成方式"
-                    rules={[
-                        {
-                            required: true,
-                            message: '請輸入打卡時間區間!',
-                        },
-                    ]}
                 >
                     <Input.Group compact>
                         {finishConstraint}
@@ -220,16 +207,10 @@ const AddTaskPage = ({token, userId}) => {
                 </Form.Item>
                 {/* 懲罰機制 */}
                 <Form.Item
-                    name="punush"
+                    name="punish"
                     label="未完成罰金"
-                    rules={[
-                        {
-                            required: true,
-                            message: '請選擇是否懲罰!',
-                        },
-                    ]}
                 >
-                    <Switch checkedChildren="開啟" unCheckedChildren="關閉" defaultChecked onChange={handlePunush}/>
+                    <Switch checkedChildren="開啟" unCheckedChildren="關閉" defaultChecked={false} onChange={handlePunush}/>
                     <Input.Group compact>
                         {/* switch */}
                         {/* input box */}
@@ -241,22 +222,17 @@ const AddTaskPage = ({token, userId}) => {
                 </Form.Item>
                 {/* 需上傳文字 + info */}
                 <Form.Item
-                    name="punush"
+                    name="textRequirement"
                     label="是否需上傳文字"
-                    rules={[
-                        {
-                            required: true,
-                        },
-                    ]}
                 >
-                    <Switch checkedChildren="開啟" unCheckedChildren="關閉" defaultChecked onChange={setNeed_daily_desc}/>
+                    <Switch checkedChildren="開啟" unCheckedChildren="關閉" defaultChecked={false} onChange={setNeed_daily_desc}/>
                 </Form.Item>
                 <Form.Item>
                         <Button className="wide-form-button" onClick={() => navigate("/")} >
                             返回
                         </Button>
                         <Button type="primary" htmlType="submit" className="wide-form-button" onClick={handleLogin}>
-                            submit
+                            送出
                         </Button>
                     </Form.Item>
             </Form> 
