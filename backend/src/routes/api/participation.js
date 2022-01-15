@@ -252,7 +252,7 @@ export const TodayDayOffParticipation_aUser = async(req, res) => {
                 ongoingTask.push(d._id);
             })
 
-            Participation.find({ Task_ID: { $in: ongoingTask }, User_ID: req.query.user_id, Is_Quit = false })
+            Participation.find({ Task_ID: { $in: ongoingTask }, User_ID: req.query.user_id })
                 .then(async (data) => {
                     await Promise.all(
                         data.map(async (d, k) => {
@@ -304,7 +304,7 @@ export const TodayFinishParticipation_aUser = async(req, res) => {
                 ongoingTask.push(d._id);
             })
 
-            Participation.find({ Task_ID: { $in: ongoingTask }, User_ID: req.query.user_id, Is_Quit = false })
+            Participation.find({ Task_ID: { $in: ongoingTask }, User_ID: req.query.user_id })
                 .then(async (data) => {
                     await Promise.all(
                         data.map(async (d, k) => {
@@ -364,7 +364,7 @@ export const TodayOngoingParticipation_aUser = async(req, res) => {
                 ongoingTask.push(d._id);
             })
 
-            Participation.find({ Task_ID: { $in: ongoingTask }, User_ID: req.query.user_id , Is_Quit = false})
+            Participation.find({ Task_ID: { $in: ongoingTask }, User_ID: req.query.user_id })
                 .then(async (data) => {
                     await Promise.all(
                         data.map(async (d, k) => {
@@ -530,7 +530,7 @@ export const getParticipateMember = async(req, res) => {
     }
     
     try {
-        const data = await Participation.find({Task_ID: req.query.task_id, Is_Quit: false}, {User_ID: 1, _id: 0});
+        const data = await Participation.find({Task_ID: req.query.task_id}, {User_ID: 1, _id: 0});
         res.status(200).send({ message: 'success', data: data});
     } catch (e) { 
         res.status(403).send({ message: 'error', data: null});
