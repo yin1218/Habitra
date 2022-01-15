@@ -74,10 +74,10 @@ const getUserInfo = async(props) => {
 }
 
 const getUserExist = async(props) => {
-    const {user_id} = props;
+    const {user_id, task_id} = props;
     try {
         const { data: {message, data} } = await instance.get('/users/checkExist',{
-            params:{user_id: user_id}
+            params:{user_id: user_id, task_id: task_id}
         });
         return data;
     }
