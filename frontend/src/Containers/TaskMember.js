@@ -97,7 +97,7 @@ const TaskMenber = ({taskId, userId, token, userName}) => {
         setIsSearching(true);
         const res = await getUserExist({user_id: value, task_id: taskId});
         //看value(就是memberId)有沒有在資料庫裡面
-        if(res){ 
+        if(res.data){ 
             const response = await getUserInfo({user_id: value});
             var temp = new Object();
             temp.id = value;
@@ -106,7 +106,7 @@ const TaskMenber = ({taskId, userId, token, userName}) => {
             setIsSearching(false);
         }
         else{
-            message.error('不存在該用戶，請重新輸入!');
+            message.error(res.message);
             setIsSearching(false);
         }
          

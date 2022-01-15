@@ -79,7 +79,7 @@ const getUserExist = async(props) => {
         const { data: {message, data} } = await instance.get('/users/checkExist',{
             params:{user_id: user_id, task_id: task_id}
         });
-        return data;
+        return {message,data};
     }
     catch (error) {
         console.log("error");
