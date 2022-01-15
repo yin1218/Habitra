@@ -74,10 +74,10 @@ const getUserInfo = async(props) => {
 }
 
 const getUserExist = async(props) => {
-    const {user_id} = props;
+    const {user_id, task_id} = props;
     try {
         const { data: {message, data} } = await instance.get('/users/checkExist',{
-            params:{user_id: user_id}
+            params:{user_id: user_id, task_id: task_id}
         });
         return data;
     }
@@ -258,10 +258,10 @@ const getgetTodayDayoff = async(props) => {
 }
 
 const getDurationOpen = async(props) => {
-    const {user_id, start_time, token} = props;
+    const {user_id, start_time, end_time, token} = props;
     try{
         const { data: {message, data} } = await instance.get('/participation/durationOpen',{
-            params:{user_id: user_id, start_time: start_time, token: token}
+            params:{user_id: user_id, start_time: start_time, end_time: end_time,token: token}
         });
         return data;
     }

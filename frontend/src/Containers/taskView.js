@@ -44,7 +44,7 @@ const TaskView = ({taskId, token, userId}) => {
     // 是否達標
     const [done, setDone] = useState(false);
     // 每日文字記錄: 如果未完成的話就這個
-    const [description, setDescription] = useState('');
+    const [description, setDescription] = useState([]);
     // 
     const [selectDate, setSelectDate] = useState('2021-01-01');
     const [isClosed, setIsClosed] = useState(false); //巫：未處理
