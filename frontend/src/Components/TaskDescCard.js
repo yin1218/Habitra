@@ -8,14 +8,16 @@ import { Icon } from '@iconify/react';
 const TaskDescCard = ({done, desc}) => {
     // <Icon icon="twemoji:sad-but-relieved-face" color="black" height="50" />
 
+    console.log(done);
+    console.log(desc);
     const CardOutline = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: left;
     height: 100px;
-    width: 90%;
-    margin: 2%;
+    width: 100%;
+    margin-top: 2%;
     border: 20px white solid;
 
     
@@ -30,9 +32,14 @@ const TaskDescCard = ({done, desc}) => {
             {
                 done
                 ?
+                desc === []
+                ?
                 <>
-                    <Text>{desc}</Text>
+                    <Icon icon="twemoji:beaming-face-with-smiling-eyes" color="black" height="50" />
+                    <Text>已完成任務！</Text>
                 </>
+                :
+                <Text>{desc}</Text>
                 :
                 <>
                 <Icon icon="twemoji:sad-but-relieved-face" color="black" height="50" />

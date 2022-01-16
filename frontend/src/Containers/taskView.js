@@ -95,12 +95,17 @@ const TaskView = ({taskId, token, userId}) => {
         if(frequency >= expectedFrequency && frequency != 0) setDone(true);
       }, [frequency]);
     
+      console.log("frequency = ", frequency)
     return(
         <>
         <DatePicker defaultValue={moment()} onChange={ (e) => dateOnChange(e._d) } allowClear={false} />
-        <Progress percent={frequency/expectedFrequency * 100} size="small" />
+        <br/>
+        <br/>
+        <div style={{width: "90%"}}>
+        <Progress percent={frequency/expectedFrequency * 100}  size="small" />
         <TaskDescCard done={done} desc={description}/>
-        <AddDone></AddDone>
+        </div>
+        <AddDone></AddDone> 
         </>
     )
 }
