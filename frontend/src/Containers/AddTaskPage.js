@@ -125,7 +125,7 @@ const AddTaskPage = ({token, userId}) => {
         
 
     return(
-        <>
+        <div style={ {marginLeft: '30px', marginTop: '30px', marginRight: '100px'}}>
             <Title level={3}>新增任務</Title>
             {/* <Divider orientation="left">任務規範</Divider> */}
             <Form
@@ -259,7 +259,7 @@ const AddTaskPage = ({token, userId}) => {
                 {/* </Collapse> */}
             </Modal>
 
-        </>
+        </div>
     )
 
 }
