@@ -134,7 +134,7 @@ const AddTaskPage = ({token, userId}) => {
                     name="normal_login"
                     className="login-form"
                     initialValues={{remember: true, layout: 'vertical'}}
-
+                    style={{display: "flex", flexDirection: "column"}}
             >
                 <Form.Item
                         name="avatar"
@@ -209,6 +209,7 @@ const AddTaskPage = ({token, userId}) => {
                             <Input style={{ width: 100 }} value = {punish} placeholder="請輸入數字" onChange={(e) => setPunish(e.target.value)} />
                             {/* <p>元</p> */}
                         </div>
+                        <p style={{visibility:punish !== 0 ? 'visible' : 'hidden'}}>&ensp; NTD</p>
                     </Input.Group>
                 </Space>
                 {/* 需上傳文字 + info */}
