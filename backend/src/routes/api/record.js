@@ -163,6 +163,10 @@ export const RecordsOfATask = async(req, res) => {
         res.status(403).send({ message: 'task_id input is needed'});
         return ;
     }
+    else if (req.query.time == null){
+        res.status(403).send({ message: 'time input is needed'});
+        return ;
+    }
     try {
         const taskDetail = await Task.find({_id: req.query.task_id}, {Threshold: 1, _id: 0, Working_Day: 1});
         let query_date = new Date(req.query.time);
