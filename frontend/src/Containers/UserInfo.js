@@ -56,7 +56,7 @@ const UserInfo = ({userId, name, email, token}) => {
             const res_2 = await getTask({task_id: response_2[i].Task_ID, token: token});
             temp.isClosed = res_2.Is_Closed//巫
             const res_3 = await getParticipationDetail({user_id: userId, task_id: response_2[i].Task_ID});
-            temp.isQuit = res_3.Is_Quit;
+            temp.isQuit = res_3.Is_Quit;  
             str_2[i] = temp;
             // setTaskInfo([...openTaskInfo, temp]);
         }
@@ -77,14 +77,14 @@ const UserInfo = ({userId, name, email, token}) => {
             >
             <Descriptions.Item label="姓名">{name}</Descriptions.Item>
             <Descriptions.Item label="信箱">{email}</Descriptions.Item>
-            <Descriptions.Item label="ID">${userId}</Descriptions.Item>
+            <Descriptions.Item label="ID">{userId}</Descriptions.Item>
         </Descriptions>
         <Divider orientation="left">管理中任務</Divider>
         <Tasks>
         {managedTaskInfo.map(
             task => {
                 return(
-                    <TaskCard uid={task.uid} icon={task.icon} name={task.name}/>
+                    <TaskCard uid={task.uid} icon={task.icon} name={task.name} isClosed={task.isClosed} isQuit={task.isQuit}/>
                 )
             }
         )}
