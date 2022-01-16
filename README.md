@@ -30,6 +30,7 @@
 
 ## 如何在 localhost 安裝與測試之詳細步驟
 - 在根目錄、/backend、/frontend 分別 yarn install
+- 複製一份 .env.defaults 來建立 .env 檔，並填入個人的 MONGO_URL 
 - 在根目錄 yarn server 開啟後端
 - 在根目錄 yarn start 開啟前端
 
