@@ -69,10 +69,10 @@ const TaskMainPage = ({setToken, setValid, userId, token}) => {
     const [isQuit, setIsQuit] = useState('');
     const [taskName, setTaskName] = useState('');
     const [taskAvatar, setTaskAvatar] = useState('');
-
-    console.log("startHour = ", startHour)
-    console.log("endHour = ", endHour)
-    console.log("currentHour = ", currentHour);
+    
+    // console.log("startHour = ", startHour)
+    // console.log("endHour = ", endHour)
+    // console.log("currentHour = ", currentHour);
 
     const textOnChange = e => {
       setTypedDesc(e.target.value);
@@ -94,7 +94,7 @@ const TaskMainPage = ({setToken, setValid, userId, token}) => {
         setIsModalVisible(false);
     };
 
-    const [timeIsValid, setTimeIsValid] = useState(moment(currentHour).isAfter(startHour) && moment(currentHour).isBefore(endHour) ? true : false);
+    // const [timeIsValid, setTimeIsValid] = useState(moment(currentHour).isAfter(startHour) && moment(currentHour).isBefore(endHour) ? false : true);
 
     useEffect( async () => {
       const response = await getUserInfo({user_id: userId});
@@ -122,7 +122,7 @@ const TaskMainPage = ({setToken, setValid, userId, token}) => {
         <Layout className="site-layout" style={{ marginLeft: 200 }}>
           <Content style={{ margin: '24px 16px 0', overflow: 'initial' }}>
             <div style={{position: "fixed", }}>
-              <Avatar size={120} src={taskAvatar}  />
+              <Avatar shape="square" size={120} src={taskAvatar}  />
               <Title level={2}>{taskName}</Title>
               <Divider></Divider>
             </div>
@@ -153,9 +153,9 @@ const TaskMainPage = ({setToken, setValid, userId, token}) => {
         {closed
         ?<></>
         :
-        <Tooltip title={timeIsValid ? "我要打卡" : "已超過打卡時間"}>
+        <Tooltip title={moment(currentHour).isAfter(startHour) && moment(currentHour).isBefore(endHour) ?   isQuit || closed ? "不可打卡" : "我要打卡" : "已超過可打卡時段QQ"}>
             <AddTask>
-                <Button type="text" shape="circle" icon={<CheckSquareOutlined />} size="large" onClick={showModal} disabled={timeIsValid ? false : true}/>
+                <Button type="text" shape="circle" icon={<CheckSquareOutlined />} size="large" onClick={showModal} disabled={moment(currentHour).isAfter(startHour) && moment(currentHour).isBefore(endHour) ? false : isQuit || closed ? false : true}/>
             </AddTask>
         </Tooltip>
         }   

@@ -1,4 +1,4 @@
-import { Avatar, message, Switch, Typography, Divider, Form, Input, TimePicker, Select, Checkbox, Row, Col, Button  } from 'antd';
+import { Modal, Avatar, message, Switch, Typography, Divider, Form, Input, TimePicker, Select, Checkbox, Row, Col, Button  } from 'antd';
 import moment from 'moment';
 import { useState, useEffect } from 'react';
 import { addTask, addNewAdmin, addNewMember, getAllIcon } from '../axios';
@@ -21,8 +21,11 @@ const AddTaskPage = ({token, userId}) => {
         // Typology default setting
         const { Title } = Typography;
 
-        const [taskIcon, setTaskIcon] = useState("https://joeschmoe.io/api/v1/random");
+        
         const [taskIconList, setTaskIconList] = useState(iconList);
+        const [taskIcon, setTaskIcon] = useState("https://cdn-icons-png.flaticon.com/512/620/620851.png");
+        const [taskListOpen, setTaskListOpen] = useState(false);
+
         
         // POST param @middleware
         const [title, setTitle] = useState("");
@@ -111,7 +114,7 @@ const AddTaskPage = ({token, userId}) => {
             setWorkDay(temp);
 
             if(title !== ""){
-                const response = await addTask({title:title, description:description, threshold:threshold, working_day:workDay, punish:punish, need_daily_desc:need_daily_desc, icon:icon, start_hour:start.split(" ")[4].substr(0,5), end_hour:end.split(" ")[4].substr(0,5), token: token});
+                const response = await addTask({title:title, description:description, threshold:threshold, working_day:workDay, punish:punish, need_daily_desc:need_daily_desc, icon:icon, icon: taskIcon, start_hour:start.split(" ")[4].substr(0,5), end_hour:end.split(" ")[4].substr(0,5), token: token});
                 const response_2 = await addNewMember({task_id: response, user_id: userId, token: token});
                 const response_3 = await addNewAdmin({task_id: response, user_id: userId, token: token});
                 // console.log("response = ", response.message);
@@ -131,6 +134,19 @@ const AddTaskPage = ({token, userId}) => {
                     initialValues={{remember: true, layout: 'vertical'}}
 
             >
+                <Form.Item
+                        name="avatar"
+                        label="任務圖標"
+                        rules={[
+                        {
+                            required: true,
+                            message: '請選擇任務圖標!',
+                        },
+                        ]}
+                    >
+                     <Avatar shape="square" size={100} src={taskIcon} onClick={() => setTaskListOpen(true)}  />
+                </Form.Item>
+
                 {/* 打卡區間 */}
                 <Form.Item
                         name="taskName"
@@ -143,7 +159,7 @@ const AddTaskPage = ({token, userId}) => {
                         ]}
                     >
                         <Input  value = {title} placeholder="任務名稱" onChange={(e) => setTitle(e.target.value)}/>
-                    </Form.Item>
+                </Form.Item>
                     <Form.Item
                         name="taskDescription"
                         label="任務敘述"
@@ -236,6 +252,12 @@ const AddTaskPage = ({token, userId}) => {
                         </Button>
                     </Form.Item>
             </Form> 
+            <Modal title="請選取你想要的圖標" visible={taskListOpen} onCancel={() =>{setTaskListOpen(false);}} footer={[]}
+            >
+                {/* <Collapse defaultActiveKey={['1']} onChange={callback} accordion> */}
+                {taskIconList.map(url => (<Avatar shape="square" size={64} src={url} onClick={(e) => {setTaskIcon(e.target.src);setTaskListOpen(false);}}/>))}
+                {/* </Collapse> */}
+            </Modal>
 
         </>
     )

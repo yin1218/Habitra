@@ -8,7 +8,7 @@ import { getUserInfo, getTodayOngoing, getTodayFinish, getgetTodayDayoff,getTask
 import { useState, useEffect } from 'react';
 
 import {
-    UsergroupAddOutlined
+    FileAddOutlined
   } from '@ant-design/icons';
 
 import styled from 'styled-components'
@@ -125,7 +125,7 @@ const MainPage = ({setToken, setValid, userId, token}) => {
                 <AddTask>
                 {/* <Button type="text">Text Button</Button> */}
                 <Link to="/addTask">
-                     <Button type="text" shape="circle" icon={<UsergroupAddOutlined />} size="large" />
+                     <Button type="text" shape="circle" icon={<FileAddOutlined />} size="large" />
                 </Link>
                 </AddTask>
             </Tooltip>
