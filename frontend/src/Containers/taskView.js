@@ -96,10 +96,14 @@ const TaskView = ({taskId, token, userId}) => {
         if(frequency >= expectedFrequency && frequency != 0) setDone(true);
       }, [frequency]);
     
-      console.log("frequency = ", frequency)
+      console.log("frequency = ", frequency);
+      function disabledDate(current) {
+        // Can not select days before today and today
+        return current && current > moment().endOf('day');
+      }
     return(
         <>
-        <DatePicker defaultValue={moment()} onChange={ (e) => dateOnChange(e._d) } allowClear={false} />
+        <DatePicker defaultValue={moment()} onChange={ (e) => dateOnChange(e._d) } allowClear={false} disabledDate={disabledDate}  />
         <br/>
         <br/>
         <div style={{width: "90%"}}>

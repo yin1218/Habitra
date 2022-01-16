@@ -135,13 +135,16 @@ const PersonalStats = ({userId, token}) => {
         };
         return <Column {...config}  />;
       };
-
+      function disabledDate(current) {
+        // Can not select days before today and today
+        return current && current > moment().endOf('day');
+      }
     return(
         <div style={{marginRight: "5%"}}>
             <Title level={3}> 戰績檢視</Title>
             <StatsInfoCard achieveTotalCount={achieveCount.reduce((a, b) => a + b, 0)} expectedTotalCount={expectedTotalCount} />
             <Title level={3}> 一周統整</Title>
-            <DatePicker defaultValue = {moment}onChange={(e) => weekOnChange(e._d)} picker="week" allowClear={false}/>
+            <DatePicker defaultValue = {moment}onChange={(e) => weekOnChange(e._d)} picker="week" allowClear={false} disabledDate={disabledDate}/>
             <br/>
             <br/>
             <DemoColumn />
