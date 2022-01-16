@@ -19,7 +19,9 @@ const TaskMenber = ({taskId, userId, token, userName}) => {
             key: 'isMgr',
             width: 50,
             dataIndex: 'isMgr',
-            render: tag => tag === true ? <Tooltip placement="right" title="任務主人"><Icon icon="emojione:crown" color="black" height="20" /></Tooltip> : <></>,
+            render: tag => tag === true ? <Tooltip placement="right" title="任務主人"><Icon icon="icon-park-outline:crown-three" color="black" height="20" />
+
+            </Tooltip> : <></>,
           },
         {
           title: '姓名',

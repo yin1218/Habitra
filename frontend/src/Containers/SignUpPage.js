@@ -1,4 +1,4 @@
-import { Form, Input, Button, Avatar, message, Modal, Collapse } from 'antd';
+import { Form, Input, Button, Avatar, message, Modal, Collapse, Tooltip } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 import React, {useState, useEffect} from 'react';
 import { useNavigate  } from "react-router-dom";
@@ -102,17 +102,18 @@ const SignUpPage = () => {
       }
     return (
         <div className='default_background'>
-            <h1 className="login_title">Sign Up</h1>
-            
+            {/* <h1 className="login_title">Sign Up</h1> */}
+            <Tooltip title="選擇頭像" placement="right">
             {
                         myAvatarUrl === ""
                         ?
                         // 可以點擊並且選取自己想要的avatar
-                        <Avatar size={64} icon={<UserOutlined />} onClick={() => setIsModalVisible(true)}  />
+                        <Avatar size={64} icon={<UserOutlined />} style={{cursor: 'pointer'}} onClick={() => setIsModalVisible(true)}  />
                         :
                         // 可以點即並且選取自己想要的avatar
-                        <Avatar size={64} src={myAvatarUrl} onClick={() => setIsModalVisible(true)}  />
-                    }
+                        <Avatar size={64} src={myAvatarUrl} style={{cursor: 'pointer'}} onClick={() => setIsModalVisible(true)}  />
+            }
+            </Tooltip>
             <br/>
             <div className="login_page">
                 <Form

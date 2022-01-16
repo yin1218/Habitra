@@ -6,7 +6,7 @@
 
 1. 錢包
 (1) Modal: List(頭貼. 名字. 欠的錢. 清空案件, 關閉案件)
-2. 長條圖
+2. 長條圖 
  */
 import { Column } from '@ant-design/plots';
 import { useState, useEffect } from "react";
@@ -29,7 +29,7 @@ const TaskStats = ({taskId, token, userId}) => {
     align-items: left;
     height: 100px;
     width: 500px;
-    margin: 2%;
+    margin-bottom: 2%;
     border: 20px white solid;
 
     
@@ -208,7 +208,7 @@ const TaskStats = ({taskId, token, userId}) => {
 
 
     return(
-        <>
+        <div style={{display: "flex", flexDirection: "column",justifyContent: "center"}}>
             <CardOutline onClick={() => setOpenModal(!openModal) } style={{cursor: 'pointer'}}>
                 <Statistic title="累積金額 (NTD)" value={totalArrear} precision={0} />
             </CardOutline>
@@ -231,10 +231,13 @@ const TaskStats = ({taskId, token, userId}) => {
                     </List.Item>
                     )}
                 />
-                {/* <Divider ></Divider> */}
             </Modal>
-            <DatePicker defaultValue={moment()} onChange={(e) => weekOnChange(e._d)} picker="week" allowClear={false}/>
+            <div>
+              <DatePicker defaultValue={moment()} onChange={(e) => weekOnChange(e._d)} picker="week" allowClear={false}/>
+            </div>
+            <br/>
             <DemoColumn />
+            <br/>
             <Row>
                 <Col span={12}>
                     <Row>
@@ -276,7 +279,7 @@ const TaskStats = ({taskId, token, userId}) => {
                 </Col>
             </Row>
             
-        </>
+        </div>
     )
 }
 
