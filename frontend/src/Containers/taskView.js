@@ -35,26 +35,6 @@ const TaskView = ({taskId, token, userId}) => {
         line-height: 50px;
     `
     // 陳沛妤
-
-    const [taskName, setTaskName] = useState('');
-    const [taskAvatar, setTaskAvatar] = useState('');
-    // 總共需要打幾次卡: 如果只有一次的話就不顯示progress bar
-    const [expectedFrequency, setExpectedFrequency] = useState(0);
-    // 總共打了幾次卡
-    const [frequency, setFrequency] = useState(0);
-    // 是否達標
-    const [done, setDone] = useState(false);
-    // 每日文字記錄: 如果未完成的話就這個
-    const [description, setDescription] = useState([]);
-    // 
-    const [selectDate, setSelectDate] = useState('2021-01-01');
-    const [isClosed, setIsClosed] = useState(false); //巫：未處理
-    const [isAdmin, setIsAdmin] = useState(false); //巫：未處理
-
-    const dateOnChange = (inputDate) => {
-        setSelectDate(formatDate(inputDate));
-    }
-
     // 這邊跟personal stats的function合再一起寫在utility
     const formatDate = (date)=>{
         var str1 = date.getMonth() + 1;
@@ -67,6 +47,25 @@ const TaskView = ({taskId, token, userId}) => {
         }
         let formatted_date = date.getFullYear() + "-" + str1 + "-" +str2;
         return formatted_date;
+    }
+    var today = new Date();
+    const [taskName, setTaskName] = useState('');
+    const [taskAvatar, setTaskAvatar] = useState('');
+    // 總共需要打幾次卡: 如果只有一次的話就不顯示progress bar
+    const [expectedFrequency, setExpectedFrequency] = useState(0);
+    // 總共打了幾次卡
+    const [frequency, setFrequency] = useState(0);
+    // 是否達標
+    const [done, setDone] = useState(false);
+    // 每日文字記錄: 如果未完成的話就這個
+    const [description, setDescription] = useState([]);
+    // 
+    const [selectDate, setSelectDate] = useState(formatDate(today));
+    const [isClosed, setIsClosed] = useState(false); //巫：未處理
+    const [isAdmin, setIsAdmin] = useState(false); //巫：未處理
+
+    const dateOnChange = (inputDate) => {
+        setSelectDate(formatDate(inputDate));
     }
 
     useEffect( async () => {
