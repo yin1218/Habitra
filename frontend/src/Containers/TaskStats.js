@@ -65,10 +65,11 @@ const TaskStats = ({taskId, token, userId}) => {
     const [unfinishTaskMemberInfo, setUnfinishTaskMemberInfo] = useState([])
 
     //總欠款: 接memberInfo的時候要加總
+    var today = new Date();
     const [totalArrear, setTotalArrear] = useState(sum(oweMemberInfo, "Punish_sum"));
     const [isMgr, setIsMgr] = useState(true);
-    const [startDate, setStartDate]=  useState("");
-    const [endDate, setEndDate]=  useState("");
+    const [startDate, setStartDate]=  useState(formatDate(today));
+    const [endDate, setEndDate]=  useState(formatDate(new Date(today.setDate(today.getDate() - today.getDay()+6))));
     const [selectedDate, setSelectedDate] = useState("");
     const [achieveCount, setAchieveCount] = useState([0,0,0,0,0,0,0]);
     const [refresh, setRefresh] = useState(false);
