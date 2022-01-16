@@ -69,8 +69,8 @@ const TaskStats = ({taskId, token, userId}) => {
     const [totalArrear, setTotalArrear] = useState(sum(oweMemberInfo, "Punish_sum"));
     const [isMgr, setIsMgr] = useState(true);
     const [startDate, setStartDate]=  useState(formatDate(today));
+    const [selectedDate, setSelectedDate] = useState(formatDate(today));
     const [endDate, setEndDate]=  useState(formatDate(new Date(today.setDate(today.getDate() - today.getDay()+6))));
-    const [selectedDate, setSelectedDate] = useState("");
     const [achieveCount, setAchieveCount] = useState([0,0,0,0,0,0,0]);
     const [refresh, setRefresh] = useState(false);
 
@@ -100,6 +100,7 @@ const TaskStats = ({taskId, token, userId}) => {
 
     useEffect( async () => {
       const res_3 = await getRecordDetail({task_id: taskId, token: token, time: selectedDate});
+      console.log(selectedDate);
       console.log(res_3);
       var fin = [];
       var unfin = [];
