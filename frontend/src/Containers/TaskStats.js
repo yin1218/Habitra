@@ -210,6 +210,7 @@ const TaskStats = ({taskId, token, userId}) => {
 
     return(
         <div style={{display: "flex", flexDirection: "column",justifyContent: "center"}}>
+          <Title level={3}>金額資訊</Title>
             <CardOutline onClick={() => setOpenModal(!openModal) } style={{cursor: 'pointer'}}>
                 <Statistic title="累積金額 (NTD)" value={totalArrear} precision={0} />
             </CardOutline>
@@ -233,17 +234,22 @@ const TaskStats = ({taskId, token, userId}) => {
                     )}
                 />
             </Modal>
+            <br/>
+            <Title level={3}>每周統計</Title>
             <div>
-              <DatePicker defaultValue={moment()} onChange={(e) => weekOnChange(e._d)} picker="week" allowClear={false}/>
+              <DatePicker  defaultValue={moment()} onChange={(e) => weekOnChange(e._d)} picker="week" allowClear={false}/>
             </div>
             <br/>
+            
             <DemoColumn />
             <br/>
+            
+            <h1>{selectedDate}</h1>            
             <Row>
                 <Col span={12}>
-                    <Row>
+                    <Row style={{display: "flex", alignItems: "flex-end",}}>
                         <Icon icon="flat-ui:trash" color="black" height="50" />
-                        <Title level={3}>未完成</Title>
+                        <Title level={3} style={{marginLeft: "2%"}}>未完成</Title>
                     </Row>
                     <List
                     itemLayout="horizontal"
@@ -251,7 +257,7 @@ const TaskStats = ({taskId, token, userId}) => {
                     renderItem={item => (
                         <List.Item>
                             <List.Item.Meta
-                            avatar={<Avatar src={item.Avatar} />}
+                            avatar={<Avatar size={45} src={item.Avatar} />}
                             title={<Text >{item.User_Name}</Text>}
                             description={<Text >{item.frequency}次</Text>}
                             />
@@ -260,9 +266,9 @@ const TaskStats = ({taskId, token, userId}) => {
                 />
                 </Col>
                 <Col span={12}>
-                    <Row>
+                    <Row style={{display: "flex", alignItems: "flex-end",}}>
                         <Icon icon="emojione:1st-place-medal" color="black" height="50" />
-                        <Title level={3}>已完成</Title>
+                        <Title level={3} style={{marginLeft: "2%"}}>已完成</Title>
                     </Row>
                     <List
                     itemLayout="horizontal"
@@ -270,7 +276,7 @@ const TaskStats = ({taskId, token, userId}) => {
                     renderItem={item => (
                     <List.Item>
                         <List.Item.Meta
-                        avatar={<Avatar src={item.Avatar} />}
+                        avatar={<Avatar size={45} src={item.Avatar} />}
                         title={<Text >{item.User_Name}</Text>}
                         description={<Text >{item.frequency}次</Text>}
                         />

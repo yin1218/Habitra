@@ -128,6 +128,7 @@ const TaskMainPage = ({setToken, setValid, userId, token}) => {
         <Layout className="site-layout" style={{ marginLeft: contentWidth, transition: 'marginLeft 1s ease-in' }}>
         {/* style={{ position: 'fixed', zIndex: 1, width: '100%' }} */}
         <Header style={{height: "33vh",position: "fixed",zIndex: 1, width: '100%', backgroundColor: "#F0F2F5"}}>
+          <div style={{display: "flex", flexDirection: "column", alignItems: "flex-start"}}>
           {/* <br/> */}
               <Avatar shape="square" size={120} src={taskAvatar}  />
               {
@@ -139,6 +140,7 @@ const TaskMainPage = ({setToken, setValid, userId, token}) => {
               }
               <Title level={2}>{taskName}</Title>
               <Divider></Divider>
+            </div>
         </Header>
           
           <Content style={{ margin: '24px 16px 0', overflow: 'initial' }}>

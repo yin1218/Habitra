@@ -28,7 +28,7 @@ const TaskInfo = ({taskId, token, userId}) => {
     align-items: center;
     width: 98%;
     margin-top: 2%;
-    border: 2px red solid;
+    border: 1px red solid;
     padding: 1%;
 
     

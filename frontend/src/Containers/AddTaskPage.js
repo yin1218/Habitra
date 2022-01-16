@@ -1,4 +1,4 @@
-import { Modal, Avatar, message, Switch, Typography, Divider, Form, Input, TimePicker, Select, Checkbox, Row, Col, Button, Space   } from 'antd';
+import { Tooltip,Modal, Avatar, message, Switch, Typography, Divider, Form, Input, TimePicker, Select, Checkbox, Row, Col, Button, Space   } from 'antd';
 import moment from 'moment';
 import { useState, useEffect } from 'react';
 import { addTask, addNewAdmin, addNewMember, getAllIcon } from '../axios';
@@ -136,11 +136,14 @@ const AddTaskPage = ({token, userId}) => {
                     initialValues={{remember: true, layout: 'vertical'}}
                     style={{display: "flex", flexDirection: "column"}}
             >
-                <Form.Item
+                <Form.Item 
+                        style={{cursor: 'pointer'}}
                         name="avatar"
                         label="任務圖標"
                     >
-                     <Avatar shape="square" size={100} src={taskIcon} onClick={() => setTaskListOpen(true)}  />
+                    <Tooltip title="選取任務icon" placement="right">
+                        <Avatar shape="square" size={100} src={taskIcon} onClick={() => setTaskListOpen(true)}  />
+                     </Tooltip>
                 </Form.Item>
 
                 {/* 打卡區間 */}
@@ -233,8 +236,8 @@ const AddTaskPage = ({token, userId}) => {
             >
                 {/* <Collapse defaultActiveKey={['1']} onChange={callback} accordion> */}
                 {/* </Collapse> */}
-                <Space size={10} wrap>
-                    {taskIconList.map(url => (<Avatar shape="square" size={64} src={url} onClick={(e) => {setTaskIcon(e.target.src);setTaskListOpen(false);}}/>))}
+                <Space size={16} wrap>
+                    {taskIconList.map(url => (<Avatar style={{cursor: 'pointer'}} shape="square" size={64} src={url} onClick={(e) => {setTaskIcon(e.target.src);setTaskListOpen(false);}}/>))}
                 </Space>
             </Modal>
 
