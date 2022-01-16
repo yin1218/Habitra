@@ -17,7 +17,7 @@ const StatsInfoCard = ({achieveTotalCount, expectedTotalCount}) => {
     align-items: left;
     height: 100px;
     width: 500px;
-    margin: 2%;
+    margin-bottom: 2%;
     border: 20px white solid;
 
     

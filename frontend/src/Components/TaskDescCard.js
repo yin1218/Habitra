@@ -8,11 +8,11 @@ import { useState } from 'react';
 
 
 
-const TaskDescCard = ({done, desc}) => {
+const TaskDescCard = ({done, desc, expectedFrequency, frequency}) => {
     // <Icon icon="twemoji:sad-but-relieved-face" color="black" height="50" />
 
     console.log(done);
-    console.log(desc);
+    console.log("desc = ", desc);
     const CardOutline = styled.div`
     display: flex;
     flex-direction: column;
@@ -28,6 +28,8 @@ const TaskDescCard = ({done, desc}) => {
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     border-radius: 17px;
  `  
+
+    const finish = frequency / expectedFrequency >= 1 ? true : false;
     const temp = ["今天好快樂", "早上超冷，差點起不來QAQ"];
     const [infoKey, setInfoKey] = useState(0);
     const handleMinus = () => {
@@ -53,13 +55,13 @@ const TaskDescCard = ({done, desc}) => {
     return(
         <div style={{display: "flex", flexDirection:"row", alignItems: "center", justifyContent: "space-between"}}>
         
-        <Button shape="circle" disabled={done ? false : true} icon={<LeftOutlined />} onClick={handleMinus} />
+        <Button shape="circle" disabled={finish ? false : true} icon={<LeftOutlined />} onClick={handleMinus} />
 
         <CardOutline>
             {
-                done
+                finish
                 ?
-                desc === []
+                desc === null || desc === [""]
                 ?
                 <>
                     <Icon icon="twemoji:beaming-face-with-smiling-eyes" color="black" height="50" />
@@ -79,7 +81,7 @@ const TaskDescCard = ({done, desc}) => {
             }
         </CardOutline>
         
-        <Button shape="circle" disabled={done ? false : true} icon={<RightOutlined />}  onClick={handlePlus}/>
+        <Button shape="circle" disabled={finish ? false : true} icon={<RightOutlined />}  onClick={handlePlus}/>
 
 
         </div>        

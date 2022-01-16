@@ -88,7 +88,7 @@ const TaskMainPage = ({setToken, setValid, userId, token}) => {
     const handleOk = async () => {
         setIsModalVisible(false);
         const res = await addRecord({user_id: userId, task_id: taskId, daily_desc: typedDesc, token: token});
-        console.log(res);
+        console.log("res = ", res);
         message.success('成功打卡！');
     };
 

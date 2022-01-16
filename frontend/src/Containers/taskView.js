@@ -88,6 +88,8 @@ const TaskView = ({taskId, token, userId}) => {
         const res_1 = await getDailyRecord({user_id: userId, task_id: taskId, time: selectDate, token: token});
         setFrequency(res_1.Frequency);
         setDescription(res_1.Daily_Desc);
+        console.log("frequency = ", res_1.Frequency);
+        console.log("Daily_Desc = ", res_1.Daily_Desc);
       }, [selectDate]);
 
       useEffect( async () => {
@@ -102,8 +104,9 @@ const TaskView = ({taskId, token, userId}) => {
         <br/>
         <div style={{width: "90%"}}>
         <Progress percent={frequency/expectedFrequency * 100}  size="small" />
-        <TaskDescCard done={done} desc={description}/>
+        <TaskDescCard done={done} desc={description} expectedFrequency={expectedFrequency} frequency={frequency} />
         </div>
+        {/* 如果close的話不能顯示 */}
         <AddDone></AddDone> 
         </>
     )
