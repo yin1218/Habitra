@@ -8,7 +8,7 @@
  */
 import styled from 'styled-components'
 import SideBar from '../Components/SideBar';
-import { Layout, Modal, Button, Avatar, Typography, Tooltip, Input, message, Divider } from 'antd';
+import { Tag, Layout, Modal, Button, Avatar, Typography, Tooltip, Input, message, Divider } from 'antd';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import moment from 'moment';
@@ -22,6 +22,8 @@ import TaskMenber from './TaskMember';
 import TaskStats from './TaskStats';
 import UserInfo from './UserInfo';
 import { getUserInfo, addRecord, getTaskDetail, getTask, getParticipationDetail } from '../axios';
+import { Icon } from '@iconify/react';
+
 
 const TaskMainPage = ({setToken, setValid, userId, token}) => {
 
@@ -121,8 +123,15 @@ const TaskMainPage = ({setToken, setValid, userId, token}) => {
         <SideBar place = "taskMainPage" userId = {userId} userName={userName} userAvatar={userAvatar} setValid={setValid}  setPage={setPage} setToken={setToken}/>
         <Layout className="site-layout" style={{ marginLeft: 200 }}>
           <Content style={{ margin: '24px 16px 0', overflow: 'initial' }}>
-            <div style={{position: "fixed", }}>
+            <div style={{position: "fixed", display:"flex", flexDirection:"column", alignItems:"flex-start"}}>
               <Avatar shape="square" size={120} src={taskAvatar}  />
+              {
+                manager
+                ?
+                <Tag color="#ffa940" icon={<Icon icon="icon-park-outline:crown-three" color="#fff7e6" height="10" />}> 管理者</Tag>
+                :
+                <br/>
+              }
               <Title level={2}>{taskName}</Title>
               <Divider></Divider>
             </div>

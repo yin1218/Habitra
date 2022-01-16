@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import {Avatar,Typography, Space} from 'antd'
+import {Avatar,Typography, Space, Tag} from 'antd'
 import { useNavigate, Link } from "react-router-dom";
 // import { useNavigate, Link } from "react-router-dom";
 
@@ -7,9 +7,8 @@ import { useNavigate, Link } from "react-router-dom";
 const { Text } = Typography;
 
 
-
 // display:"flex", flexDirection: 'column', justifyContent:"center", margin: '24px', alignItems:"center"
-const TaskCard = ({uid, icon, name}) => {
+const TaskCard = ({uid, icon, name, isClosed, isQuit}) => {
     let navigate = useNavigate();
      const Card = styled.div`
         display: flex;
@@ -24,15 +23,27 @@ const TaskCard = ({uid, icon, name}) => {
         box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
         border-radius: 17px;
      `
-    //  navigate('/task', {
-    //     taskId: uid,
-    //   })
+
     
 
      return(
          <>
          {/* <Link to={`/task/${uid}`}> */}
             <Card style={{cursor: 'pointer'}} onClick={() => navigate('/task/'+uid )}>
+                {
+                    isClosed
+                    ?
+                    <Tag color="#f50">已關閉</Tag>
+                    :
+                    <></>
+                }
+                {
+                    isQuit
+                    ?
+                    <Tag color="#f50">已退出</Tag>
+                    :
+                    <></>
+                }
                 <Avatar shape="square" size="large" src={icon} />
                 <div style={{fontSize: 1}}>{name}</div>
             </Card>
