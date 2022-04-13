@@ -1,5 +1,5 @@
 # 相關資訊
-- Demo影片連結：
+- Demo影片連結：https://drive.google.com/drive/folders/1DjKDuPkl-mrxqXiaisGsLMKVQ0CbliH3?usp=sharing
 - Deploy連結：[https://habitra.netlify.app/](https://habitra.netlify.app/)
 
 # 主題描述：
